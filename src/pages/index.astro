@@ -1,0 +1,12 @@
+---
+import Home from '~/components/home';
+import Layout from "~layouts/layout.astro";
+import { generateDefaultSeoParams } from '~/lib/seo';
+import { getFeaturedPosts } from "~/lib/post-db";
+
+const featuredPosts = getFeaturedPosts(3);
+---
+
+<Layout {...generateDefaultSeoParams()}>
+	<Home currentUrl={new URL(Astro.request.url)} featuredPosts={featuredPosts} />
+</Layout>

@@ -1,0 +1,124 @@
+{
+  "root": true,
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:react-hooks/recommended", "plugin:jsx-a11y/recommended", "plugin:prettier/recommended"],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "requireConfigFile": false,
+    "ecmaVersion": "latest",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "settings": {
+    "import/ignore": ["node_modules", "\\.(css|md|svg|json)$"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx", ".d.ts"]
+    },
+    "import/resolver": {
+      "eslint-import-resolver-node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "eslint-import-resolver-typescript": {
+        "alwaysTryTypes": true
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
+  },
+  "plugins": [
+    "node",
+    "import"
+  ],
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "public"
+  ],
+  "rules": {
+    "no-constant-condition": "off",
+    "react/react-in-jsx-scope": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc"
+        },
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "warnOnUnassignedImports": true,
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling", "index"],
+          "object",
+          "type",
+          "unknown"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "~",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "*.css",
+            "patternOptions": { "matchBase": true },
+            "group": "unknown",
+            "position": "after"
+          }
+        ]
+      }
+    ],
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/no-absolute-path": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true,
+        "peerDependencies": true,
+        "optionalDependencies": false
+      }
+    ],
+    "import/no-mutable-exports": "error",
+    "import/no-named-default": "error",
+    "import/no-self-import": "error",
+    "import/no-duplicates": "error",
+    "import/no-amd": "error",
+    "import/no-webpack-loader-syntax": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts?(x)"],
+      "extends": ["plugin:@typescript-eslint/recommended", "plugin:import/typescript"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2021,
+        "ecmaFeatures": {
+          "jsx": true
+        },
+        "warnOnUnsupportedTypeScriptVersion": true
+      },
+      "plugins": ["@typescript-eslint"],
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+          "error",
+          { "prefer": "type-imports" }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+---
+import Post from '~/components/blog/post';
+import Layout from "~layouts/layout.astro";
+import { generatePostSeoParams } from '~/lib/seo';
+import { getPosts, mustGetPostWithRecommendations } from "~/lib/post-db";
+
+export function getStaticPaths() {
+  const allPosts = getPosts();
+  return allPosts.map(post => ({ params: { slug: post.slug } }))
+}
+
+const { post, recommendations } = mustGetPostWithRecommendations(Astro.params.slug as string);
+---
+
+<Layout {...generatePostSeoParams(post)}>
+	<Post currentUrl={new URL(Astro.request.url)} post={post} recommendations={recommendations} />
+</Layout>

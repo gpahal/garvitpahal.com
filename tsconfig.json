@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx",
+
+    "alwaysStrict": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"],
+      "~content/*": ["./src/gen/content/*"],
+      "~styles/*": ["./src/styles/*"],
+      "~lib/*": ["./src/lib/*"],
+      "~components/*": ["./src/components/*"],
+      "~layouts/*": ["./src/layouts/*"]
+    },
+    
+    "types": ["vite/client"],
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

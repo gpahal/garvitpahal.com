@@ -1,0 +1,50 @@
+---
+import { SeoParams } from "~/lib/seo";
+
+import "~styles/root.css";
+
+export type Props = SeoParams;
+
+const { title, browserTitle, description, image, article } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+  <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="manifest" href="/favicons/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-TileImage" content="/favicons/mstile-144x144.png">
+  <meta name="msapplication-config" content="/favicons/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <meta name="robots" content="index, follow" />
+
+	<title>{browserTitle}</title>
+  <link rel="canonical" href={Astro.canonicalURL.href} />
+  {description ? <meta name="description" content={description} /> : null}
+
+  <meta property="og:title" content={title} />
+  {description ? <meta property="og:description" content={description} /> : null}
+  <meta property="og:type" content={article ? "article" : "website"} />
+  <meta property="og:image" content={image} />
+  <meta property="og:url" content={Astro.canonicalURL.href} />
+
+  {article ? <meta property="article:published_time" content={new Date(article.publishedTime).toISOString()} /> : null}
+  {article ? <meta property="article:author" content="Garvit Pahal (@g10pahal)" /> : null}
+  {article && article.tags ? article.tags.map((tag: string) => <meta property="article:tag" content={tag} />) : null}
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@g10pahal" />
+</head>
+<body>
+	<slot />
+</body>
+</html>

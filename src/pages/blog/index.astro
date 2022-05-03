@@ -1,0 +1,13 @@
+---
+import Blog from '~/components/blog';
+import Layout from "~layouts/layout.astro";
+import { generateDefaultSeoParams } from '~/lib/seo';
+import { getFeaturedPosts, getPosts } from "~/lib/post-db";
+
+const allPosts = getPosts();
+const featuredPosts = getFeaturedPosts(3);
+---
+
+<Layout {...generateDefaultSeoParams()}>
+	<Blog currentUrl={new URL(Astro.request.url)} allPosts={allPosts} featuredPosts={featuredPosts} />
+</Layout>
