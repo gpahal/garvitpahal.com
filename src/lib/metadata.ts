@@ -4,12 +4,12 @@ import { trim } from '@gpahal/std/string'
 
 import { ogSize } from '@/lib/og'
 
-export const WEBSITE_HOSTNAME = 'garvipahal.com'
+export const WEBSITE_HOSTNAME = 'garvitpahal.com'
 export const WEBSITE_ORGIN = `https://${WEBSITE_HOSTNAME}`
 export const WEBSITE_URL = new URL(WEBSITE_ORGIN)
 
 export const AUTHOR_NAME = 'Garvit Pahal'
-export const AUTHOR_URL = 'https://garvipahal.com'
+export const AUTHOR_URL = 'https://garvitpahal.com'
 export const AUTHOR_TWITTER_USERNAME = '@g10pahal'
 
 export const DEFAULT_IMAGE_PATH = '?v=1'
