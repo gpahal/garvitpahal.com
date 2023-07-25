@@ -20,13 +20,12 @@ export const buttonStyles = cva(
     variants: {
       variant: {
         outline:
-          'ring-neutral-7 text-fg shadow-sm ring-1 ring-inset hover:border-neutral-8 hover:bg-bg-emphasis focus-visible:ring-offset-0',
-        ghost: 'text-fg hover:bg-bg-emphasis',
+          'ring-neutral-7 text-fg shadow-sm ring-1 ring-inset hover:border-neutral-8 hover:bg-bg-emphasis-3 focus-visible:ring-offset-0',
+        ghost: 'text-fg hover:bg-bg-emphasis-3',
         'link-unstyled': linkStyles({ variant: 'unstyled' }),
         'link-highlighted': linkStyles({ variant: 'highlighted' }),
         'link-hover-highlighted': linkStyles({ variant: 'hover-highlighted' }),
         link: linkStyles({ variant: 'link' }),
-        primary: 'bg-primary-9 text-primary-fg ring-1 ring-inset ring-primary-9 shadow-sm hover:bg-primary-10',
         info: 'bg-info-9 text-info-fg ring-1 ring-inset ring-info-9 shadow-sm hover:bg-info-10',
         warn: 'bg-warn-9 text-warn-fg ring-1 ring-inset ring-warn-9 shadow-sm hover:bg-warn-10',
         error: 'bg-error-9 text-error-fg ring-1 ring-inset ring-error-9 shadow-sm hover:bg-error-10',

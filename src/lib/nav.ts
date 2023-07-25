@@ -7,23 +7,23 @@ export type NavLinkItem = {
 
 export const NAV_LINK_ITEMS: NavLinkItem[] = [
   {
-    label: 'About',
+    label: 'about',
     description: 'About me',
     path: '/',
     requiresExactMatch: true,
   },
   {
-    label: 'Projects',
+    label: 'projects',
     description: "Projects I've worked on",
     path: '/projects',
   },
   {
-    label: 'Blog',
+    label: 'blog',
     description: "Blog posts I've written",
     path: '/blog',
   },
   {
-    label: 'Tech',
+    label: 'tech',
     description: 'Tech stack I use daily',
     path: '/uses',
   },

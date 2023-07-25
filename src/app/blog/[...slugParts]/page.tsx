@@ -60,7 +60,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
 
   return (
     <>
-      <header className="mb-5 flex flex-col">
+      <header className="mb-4 flex flex-col">
         <H1>
           <Balancer>{blogPost.data.frontmatter.title}</Balancer>
         </H1>
@@ -70,7 +70,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
           {blogPost.data.readTimeResults.text}
         </p>
         {parent ? (
-          <div className="mt-5">
+          <div className="pb-1.5 pt-4">
             <BlogPostSeriesToc
               blog={blog}
               blogPost={parent}
@@ -96,7 +96,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
               <Link
                 variant="unstyled"
                 href={`/blog/${prev.path}`}
-                className="border-divider w-full transform rounded-md border p-1 hocus:bg-bg-emphasis/60 md:mr-2 md:max-w-[47.5%]"
+                className="border-divider w-full transform rounded-md border p-1 hocus:bg-bg-emphasis-2 md:mr-2 md:max-w-[47.5%]"
               >
                 <div className="h-full px-2.5 py-1 leading-[1.325]">
                   <p className="text-sm font-medium text-fg-subtle">Prev in the series</p>
@@ -110,7 +110,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
                 href={`/blog/${next.path}`}
                 className={cn(
                   prev ? 'mt-6 md:mt-0' : '',
-                  'unstyled border-divider w-full transform rounded-md border p-1 hocus:bg-bg-emphasis/60 md:ml-2 md:max-w-[47.5%]',
+                  'unstyled border-divider w-full transform rounded-md border p-1 hocus:bg-bg-emphasis-3 md:ml-2 md:max-w-[47.5%]',
                 )}
               >
                 <div className="h-full px-2.5 py-1 leading-[1.325]">

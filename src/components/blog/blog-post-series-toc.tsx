@@ -27,7 +27,7 @@ export function BlogPostSeriesToc({
   ).reverse()
 
   return reversedChildren.length === 0 ? null : (
-    <div className="bg-subtle divide-divider border-divider mx-auto my-2 max-w-lg divide-y rounded border">
+    <div className="mx-auto my-2 max-w-lg divide-y divide-neutral-6 rounded border bg-bg-emphasis-2">
       {showSeriesTitle ? (
         <div>
           <Link
@@ -37,11 +37,11 @@ export function BlogPostSeriesToc({
           >{`${blogPost.data.frontmatter.title} (${reversedChildren.length} part series)`}</Link>
         </div>
       ) : null}
-      <ul className="divide-divider m-0 divide-y p-0">
+      <ul className="m-0 divide-y divide-neutral-6 p-0">
         {reversedChildren.map((child, i) => {
           const isActive = child.path === activeBlogPost?.path
           return (
-            <li key={child.path} className="m-0 list-none p-0">
+            <li key={child.path} className="m-0 list-none p-0 hocus:bg-bg-emphasis-3">
               <Link
                 variant="unstyled"
                 href={`/blog/${child.path}`}
@@ -49,18 +49,14 @@ export function BlogPostSeriesToc({
               >
                 <div
                   className={cn(
-                    'bg-bg-subtle flex h-[1.875rem] w-[1.875rem] flex-row items-center justify-center rounded-full text-sm',
-                    isActive ? 'border border-fg-subtle text-fg' : 'border-divider border text-fg-subtle',
+                    'flex h-[1.875rem] w-[1.875rem] flex-row items-center justify-center rounded-full text-sm',
+                    isActive ? 'border border-fg-subtle text-fg' : 'border border-neutral-6 text-fg-subtle',
                   )}
                 >
                   {i + 1}
                 </div>
                 <span
-                  className={cn(
-                    'line-clamp-1',
-                    isActive || !highlightActiveBlogPost ? 'text-fg' : 'text-fg-subtle',
-                    isActive ? 'font-medium' : 'font-normal',
-                  )}
+                  className={cn('line-clamp-1', isActive || !highlightActiveBlogPost ? 'text-fg' : 'text-fg-subtle')}
                 >
                   {child.data.frontmatter.title}
                 </span>

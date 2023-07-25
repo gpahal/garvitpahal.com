@@ -10,7 +10,6 @@ import { cn } from '@/lib/styles'
 import { H1, H2 } from '@/components/lib/heading'
 import { Image } from '@/components/lib/image'
 import { Link } from '@/components/lib/link'
-import { buttonStyles } from '@/components/lib/styles'
 import { BlogPostSummaries } from '@/components/blog/blog-post-summaries'
 import { ProjectSummaries } from '@/components/project/project-summaries'
 
@@ -47,26 +46,27 @@ export default function HomePage() {
       </div>
       <div className="prose mt-8">
         <H2>Projects</H2>
-        <ProjectSummaries projects={PROJECTS.slice(0, 6)} />
-        {PROJECTS.length > 6 && (
-          <p>
-            <Link
-              href="/projects"
-              className="decoration-neutral-5 underline-offset-4 hocus-visible:decoration-neutral-6"
-            >
-              All projects →
-            </Link>
-          </p>
+        <ProjectSummaries projects={PROJECTS.slice(0, 4)} />
+        {PROJECTS.length > 4 && (
+          <Link
+            variant="unstyled"
+            href="/projects"
+            className="mt-4 inline-block w-full border border-neutral-6/50 bg-bg-emphasis-2 px-3 pb-[0.55rem] pt-[0.5rem] hocus-visible:bg-bg-emphasis-3"
+          >
+            All projects →
+          </Link>
         )}
 
         <H2 className="mt-10">Blog</H2>
         <BlogPostSummaries blogPosts={blogPosts.slice(0, 3)} />
         {blogPosts.length > 3 && (
-          <p>
-            <Link href="/blog" className="decoration-neutral-5 underline-offset-4 hocus-visible:decoration-neutral-6">
-              All posts →
-            </Link>
-          </p>
+          <Link
+            variant="unstyled"
+            href="/blog"
+            className="mt-4 inline-block w-full border border-neutral-6/50 bg-bg-emphasis-2 px-3 pb-[0.55rem] pt-[0.5rem] hocus-visible:bg-bg-emphasis-3"
+          >
+            All posts →
+          </Link>
         )}
 
         <H2 className="mt-10">Reach out</H2>
@@ -76,7 +76,10 @@ export default function HomePage() {
               key={label}
               variant="unstyled"
               href={href}
-              className={cn(buttonStyles({ variant: 'outline' }), 'gap-2 font-normal shadow-none', filledClassName)}
+              className={cn(
+                'flex items-center gap-2 border border-neutral-6/50 bg-bg-emphasis-2 px-3 py-1',
+                filledClassName,
+              )}
             >
               <Icon className="h-4 w-4" />
               <span>{label}</span>

@@ -5,15 +5,14 @@ import { Analytics } from '@vercel/analytics/react'
 
 import { monoFont, sansSerifFont } from '@/lib/fonts'
 import { WEBSITE_URL } from '@/lib/metadata'
-import { cn } from '@/lib/styles'
-
-import '@/styles/global.css'
-
-import { NAV_LINK_ITEMS } from '@/lib/nav'
 import { SOCIAL_LINKS } from '@/lib/social'
+import { cn } from '@/lib/styles'
 import { Link } from '@/components/lib/link'
+import { Nav } from '@/components/nav'
 
 import { RootScripts } from './root-scripts'
+
+import '@/styles/global.css'
 
 export const metadata: Metadata = {
   metadataBase: WEBSITE_URL,
@@ -45,31 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RootScripts />
       </head>
       <body className={cn(sansSerifFont.variable, monoFont.variable)} suppressHydrationWarning>
-        <div className="mx-auto flex w-full max-w-[42rem] flex-col px-6 py-4 lg:pt-8">
-          <div className="border-divider mb-10 lg:mb-12">
-            <nav>
-              <ul className="mx-[-0.6rem] flex flex-row space-x-0.5">
-                {NAV_LINK_ITEMS.map(({ label, path, requiresExactMatch }) => {
-                  const inactiveClassName = 'text-fg-subtle hover:text-fg'
-                  const activeClassName = 'font-medium text-fg underline'
-                  const childActiveClassName = requiresExactMatch ? inactiveClassName : activeClassName
-                  return (
-                    <li key={label}>
-                      <Link
-                        variant="hover-highlighted"
-                        href={path}
-                        className="unstyled inline-block px-2.5 py-0.5 decoration-neutral-5 underline-offset-[6px] hocus-visible:decoration-neutral-6"
-                        inactiveClassName={inactiveClassName}
-                        activeClassName={activeClassName}
-                        childActiveClassName={childActiveClassName}
-                      >
-                        {label}
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            </nav>
+        <div className="mx-auto flex w-full max-w-[42rem] flex-col px-6 py-4 md:py-6 xl:py-8">
+          <div className="border-divider mb-8 md:mb-10">
+            <Nav />
           </div>
           <main className="relative w-full">
             {children}
@@ -83,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     key={label}
                     variant="unstyled"
                     href={href}
-                    className="group flex-shrink-0 p-1.5 hocus-visible:bg-bg-emphasis"
+                    className="group flex-shrink-0 p-1.5 hocus-visible:bg-bg-emphasis-3"
                   >
                     <Icon
                       aria-label={label}

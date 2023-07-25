@@ -20,7 +20,7 @@ export default function RootErrorPage({ error, reset }: { error: Error & { diges
           at <Link href="mailto:g10pahal@gmail.com">g10pahal@gmail.com</Link>.<br />
         </p>
         <p>
-          <Button variant="primary" onClick={reset}>
+          <Button variant="info" onClick={reset}>
             Reload
           </Button>
         </p>

@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 
 import type { VariantProps } from 'class-variance-authority'
 
+import { isFunction } from '@gpahal/std/function'
 import { isString } from '@gpahal/std/string'
 import { isAbsoluteUrl, isPathnameActive } from '@gpahal/std/url'
 
@@ -18,14 +19,20 @@ import { linkStyles } from '@/components/lib/styles'
 const FORCE_EXTERNAL_LINK_PATTERNS = [/\/references/]
 
 export type ActiveLinkState = { isActive: boolean; isChildActive?: boolean }
+export type ActiveLinkClassNameFn = (_: ActiveLinkState) => string | undefined | null
+export type ActiveLinkChildrenFn = (_: ActiveLinkState) => React.ReactNode
 
-export type LinkProps = Omit<React.ComponentPropsWithoutRef<typeof NextLink>, 'legacyBehavior' | 'className'> &
+export type LinkProps = Omit<
+  React.ComponentPropsWithoutRef<typeof NextLink>,
+  'legacyBehavior' | 'className' | 'children'
+> &
   VariantProps<typeof linkStyles> & {
     activeLinkState?: ActiveLinkState
-    className?: string
-    inactiveClassName?: string
+    requiresExactMatch?: boolean
+    className?: string | ActiveLinkClassNameFn
     activeClassName?: string
-    childActiveClassName?: string
+    children?: React.ReactNode | ActiveLinkChildrenFn
+    activeChildren?: React.ReactNode
   }
 
 export const Link = React.forwardRef<React.ElementRef<typeof NextLink>, LinkProps>(
@@ -36,11 +43,11 @@ export const Link = React.forwardRef<React.ElementRef<typeof NextLink>, LinkProp
       rel,
       variant,
       activeLinkState,
+      requiresExactMatch,
       className: classNameProp,
-      inactiveClassName,
       activeClassName,
-      childActiveClassName,
-      children,
+      children: childrenProp,
+      activeChildren,
       ...props
     },
     ref,
@@ -49,19 +56,26 @@ export const Link = React.forwardRef<React.ElementRef<typeof NextLink>, LinkProp
 
     const pathname = usePathname()
 
-    const [isExternal, setIsExternal] = React.useState(isAbsoluteUrl(hrefString))
-    const [className, setClassName] = React.useState(
-      getClassName(
+    const [dependentProps, setDependentProps] = React.useState({
+      isExternal: isAbsoluteUrl(hrefString),
+      className: getClassName(
+        variant,
         activeLinkState || {
           isActive: false,
         },
-        variant,
+        requiresExactMatch,
         classNameProp,
-        inactiveClassName,
         activeClassName,
-        childActiveClassName,
       ),
-    )
+      children: getChildren(
+        activeLinkState || {
+          isActive: false,
+        },
+        requiresExactMatch,
+        childrenProp,
+        activeChildren,
+      ),
+    })
 
     React.useEffect(() => {
       const currentUrl = new URL(window.location.href)
@@ -82,41 +96,39 @@ export const Link = React.forwardRef<React.ElementRef<typeof NextLink>, LinkProp
         isExternal = FORCE_EXTERNAL_LINK_PATTERNS.some((pattern) => hrefPathname && pattern.test(hrefPathname))
       }
 
-      setIsExternal(isExternal)
-      setClassName(
-        getClassName(
-          activeLinkState ||
-            (hrefPathname != null
-              ? isPathnameActive(pathname, hrefPathname)
-              : {
-                  isActive: false,
-                }),
-          variant,
-          classNameProp,
-          inactiveClassName,
-          activeClassName,
-          childActiveClassName,
-        ),
-      )
+      const state =
+        activeLinkState ||
+        (hrefPathname != null
+          ? isPathnameActive(pathname, hrefPathname)
+          : {
+              isActive: false,
+            })
+
+      setDependentProps({
+        isExternal,
+        className: getClassName(variant, state, requiresExactMatch, classNameProp, activeClassName),
+        children: getChildren(state, requiresExactMatch, childrenProp, activeChildren),
+      })
     }, [
       variant,
       classNameProp,
       hrefString,
       pathname,
       activeLinkState,
-      inactiveClassName,
       activeClassName,
-      childActiveClassName,
+      requiresExactMatch,
+      childrenProp,
+      activeChildren,
     ])
 
     rel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined)
-    return isExternal ? (
-      <a ref={ref} href={hrefString} target={target} rel={rel} className={className} {...props}>
-        {children}
+    return dependentProps.isExternal ? (
+      <a {...props} ref={ref} href={hrefString} target={target} rel={rel} className={dependentProps.className}>
+        {dependentProps.children}
       </a>
     ) : (
-      <BasicLink ref={ref} href={hrefString} target={target} rel={rel} className={className} {...props}>
-        {children}
+      <BasicLink {...props} ref={ref} href={hrefString} target={target} rel={rel} className={dependentProps.className}>
+        {dependentProps.children}
       </BasicLink>
     )
   },
@@ -124,25 +136,36 @@ export const Link = React.forwardRef<React.ElementRef<typeof NextLink>, LinkProp
 Link.displayName = 'Link'
 
 function getClassName(
-  state: ActiveLinkState,
   variant: LinkProps['variant'],
+  state: ActiveLinkState,
+  requiresExactMatch: LinkProps['requiresExactMatch'],
   className: LinkProps['className'],
-  inactiveClassName?: LinkProps['inactiveClassName'],
-  activeClassName?: LinkProps['activeClassName'],
-  childActiveClassName?: LinkProps['childActiveClassName'],
+  activeClassName: LinkProps['activeClassName'],
 ): string | undefined {
+  const isActive = state.isActive || (!requiresExactMatch && state.isChildActive)
   return cn(
     linkStyles({ variant }),
-    className,
-    !state.isActive && !state.isChildActive && cn('inactive', inactiveClassName),
-    state.isActive && cn('active', activeClassName),
-    state.isChildActive && cn('child-active', childActiveClassName),
+    (className && isFunction(className) ? className(state) : className) as string | undefined,
+    isActive ? cn('active', activeClassName) : 'inactive',
   )
 }
 
-type BasicLinkProps = Omit<LinkProps, 'href' | 'className'> & {
+function getChildren(
+  state: ActiveLinkState,
+  requiresExactMatch: LinkProps['requiresExactMatch'],
+  children: LinkProps['children'],
+  activeChildren: LinkProps['activeChildren'],
+): React.ReactNode {
+  const isActive = state.isActive || (!requiresExactMatch && state.isChildActive)
+  return isActive && activeChildren
+    ? activeChildren
+    : ((isFunction(children) ? children(state) : children) as React.ReactNode)
+}
+
+type BasicLinkProps = Omit<LinkProps, 'href' | 'className' | 'children'> & {
   href: string
   className?: string
+  children?: React.ReactNode
 }
 
 const BasicLink = React.forwardRef<React.ElementRef<typeof NextLink>, BasicLinkProps>((props, ref) =>

@@ -6,10 +6,6 @@ import { cn } from '@/lib/styles'
 
 const spinnerStyles = cva('inline-block animate-spin', {
   variants: {
-    variant: {
-      default: 'text-fg',
-      primary: 'bg-primary-9',
-    },
     size: {
       sm: 'h-6 w-6',
       md: 'h-8 w-8',
@@ -17,14 +13,13 @@ const spinnerStyles = cva('inline-block animate-spin', {
     },
   },
   defaultVariants: {
-    variant: 'default',
     size: 'md',
   },
 })
 
 export type SpinnerProps = React.SVGProps<SVGSVGElement> & VariantProps<typeof spinnerStyles>
 
-export const Spinner = React.forwardRef<SVGSVGElement, SpinnerProps>(({ variant, size, className, ...props }, ref) => {
+export const Spinner = React.forwardRef<SVGSVGElement, SpinnerProps>(({ size, className, ...props }, ref) => {
   return (
     <svg
       {...props}
@@ -34,7 +29,7 @@ export const Spinner = React.forwardRef<SVGSVGElement, SpinnerProps>(({ variant,
       viewBox="0 0 24 24"
       fill="none"
       stroke="none"
-      className={cn(spinnerStyles({ variant, size }), className)}
+      className={cn(spinnerStyles({ size }), className)}
     >
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
       <path
