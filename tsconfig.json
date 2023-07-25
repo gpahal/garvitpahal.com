@@ -1,0 +1,12 @@
+{
+  "extends": "@gpahal/tsconfig/nextjs-app.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@public/*": ["./public/*"]
+    }
+  },
+  "include": ["src", "scripts", "next-env.d.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
