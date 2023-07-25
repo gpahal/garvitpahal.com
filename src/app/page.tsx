@@ -50,7 +50,10 @@ export default function HomePage() {
         <ProjectSummaries projects={PROJECTS.slice(0, 6)} />
         {PROJECTS.length > 6 && (
           <p>
-            <Link variant="link" href="/projects" className="font-medium">
+            <Link
+              href="/projects"
+              className="decoration-neutral-5 underline-offset-4 hocus-visible:decoration-neutral-6"
+            >
               All projects →
             </Link>
           </p>
@@ -60,7 +63,7 @@ export default function HomePage() {
         <BlogPostSummaries blogPosts={blogPosts.slice(0, 3)} />
         {blogPosts.length > 3 && (
           <p>
-            <Link variant="link" href="/blog" className="font-medium">
+            <Link href="/blog" className="decoration-neutral-5 underline-offset-4 hocus-visible:decoration-neutral-6">
               All posts →
             </Link>
           </p>
