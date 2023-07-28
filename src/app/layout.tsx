@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     {
       rel: 'shortcut icon',
       type: 'image/x-icon',
-      url: '/favicon.icon',
+      url: '/favicon.ico',
     },
   ],
 }
