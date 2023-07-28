@@ -29,7 +29,6 @@ export function generateMetadata({ params: { slugParts } }: BlogPostPageProps): 
     pathname: `/blog/${blogPost.path}`,
     title: `${blogPost.data.frontmatter.title} - Garvit Pahal`,
     description: blogPost.data.frontmatter.description,
-    imagePath: `/blog/${blogPost.path}?v=1`,
     article: {
       publishedTime: blogPost.data.frontmatter.publishedOn,
       tags: blogPost.data.frontmatter.tags,

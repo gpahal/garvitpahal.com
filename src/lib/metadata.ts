@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 
 import { trim } from '@gpahal/std/string'
 
-import { ogSize } from '@/lib/og'
-
+export const WEBSITE_TITLE = 'Garvit Pahal'
 export const WEBSITE_HOSTNAME = 'garvitpahal.com'
 export const WEBSITE_ORGIN = `https://${WEBSITE_HOSTNAME}`
 export const WEBSITE_URL = new URL(WEBSITE_ORGIN)
@@ -19,14 +18,12 @@ export function generatePageMetadata({
   title: titleProp,
   browserTitle: browserTitleProp,
   description: descriptionProp,
-  imagePath: imagePathProp,
   article,
 }: {
   pathname: string
   title?: string
   browserTitle?: string
   description?: string
-  imagePath?: string
   article?: {
     publishedTime: number | Date
     tags?: string[]
@@ -35,36 +32,28 @@ export function generatePageMetadata({
   pathname = trim(pathname || '', '/')
   const url = `${WEBSITE_ORGIN}${pathname ? `/${pathname}` : ''}`
 
-  const title = trim(titleProp || 'Garvit Pahal')
+  const title = trim(titleProp || WEBSITE_TITLE)
   const browserTitle = trim(browserTitleProp || title)
   const description = trim(descriptionProp || 'Software engineer interested in technology and football')
-
-  const imagePath = imagePathProp == null ? DEFAULT_IMAGE_PATH : imagePathProp
-  const imageUrl = new URL(imagePath, 'http://test.com/')
-  const imageUrlSearchParamsString = imageUrl.searchParams.toString()
-  const imagePathname = trim(imageUrl.pathname, '/')
-  const image = {
-    type: 'image/png',
-    url: `/og-images${imagePathname ? `/${imagePathname}` : ''}${
-      imageUrlSearchParamsString ? `?${imageUrlSearchParamsString}` : ''
-    }`,
-    ...ogSize,
-  }
-  const images = [image]
 
   let openGraph: NonNullable<Metadata['openGraph']> = {
     type: article ? 'article' : 'website',
     title,
     description,
     url,
-    images,
   }
   const twitter: NonNullable<Metadata['twitter']> = {
-    card: 'summary_large_image',
+    card: 'summary',
     title,
     description,
     creator: AUTHOR_TWITTER_USERNAME,
-    images,
+    images: {
+      url: `${WEBSITE_ORGIN}/images/self/self-320x320.jpg?v=1`,
+      alt: WEBSITE_TITLE,
+      type: 'image/jpeg',
+      width: 320,
+      height: 320,
+    },
   }
 
   const metadata: Partial<Metadata> = {

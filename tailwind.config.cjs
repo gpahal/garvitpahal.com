@@ -1,5 +1,3 @@
-const { fontFamily } = require('tailwindcss/defaultTheme')
-
 const darkTheme = require('./color-themes/dark.cjs')
 const lightTheme = require('./color-themes/light.cjs')
 
@@ -7,10 +5,6 @@ const lightTheme = require('./color-themes/light.cjs')
 const config = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    fontFamily: {
-      sans: ['var(--font-sans-serif)', ...fontFamily.sans],
-      mono: ['var(--font-mono)', ...fontFamily.mono],
-    },
     fontWeight: {
       inherit: 'inherit',
       thin: '100',

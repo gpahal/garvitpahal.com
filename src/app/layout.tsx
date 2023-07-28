@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 
 import { Analytics } from '@vercel/analytics/react'
 
-import { monoFont, sansSerifFont } from '@/lib/fonts'
 import { WEBSITE_URL } from '@/lib/metadata'
 import { SOCIAL_LINKS } from '@/lib/social'
 import { cn } from '@/lib/styles'
@@ -20,14 +19,14 @@ export const metadata: Metadata = {
     {
       rel: 'icon',
       type: 'image/jpeg',
-      sizes: '32x32',
-      url: '/images/self/self-32x32.jpg',
+      sizes: '64x64',
+      url: '/favicon-64x64.jpg',
     },
     {
       rel: 'icon',
       type: 'image/jpeg',
-      sizes: '64x64',
-      url: '/images/self/self-64x64.jpg',
+      sizes: '32x32',
+      url: '/favicon-32x32.jpg',
     },
     {
       rel: 'shortcut icon',
@@ -43,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <RootScripts />
       </head>
-      <body className={cn(sansSerifFont.variable, monoFont.variable)} suppressHydrationWarning>
+      <body>
         <div className="mx-auto flex w-full max-w-[42rem] flex-col px-6 py-4 md:py-6 xl:py-8">
           <div className="border-divider mb-8 md:mb-10">
             <Nav />
