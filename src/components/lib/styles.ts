@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority'
 
-export const linkStyles = cva('underline-offset-2 rounded-md decoration-neutral-7 hocus-visible:outline-none', {
+export const linkStyles = cva('underline-offset-2 decoration-neutral-7 hocus-visible:outline-none text-opacity-100', {
   variants: {
     variant: {
       unstyled: 'no-underline',
@@ -15,24 +15,24 @@ export const linkStyles = cva('underline-offset-2 rounded-md decoration-neutral-
 })
 
 export const buttonStyles = cva(
-  'relative inline-flex items-center justify-center font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info-10 focus-visible:ring-offset-1',
+  'relative inline-flex items-center justify-center font-semimedium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info-10 focus-visible:ring-offset-1',
   {
     variants: {
       variant: {
-        outline:
-          'ring-neutral-7 text-fg shadow-sm ring-1 ring-inset hover:border-neutral-8 hover:bg-bg-emphasis-3 focus-visible:ring-offset-0',
+        outline: 'text-fg shadow-sm border border-neutral-7 hocus-visible:bg-bg-emphasis-3',
         ghost: 'text-fg hover:bg-bg-emphasis-3',
+        inverted: 'bg-fg text-bg shadow-sm hocus-visible:bg-fg-muted',
         'link-unstyled': linkStyles({ variant: 'unstyled' }),
         'link-highlighted': linkStyles({ variant: 'highlighted' }),
         'link-hover-highlighted': linkStyles({ variant: 'hover-highlighted' }),
         link: linkStyles({ variant: 'link' }),
-        info: 'bg-info-9 text-info-fg ring-1 ring-inset ring-info-9 shadow-sm hover:bg-info-10',
-        warn: 'bg-warn-9 text-warn-fg ring-1 ring-inset ring-warn-9 shadow-sm hover:bg-warn-10',
-        error: 'bg-error-9 text-error-fg ring-1 ring-inset ring-error-9 shadow-sm hover:bg-error-10',
+        info: 'bg-info-9 text-info-fg shadow-sm hocus-visible:bg-info-10',
+        warn: 'bg-warn-9 text-warn-fg shadow-sm hocus-visible:bg-warn-10',
+        error: 'bg-error-9 text-error-fg shadow-sm hocus-visible:bg-error-10',
       },
       size: {
         sm: 'h-8 rounded-[0.33rem] px-[1rem] text-sm',
-        md: 'h-9 rounded-[0.375rem] px-[1.2rem] py-2 text-base',
+        md: 'h-9 rounded-[0.375rem] px-[1.2rem] text-base',
         lg: 'h-10 rounded-[0.42rem] px-[1.4rem] text-lg',
         xl: 'h-11 rounded-[0.475rem] px-[1.6rem] text-xl',
       },

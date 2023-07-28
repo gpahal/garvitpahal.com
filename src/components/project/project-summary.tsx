@@ -7,13 +7,13 @@ export type ProjectSummaryProps = {
 
 export function ProjectSummary({ project: { name, description, href } }: ProjectSummaryProps) {
   return (
-    <Link
-      variant="unstyled"
-      href={href}
-      className="flex w-full flex-col items-start gap-[0.1rem] border border-neutral-6/50 bg-bg-emphasis-2 px-3 pb-[0.55rem] pt-[0.5rem] no-underline hocus-visible:bg-bg-emphasis-3"
-    >
-      <span className="font-extramedium">{name}</span>
-      <span className="text-[0.9375rem]/[1.35rem] text-fg-subtle">{description}</span>
+    <Link variant="unstyled" href={href} className="group block w-full">
+      <span className="-mx-2.5 block rounded-md px-2.5 group-hover:bg-bg-emphasis-3 group-focus-visible:bg-bg-emphasis-3">
+        <span className="inline-flex w-full flex-col justify-between gap-[0.025rem] pb-3 pt-2.5">
+          <span className="inline-block font-medium">{name}</span>
+          <span className="shrink-0 text-[0.9375rem]/[1.35rem] text-fg-subtle/80">{description}</span>
+        </span>
+      </span>
     </Link>
   )
 }

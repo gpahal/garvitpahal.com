@@ -5,7 +5,7 @@ import { cn } from '@/lib/styles'
 export type HeadingProps = React.HTMLAttributes<HTMLHeadingElement>
 
 export const H1 = React.forwardRef<HTMLHeadingElement, HeadingProps>(({ className, children, ...props }, ref) => (
-  <h1 {...props} ref={ref} className={cn('text-[1.75rem]/[2.125rem] font-bold tracking-[-0.02em]', className)}>
+  <h1 {...props} ref={ref} className={cn('text-3xl font-bold tracking-[-0.02em]', className)}>
     {children}
   </h1>
 ))

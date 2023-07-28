@@ -1,3 +1,5 @@
+const { fontFamily } = require('tailwindcss/defaultTheme')
+
 const darkTheme = require('./color-themes/dark.cjs')
 const lightTheme = require('./color-themes/light.cjs')
 
@@ -5,6 +7,10 @@ const lightTheme = require('./color-themes/light.cjs')
 const config = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      sans: ['var(--font-sans-serif)', ...fontFamily.sans],
+      mono: ['var(--font-mono)', ...fontFamily.mono],
+    },
     fontWeight: {
       inherit: 'inherit',
       thin: '100',
@@ -35,8 +41,8 @@ const config = {
           css: {
             '--tw-prose-headings': 'rgb(var(--colors-fg))',
             '--tw-prose-invert-headings': 'rgb(var(--colors-fg))',
-            '--tw-prose-body': 'rgb(var(--colors-fg-muted))',
-            '--tw-prose-invert-body': 'rgb(var(--colors-fg-muted))',
+            '--tw-prose-body': 'rgb(var(--colors-fg) / 0.95)',
+            '--tw-prose-invert-body': 'rgb(var(--colors-fg) / 0.95)',
             '--tw-prose-lead': 'rgb(var(--colors-fg-muted) / 0.9)',
             '--tw-prose-invert-lead': 'rgb(var(--colors-fg-muted) / 0.9)',
             '--tw-prose-links': 'inherit',
@@ -61,7 +67,7 @@ const config = {
             '--tw-prose-invert-counters': 'rgb(var(--colors-fg-muted) / 0.5)',
             '--tw-prose-bullets': 'rgb(var(--colors-fg-muted) / 0.325)',
             '--tw-prose-invert-bullets': 'rgb(var(--colors-fg-muted) / 0.325)',
-            '--tw-prose-hr': 'rgb(var(--colors-neutral-6))',
+            '--tw-prose-hr': 'rgb(var(--colors-neutral-6) / 0.75)',
             '--tw-prose-invert-hr': 'rgb(var(--colors-neutral-6))',
             '--tw-prose-bold': 'inherit',
             '--tw-prose-invert-bold': 'inherit',
@@ -70,7 +76,7 @@ const config = {
             margin: 0,
             padding: 0,
             fontSize: '1rem',
-            lineHeight: '1.625rem',
+            lineHeight: '1.75rem',
             fontWeight: '400',
 
             strong: {
@@ -90,23 +96,6 @@ const config = {
             'h1, h2, h3, h4, h5, h6': {
               position: 'relative',
               scrollMarginTop: '100px',
-            },
-
-            h1: {
-              marginTop: 0,
-              marginBottom: '1rem',
-            },
-            h2: {
-              marginTop: '1.75rem',
-              marginBottom: '1rem',
-            },
-            h3: {
-              marginTop: '1.55rem',
-              marginBottom: '0.6rem',
-            },
-            h4: {
-              marginTop: '1.5rem',
-              marginBottom: '0.5rem',
             },
 
             'a:not(.heading-anchor)': {
@@ -210,11 +199,6 @@ const config = {
                   color: 'rgb(var(--colors-fg) / 0.6)',
                 },
               },
-            },
-
-            hr: {
-              marginTop: '2rem',
-              marginBottom: '2rem',
             },
           },
         },

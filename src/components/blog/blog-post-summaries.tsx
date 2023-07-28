@@ -11,8 +11,8 @@ export type BlogPostSummariesProps = React.HTMLAttributes<HTMLDivElement> & {
 
 export function BlogPostSummaries({ blogPosts, className, ...props }: BlogPostSummariesProps) {
   return (
-    <div {...props} className={cn('space-y-4', className)}>
-      {blogPosts.slice(0, 3).map((blogPost) => (
+    <div {...props} className={cn('-my-2 divide-y divide-neutral-6/40', className)}>
+      {blogPosts.map((blogPost) => (
         <BlogPostSummary key={blogPost.path} blogPost={blogPost} />
       ))}
     </div>

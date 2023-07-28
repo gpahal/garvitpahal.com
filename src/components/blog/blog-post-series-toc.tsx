@@ -27,7 +27,7 @@ export function BlogPostSeriesToc({
   ).reverse()
 
   return reversedChildren.length === 0 ? null : (
-    <div className="mx-auto my-2 max-w-lg divide-y divide-neutral-6 rounded border bg-bg-emphasis-2">
+    <div className="mx-auto my-8 max-w-lg divide-y divide-neutral-6 rounded border bg-bg-emphasis-2/80">
       {showSeriesTitle ? (
         <div>
           <Link

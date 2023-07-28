@@ -8,14 +8,14 @@ export const runtime = 'edge'
 
 export const metadata: Metadata = generatePageMetadata({
   pathname: '/uses',
-  title: 'Tech stack - Garvit Pahal',
+  title: 'Uses - Garvit Pahal',
 })
 
 export default function UsesPage() {
   return (
     <>
       <header className="mb-5">
-        <H1>Tech Stack</H1>
+        <H1>Uses</H1>
       </header>
       <div className="prose">
         <p>

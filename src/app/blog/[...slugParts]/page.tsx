@@ -55,7 +55,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
   const currIndex = siblings ? siblings.findIndex((sibling) => sibling.path === blogPost.path) : -1
   const prev = siblings && currIndex >= 0 && siblings.length > currIndex + 1 ? siblings[currIndex + 1] : undefined
   const next = siblings && currIndex >= 1 ? siblings[currIndex - 1] : undefined
-  const recommendedBlogPosts = getRecommendedBlogPosts(blogPost)
+  const recommendedBlogPosts = getRecommendedBlogPosts(blogPost, 3)
 
   return (
     <>
@@ -69,7 +69,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
           {blogPost.data.readTimeResults.text}
         </p>
         {parent ? (
-          <div className="pb-1.5 pt-4">
+          <div>
             <BlogPostSeriesToc
               blog={blog}
               blogPost={parent}
@@ -78,7 +78,9 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
               highlightActiveBlogPost={true}
             />
           </div>
-        ) : null}
+        ) : (
+          <div className="pb-2" />
+        )}
       </header>
 
       <BlogPostContent blog={blog} blogPost={blogPost} />

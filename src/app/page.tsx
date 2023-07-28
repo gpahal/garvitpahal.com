@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Metadata } from 'next'
 
 import selfImage from '@public/images/self/self-320x320.jpg'
@@ -10,6 +11,7 @@ import { cn } from '@/lib/styles'
 import { H1, H2 } from '@/components/lib/heading'
 import { Image } from '@/components/lib/image'
 import { Link } from '@/components/lib/link'
+import { buttonStyles } from '@/components/lib/styles'
 import { BlogPostSummaries } from '@/components/blog/blog-post-summaries'
 import { ProjectSummaries } from '@/components/project/project-summaries'
 
@@ -38,6 +40,18 @@ export default function HomePage() {
             <p>
               I spend my days fixing bugs, rooting for FC Barcelona, watching movies and stuck in Bangalore traffic.
             </p>
+            <div className="flex flex-wrap items-center gap-2 pb-2">
+              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                <Link
+                  key={label}
+                  variant="unstyled"
+                  href={href}
+                  className={cn(buttonStyles({ variant: 'ghost', shape: 'square' }), 'underline-offset-4')}
+                >
+                  <Icon className="h-[1.125rem] w-[1.125rem]" />
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
         <div className="relative mb-6 mr-auto w-[128px] sm:mb-0 sm:mt-14 sm:w-auto sm:min-w-[128px] md:ml-4">
@@ -45,47 +59,41 @@ export default function HomePage() {
         </div>
       </div>
       <div className="prose mt-8">
-        <H2>Projects</H2>
-        <ProjectSummaries projects={PROJECTS.slice(0, 4)} />
-        {PROJECTS.length > 4 && (
-          <Link
-            variant="unstyled"
-            href="/projects"
-            className="mt-4 inline-block w-full border border-neutral-6/50 bg-bg-emphasis-2 px-3 pb-[0.55rem] pt-[0.5rem] hocus-visible:bg-bg-emphasis-3"
-          >
-            All projects →
-          </Link>
-        )}
-
-        <H2 className="mt-10">Blog</H2>
-        <BlogPostSummaries blogPosts={blogPosts.slice(0, 3)} />
-        {blogPosts.length > 3 && (
-          <Link
-            variant="unstyled"
-            href="/blog"
-            className="mt-4 inline-block w-full border border-neutral-6/50 bg-bg-emphasis-2 px-3 pb-[0.55rem] pt-[0.5rem] hocus-visible:bg-bg-emphasis-3"
-          >
-            All posts →
-          </Link>
-        )}
-
-        <H2 className="mt-10">Reach out</H2>
-        <div className="flex flex-wrap items-center gap-2">
-          {SOCIAL_LINKS.map(({ label, href, Icon, filledClassName }) => (
+        <H2 className="mt-12 flex items-start justify-between">
+          Projects
+          {PROJECTS.length > 3 && (
             <Link
-              key={label}
               variant="unstyled"
-              href={href}
+              href="/projects"
               className={cn(
-                'flex items-center gap-2 border border-neutral-6/50 bg-bg-emphasis-2 px-3 py-1',
-                filledClassName,
+                buttonStyles({ size: 'sm' }),
+                '-mt-0.5 inline-flex items-center gap-2 border-neutral-6/50 font-normal shadow-none',
               )}
             >
-              <Icon className="h-4 w-4" />
-              <span>{label}</span>
+              View all projects
             </Link>
-          ))}
-        </div>
+          )}
+        </H2>
+        <ProjectSummaries projects={PROJECTS.slice(0, 3)} />
+
+        <H2 className="mt-12 flex items-center justify-between">
+          Blog
+          {blogPosts.length > 3 && (
+            <div className="mt-3">
+              <Link
+                variant="unstyled"
+                href="/blog"
+                className={cn(
+                  buttonStyles({ size: 'sm' }),
+                  '-mt-0.5 inline-flex items-center gap-2 border-neutral-6/50 font-normal shadow-none',
+                )}
+              >
+                View all posts →
+              </Link>
+            </div>
+          )}
+        </H2>
+        <BlogPostSummaries blogPosts={blogPosts.slice(0, 3)} />
       </div>
     </>
   )
