@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 
 import { format } from 'date-fns'
 
-import type { FlattenedBlogPost } from '@/lib/blog'
 import { getBlog, getBlogPostBySlugParts, getRecommendedBlogPosts } from '@/lib/blog.server'
 import { getFlattenedContentCollectionItemByIndex } from '@/lib/content'
 import { generatePageMetadata } from '@/lib/metadata'
@@ -47,9 +46,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
     blogPost.parentIndex != null ? getFlattenedContentCollectionItemByIndex(blog, blogPost.parentIndex) : undefined
   const siblings = parent
     ? parent.childrenIndices
-      ? (parent.childrenIndices
-          .map((index) => getFlattenedContentCollectionItemByIndex(blog, index))
-          .filter(Boolean) as FlattenedBlogPost[])
+      ? parent.childrenIndices.map((index) => getFlattenedContentCollectionItemByIndex(blog, index)).filter(Boolean)
       : undefined
     : undefined
   const currIndex = siblings ? siblings.findIndex((sibling) => sibling.path === blogPost.path) : -1

@@ -20,9 +20,7 @@ export function BlogPostSeriesToc({
 }: BlogPostSeriesTocProps) {
   const reversedChildren = (
     blogPost.childrenIndices
-      ? (blogPost.childrenIndices
-          .map((index) => getFlattenedContentCollectionItemByIndex(blog, index))
-          .filter(Boolean) as FlattenedBlogPost[])
+      ? blogPost.childrenIndices.map((index) => getFlattenedContentCollectionItemByIndex(blog, index)).filter(Boolean)
       : []
   ).reverse()
 

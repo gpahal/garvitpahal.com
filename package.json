@@ -39,7 +39,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@gpahal/eslint-config": "^0.0.11",
+    "@gpahal/eslint-config": "^0.0.12",
     "@gpahal/markdoc": "^0.0.60",
     "@gpahal/prettier-config": "^0.0.5",
     "@gpahal/std-node": "^0.0.19",
@@ -50,6 +50,7 @@
     "@next/bundle-analyzer": "^13.4.12",
     "@radix-ui/colors": "^1.0.1",
     "@tailwindcss/typography": "^0.5.9",
+    "@total-typescript/ts-reset": "^0.4.2",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.17",
