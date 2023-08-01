@@ -85,6 +85,9 @@ export default function UsesPage() {
         <H2>Productivity tools</H2>
         <ul>
           <li>
+            Command center: <Link href="https://www.raycast.com/">Raycast</Link>
+          </li>
+          <li>
             Knowledge base: <Link href="https://www.notion.so/">Notion</Link>
           </li>
           <li>
@@ -109,9 +112,6 @@ export default function UsesPage() {
           </li>
           <li>
             DNS: <Link href="https://1.1.1.1/">WARP by Cloudflare</Link>
-          </li>
-          <li>
-            Window manager: <Link href="https://magnet.crowdcafe.com/">Magnet</Link>
           </li>
           <li>
             Break reminders: <Link href="https://www.dejal.com/timeout/">Time Out</Link>
