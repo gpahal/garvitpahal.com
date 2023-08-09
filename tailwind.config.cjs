@@ -41,10 +41,10 @@ const config = {
           css: {
             '--tw-prose-headings': 'rgb(var(--colors-fg))',
             '--tw-prose-invert-headings': 'rgb(var(--colors-fg))',
-            '--tw-prose-body': 'rgb(var(--colors-fg) / 0.95)',
-            '--tw-prose-invert-body': 'rgb(var(--colors-fg) / 0.95)',
-            '--tw-prose-lead': 'rgb(var(--colors-fg-muted) / 0.9)',
-            '--tw-prose-invert-lead': 'rgb(var(--colors-fg-muted) / 0.9)',
+            '--tw-prose-body': 'rgb(var(--colors-fg) / 0.8)',
+            '--tw-prose-invert-body': 'rgb(var(--colors-fg) / 0.8)',
+            '--tw-prose-lead': 'rgb(var(--colors-fg-muted) / 0.75)',
+            '--tw-prose-invert-lead': 'rgb(var(--colors-fg-muted) / 0.75)',
             '--tw-prose-links': 'inherit',
             '--tw-prose-invert-links': 'inherit',
             '--tw-prose-code': 'inherit',
@@ -76,7 +76,7 @@ const config = {
             margin: 0,
             padding: 0,
             fontSize: '1rem',
-            lineHeight: '1.75rem',
+            lineHeight: '1.6rem',
             fontWeight: '400',
 
             strong: {
@@ -100,6 +100,7 @@ const config = {
 
             'a:not(.heading-anchor)': {
               fontWeight: 'inherit',
+              color: 'rgb(var(--colors-fg))',
             },
 
             'a.heading-anchor': {

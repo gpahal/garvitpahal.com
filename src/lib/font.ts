@@ -2,7 +2,6 @@ import { Golos_Text, Source_Code_Pro } from 'next/font/google'
 
 export const sansSerifFont = Golos_Text({
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
   display: 'swap',
   variable: '--font-sans-serif',
 })

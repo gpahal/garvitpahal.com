@@ -40,13 +40,13 @@ export default function HomePage() {
             <p>
               I spend my days fixing bugs, rooting for FC Barcelona, watching movies and stuck in Bangalore traffic.
             </p>
-            <div className="flex flex-wrap items-center gap-2 pb-2">
+            <div className="-mx-2 flex flex-wrap items-center gap-3 pb-2">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                 <Link
                   key={label}
                   variant="unstyled"
                   href={href}
-                  className={cn(buttonStyles({ variant: 'ghost', shape: 'square' }), 'underline-offset-4')}
+                  className={cn(buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }), 'underline-offset-4')}
                 >
                   <Icon className="h-[1.125rem] w-[1.125rem]" />
                 </Link>

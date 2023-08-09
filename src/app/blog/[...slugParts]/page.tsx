@@ -96,9 +96,9 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
                 href={`/blog/${prev.path}`}
                 className="border-divider w-full transform rounded-md border p-1 hocus:bg-bg-emphasis-2 md:mr-2 md:max-w-[47.5%]"
               >
-                <div className="h-full px-2.5 py-1 leading-[1.325]">
-                  <p className="text-sm font-medium text-fg-subtle">Prev in the series</p>
-                  <p className="tracking-tight">{prev.data.frontmatter.title}</p>
+                <div className="h-full px-2.5 pb-1.5 pt-1">
+                  <p className="text-sm font-medium text-fg-subtle/80">Prev in the series</p>
+                  <p className="leading-[1.325rem] tracking-tight">{prev.data.frontmatter.title}</p>
                 </div>
               </Link>
             ) : null}
@@ -111,9 +111,9 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
                   'unstyled border-divider w-full transform rounded-md border p-1 hocus:bg-bg-emphasis-3 md:ml-2 md:max-w-[47.5%]',
                 )}
               >
-                <div className="h-full px-2.5 py-1 leading-[1.325]">
-                  <p className="text-sm font-medium text-fg-subtle md:text-right">Next in the series</p>
-                  <p className="tracking-tight md:text-right">{next.data.frontmatter.title}</p>
+                <div className="h-full px-2.5 pb-1.5 pt-1">
+                  <p className="text-sm font-medium text-fg-subtle/80 md:text-right">Next in the series</p>
+                  <p className="leading-[1.325rem] tracking-tight md:text-right">{next.data.frontmatter.title}</p>
                 </div>
               </Link>
             ) : null}
