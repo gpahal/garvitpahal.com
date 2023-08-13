@@ -46,7 +46,11 @@ export default function HomePage() {
                   key={label}
                   variant="unstyled"
                   href={href}
-                  className={cn(buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }), 'underline-offset-4')}
+                  className={cn(
+                    buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
+                    'underline-offset-4 opacity-80 hocus-visible:opacity-100',
+                  )}
+                  aria-label={label}
                 >
                   <Icon className="h-[1.125rem] w-[1.125rem]" />
                 </Link>
@@ -59,16 +63,13 @@ export default function HomePage() {
         </div>
       </div>
       <div className="prose mt-8">
-        <H2 className="mt-12 flex items-start justify-between">
+        <H2 className="mb-[1.125rem] mt-12 flex items-center justify-between">
           Projects
           {PROJECTS.length > 3 && (
             <Link
               variant="unstyled"
               href="/projects"
-              className={cn(
-                buttonStyles({ size: 'sm' }),
-                '-mt-0.5 inline-flex items-center gap-2 border-neutral-6/50 font-normal shadow-none',
-              )}
+              className={cn(buttonStyles({ size: 'sm' }), '-mt-0.5 border-neutral-6/50 !font-normal shadow-none')}
             >
               View all projects
             </Link>
@@ -76,21 +77,16 @@ export default function HomePage() {
         </H2>
         <ProjectSummaries projects={PROJECTS.slice(0, 3)} />
 
-        <H2 className="mt-12 flex items-center justify-between">
+        <H2 className="mb-[1.125rem] mt-12 flex items-center justify-between">
           Blog
           {blogPosts.length > 3 && (
-            <div className="mt-3">
-              <Link
-                variant="unstyled"
-                href="/blog"
-                className={cn(
-                  buttonStyles({ size: 'sm' }),
-                  '-mt-0.5 inline-flex items-center gap-2 border-neutral-6/50 font-normal shadow-none',
-                )}
-              >
-                View all posts →
-              </Link>
-            </div>
+            <Link
+              variant="unstyled"
+              href="/blog"
+              className={cn(buttonStyles({ size: 'sm' }), '-mt-0.5 border-neutral-6/50 font-normal shadow-none')}
+            >
+              View all posts
+            </Link>
           )}
         </H2>
         <BlogPostSummaries blogPosts={blogPosts.slice(0, 3)} />

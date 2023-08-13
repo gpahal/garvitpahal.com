@@ -76,7 +76,7 @@ const config = {
             margin: 0,
             padding: 0,
             fontSize: '1rem',
-            lineHeight: '1.6rem',
+            lineHeight: '1.725rem',
             fontWeight: '400',
 
             strong: {

@@ -38,11 +38,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RootScripts />
       </head>
       <body className={cn(sansSerifFont.variable, monoFont.variable)}>
-        <div className="mx-auto flex w-full max-w-[42rem] flex-col px-6 py-4 sm:py-6">
-          <div className="border-divider mb-10 pb-1.5 md:mb-12">
+        <div className="relative mx-auto flex w-full max-w-[42rem] flex-col px-6 py-4 sm:py-6">
+          <div className="fixed inset-x-0 bottom-0 z-10 bg-bg sm:bottom-auto sm:top-0 sm:py-4 md:py-5">
             <Nav />
           </div>
-          <main className="relative w-full">
+          <main className="relative mb-10 mt-2 w-full sm:mb-0 sm:mt-[4.5rem] md:mt-20">
             {children}
             <footer className="border-divider mt-10 flex w-full items-center justify-between gap-4 border-t pt-2">
               <span className="-ml-2 inline-flex">
@@ -64,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
                       'flex-shrink-0 text-fg-subtle',
                     )}
+                    aria-label={label}
                   >
                     <Icon
                       aria-label={label}

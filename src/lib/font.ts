@@ -1,7 +1,9 @@
-import { Golos_Text, Source_Code_Pro } from 'next/font/google'
+import { Poppins, Source_Code_Pro } from 'next/font/google'
 
-export const sansSerifFont = Golos_Text({
+export const sansSerifFont = Poppins({
   subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
   display: 'swap',
   variable: '--font-sans-serif',
 })

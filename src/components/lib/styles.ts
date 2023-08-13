@@ -31,10 +31,10 @@ export const buttonStyles = cva(
         error: 'bg-error-9 text-error-fg shadow-sm hocus-visible:bg-error-10',
       },
       size: {
-        sm: 'h-8 rounded-[0.33rem] px-[1rem] text-sm',
-        md: 'h-9 rounded-[0.375rem] px-[1.2rem] text-base',
-        lg: 'h-10 rounded-[0.42rem] px-[1.4rem] text-lg',
-        xl: 'h-11 rounded-[0.475rem] px-[1.6rem] text-xl',
+        sm: 'h-[1.875rem] rounded-[0.33rem] px-[0.875rem] text-sm',
+        md: 'h-9 rounded-[0.375rem] px-[1.05rem] text-base',
+        lg: 'h-10 rounded-[0.42rem] px-[1.25rem] text-lg',
+        xl: 'h-11 rounded-[0.475rem] px-[1.45rem] text-xl',
       },
       shape: {
         rect: '',
