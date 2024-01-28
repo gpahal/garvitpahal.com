@@ -52,7 +52,7 @@ export default function HomePage() {
                   )}
                   aria-label={label}
                 >
-                  <Icon className="h-[1.125rem] w-[1.125rem]" />
+                  <Icon className="size-[1.125rem]" />
                 </Link>
               ))}
             </div>

@@ -144,7 +144,7 @@ function ContentCodeBlock({ hideHeader, className, children, ...props }: Content
       {!hideHeader && finalName && Icon ? (
         <div className="flex h-9 w-full flex-row items-center justify-between gap-4 border-b px-4 text-sm font-normal text-fg">
           <div className="flex items-center gap-2">
-            <Icon className="h-4 w-4 text-fg-subtle" />
+            <Icon className="size-4 text-fg-subtle" />
             {finalName}
           </div>
         </div>
@@ -160,7 +160,7 @@ function ContentCodeBlock({ hideHeader, className, children, ...props }: Content
         )}
         onClick={isCopied ? undefined : onClick}
       >
-        {isCopied ? <CheckIcon className="h-4 w-4" /> : <CopyIcon className="h-4 w-4" />}
+        {isCopied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
       </Button>
     </div>
   )
@@ -209,7 +209,7 @@ function ContentCodeBlockGroup({ defaultValue, className, children, ...props }: 
       <TabsList className="px-1">
         {childrenProps.map(({ Icon, label }, i) => (
           <TabsTrigger key={i} value={String(i)} className="gap-2 text-sm font-normal">
-            {!hasCommonIcon && <Icon className="h-3.5 w-3.5 text-fg-subtle" />}
+            {!hasCommonIcon && <Icon className="size-3.5 text-fg-subtle" />}
             {label}
           </TabsTrigger>
         ))}

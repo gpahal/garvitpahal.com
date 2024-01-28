@@ -22,14 +22,14 @@ export function Nav() {
                 src={logoImage}
                 alt="Garvit Pahal"
                 data-theme="light"
-                className="h-[1.8rem] w-[1.8rem] rounded-md sm:rounded-full"
+                className="size-[1.8rem] rounded-md sm:rounded-full"
                 priority
               />
               <Image
                 src={logoLightImage}
                 alt="Garvit Pahal"
                 data-theme="dark"
-                className="h-[1.8rem] w-[1.8rem] rounded-md sm:rounded-full"
+                className="size-[1.8rem] rounded-md sm:rounded-full"
                 priority
               />
             </Link>

@@ -6,7 +6,7 @@ import { AlertTriangleIcon, BanIcon, InfoIcon, type LucideIcon, type LucideProps
 import { cn } from '@/lib/styles'
 
 const alertVariants = cva(
-  'relative flex w-full flex-col rounded-md border px-4 pb-2 pt-[0.8rem] [&:has(svg)]:pl-10 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-3 [&>svg]:top-[0.75rem] [&>svg]:h-[1.25rem] [&>svg]:w-[1.25rem] [&>svg]:text-fg',
+  'relative flex w-full flex-col rounded-md border px-4 pb-2 pt-[0.8rem] [&:has(svg)]:pl-10 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-3 [&>svg]:top-[0.75rem] [&>svg]:size-[1.25rem] [&>svg]:text-fg',
   {
     variants: {
       variant: {

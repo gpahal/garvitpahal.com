@@ -74,10 +74,10 @@ export const buttonStyles = cva(
 export const buttonSpinnerStyles = cva('text-inherit', {
   variants: {
     size: {
-      sm: 'w-3.5 h-3.5',
-      md: 'w-4 h-4',
-      lg: 'w-[1.125rem] h-[1.125rem]',
-      xl: 'w-5 h-5',
+      sm: 'size-3.5',
+      md: 'size-4',
+      lg: 'size-[1.125rem]',
+      xl: 'size-5',
     },
   },
   defaultVariants: {

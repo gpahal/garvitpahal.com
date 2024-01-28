@@ -70,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       aria-label={label}
                       stroke="currentColor"
                       fill="transparent"
-                      className="h-4 w-4 rounded-md text-base"
+                      className="size-4 rounded-md text-base"
                     />
                   </Link>
                 ))}

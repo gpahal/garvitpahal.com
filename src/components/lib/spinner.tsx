@@ -7,9 +7,9 @@ import { cn } from '@/lib/styles'
 const spinnerStyles = cva('inline-block animate-spin', {
   variants: {
     size: {
-      sm: 'h-6 w-6',
-      md: 'h-8 w-8',
-      lg: 'h-10 w-10',
+      sm: 'size-6',
+      md: 'size-8',
+      lg: 'size-10',
     },
   },
   defaultVariants: {
