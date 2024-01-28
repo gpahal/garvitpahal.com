@@ -8,8 +8,8 @@ const config = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     fontFamily: {
-      sans: ['var(--font-sans-serif)', ...fontFamily.sans],
-      mono: ['var(--font-mono)', ...fontFamily.mono],
+      sans: ['var(--font-geist-sans)', ...fontFamily.sans],
+      mono: ['var(--font-geist-mono)', ...fontFamily.mono],
     },
     fontWeight: {
       inherit: 'inherit',

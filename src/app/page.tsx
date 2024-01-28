@@ -40,7 +40,7 @@ export default function HomePage() {
             <p>
               I spend my days fixing bugs, rooting for FC Barcelona, watching movies and stuck in Bangalore traffic.
             </p>
-            <div className="-mx-2 flex flex-wrap items-center gap-3 pb-2">
+            <div className="mx-[-0.4rem] flex flex-wrap items-center gap-2.5 pb-2">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                 <Link
                   key={label}

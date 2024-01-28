@@ -9,7 +9,7 @@ export type ProjectSummariesProps = React.HTMLAttributes<HTMLDivElement> & {
 
 export function ProjectSummaries({ projects, className, ...props }: ProjectSummariesProps) {
   return (
-    <div {...props} className={cn('-my-2 divide-y divide-neutral-6/40', className)}>
+    <div {...props} className={cn('-my-2.5 divide-y divide-neutral-6/40', className)}>
       {projects.map((project) => (
         <ProjectSummary key={project.name} project={project} />
       ))}

@@ -2,8 +2,9 @@ import * as React from 'react'
 import type { Metadata } from 'next'
 
 import { Analytics } from '@vercel/analytics/react'
+import { GeistMono } from 'geist/font/mono'
+import { GeistSans } from 'geist/font/sans'
 
-import { monoFont, sansSerifFont } from '@/lib/font'
 import { WEBSITE_URL } from '@/lib/metadata'
 import { SOCIAL_LINKS } from '@/lib/social'
 import { cn } from '@/lib/styles'
@@ -37,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <RootScripts />
       </head>
-      <body className={cn(sansSerifFont.variable, monoFont.variable)}>
+      <body className={cn(GeistSans.variable, GeistMono.variable)}>
         <div className="relative mx-auto flex w-full max-w-[42rem] flex-col px-6 py-4 sm:py-6">
           <div className="fixed inset-x-0 bottom-0 z-10 bg-bg sm:bottom-auto sm:top-0 sm:py-4 md:py-5">
             <Nav />
