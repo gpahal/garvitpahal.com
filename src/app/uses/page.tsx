@@ -98,7 +98,7 @@ export default function UsesPage() {
           </li>
           <li>
             Calendar: <Link href="https://calendar.google.com/">Google Calendar</Link> and{' '}
-            <Link href="https://cron.com/">Cron</Link>
+            <Link href="https://www.notion.so/product/calendar">Notion Calendar</Link>
           </li>
           <li>
             File management and backup: <Link href="https://drive.google.com/">Google Drive</Link> and{' '}
