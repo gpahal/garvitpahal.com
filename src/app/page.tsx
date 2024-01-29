@@ -29,13 +29,13 @@ export default function HomePage() {
       <div className="flex flex-col-reverse items-start sm:flex-row">
         <div className="flex flex-col pr-8">
           <header className="mb-5">
-            <H1>Hey, I&apos;m Garvit</H1>
+            <H1>Hi, I&apos;m Garvit</H1>
           </header>
 
           <div className="prose">
             <p>
-              I&apos;m a software engineer from India. I&apos;m currently a founding engineer at{' '}
-              <Link href="https://joinperch.com/">Perch</Link>. We help creators host their very own ama page.
+              I&apos;m a software engineer from India. I work at <Link href="https://perch.app/">Perch</Link> as
+              founding engineer. We want to make the world smarter by helping people develop a reading habit.
             </p>
             <p>
               I spend my days fixing bugs, rooting for FC Barcelona, watching movies and stuck in Bangalore traffic.
@@ -63,33 +63,11 @@ export default function HomePage() {
         </div>
       </div>
       <div className="prose mt-8">
-        <H2 className="mb-[1.125rem] mt-12 flex items-center justify-between">
-          Projects
-          {PROJECTS.length > 3 && (
-            <Link
-              variant="unstyled"
-              href="/projects"
-              className={cn(buttonStyles({ size: 'sm' }), '-mt-0.5 border-neutral-6/50 !font-normal shadow-none')}
-            >
-              View all projects
-            </Link>
-          )}
-        </H2>
-        <ProjectSummaries projects={PROJECTS.slice(0, 3)} />
+        <H2 className="mb-[1.125rem] mt-12">Projects</H2>
+        <ProjectSummaries projects={PROJECTS} maxProjectsVisible={3} />
 
-        <H2 className="mb-[1.125rem] mt-12 flex items-center justify-between">
-          Blog
-          {blogPosts.length > 3 && (
-            <Link
-              variant="unstyled"
-              href="/blog"
-              className={cn(buttonStyles({ size: 'sm' }), '-mt-0.5 border-neutral-6/50 font-normal shadow-none')}
-            >
-              View all posts
-            </Link>
-          )}
-        </H2>
-        <BlogPostSummaries blogPosts={blogPosts.slice(0, 3)} />
+        <H2 className="mb-[1.125rem] mt-12">Blog</H2>
+        <BlogPostSummaries blogPosts={blogPosts} maxBlogPostsVisible={3} />
       </div>
     </>
   )

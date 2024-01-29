@@ -18,7 +18,7 @@ export function Nav() {
                 variant="unstyled"
                 href={path}
                 requiresExactMatch={requiresExactMatch}
-                className="relative inline-block px-2.5 text-fg-subtle/80 hocus-visible:text-fg"
+                className="relative inline-block px-2.5 text-[0.9375rem] text-fg-subtle/80 hocus-visible:text-fg"
                 activeClassName="text-fg group"
               >
                 {({ isActive, isChildActive }) => (

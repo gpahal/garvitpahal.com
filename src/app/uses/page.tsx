@@ -24,7 +24,7 @@ export default function UsesPage() {
         </p>
         <p>
           There was a time in my early 20&apos;s when I used to enjoy building my own desktop and OS from scratch. I
-          still enjoy tinkering with new tech but I depend on a simple setup so that I focus more on my work.
+          still enjoy tinkering with new tech but I depend on a simple setup so that I can focus more on my work.
         </p>
         <p></p>
         <H2>Hardware</H2>
