@@ -4,9 +4,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@public/*": ["./public/*"],
-    },
+      "@public/*": ["./public/*"]
+    }
   },
   "include": ["src", "scripts", "next-env.d.ts", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }
