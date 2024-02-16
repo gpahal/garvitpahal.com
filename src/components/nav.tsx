@@ -10,7 +10,7 @@ import { Link } from '@/components/lib/link'
 export function Nav() {
   return (
     <LayoutGroup>
-      <nav className="flex w-full items-center justify-center sm:mx-auto sm:max-w-[42rem] sm:px-4">
+      <nav className="flex w-full items-center justify-center sm:mx-auto sm:max-w-[42rem] sm:px-2">
         <div className="border-divider relative mx-[-0.6rem] flex h-10 w-full items-center justify-between border-t px-[0.875rem] py-1 tracking-tight sm:mx-0 sm:h-[2.325rem] sm:rounded-full sm:border sm:px-4">
           <Link
             variant="unstyled"
