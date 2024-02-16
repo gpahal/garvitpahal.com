@@ -1,5 +1,6 @@
-import fs from 'node:fs/promises'
-import path from 'node:path'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { formatDistanceToNow } from 'date-fns'
 import sizeOf from 'image-size'
@@ -13,9 +14,10 @@ import { isAbsoluteUrl } from '@gpahal/std/url'
 import { BLOG_FRONTMATTER_SCHEMA, type BlogFrontmatterSchema } from '../src/lib/blog'
 import type { ContentCollectionMetadata } from '../src/lib/content'
 
-const PUBLIC_DIR_PATH = path.join(__dirname, '..', 'public')
-const CONTENT_DIR_PATH = path.join(__dirname, '..', 'content')
-const CONTENT_GEN_DB_DIR_PATH = path.join(__dirname, '..', 'src', 'gen', 'content')
+const DIRNAME = dirname(fileURLToPath(import.meta.url))
+const PUBLIC_DIR_PATH = join(DIRNAME, '..', 'public')
+const CONTENT_DIR_PATH = join(DIRNAME, '..', 'content')
+const CONTENT_GEN_DB_DIR_PATH = join(DIRNAME, '..', 'src', 'gen', 'content')
 
 async function transformImageSrcAndGetSize(src: string): Promise<{ src: string; width?: number; height?: number }> {
   let input: string | Buffer = src
@@ -27,8 +29,8 @@ async function transformImageSrcAndGetSize(src: string): Promise<{ src: string; 
       throw new Error('Image src should start with a slash')
     }
 
-    src = path.join('/images', src)
-    input = path.join(PUBLIC_DIR_PATH, src)
+    src = join('/images', src)
+    input = join(PUBLIC_DIR_PATH, src)
   }
 
   const { width, height } = sizeOf(input)
@@ -52,9 +54,9 @@ async function generateCollectionDbInner<TFrontmatterSchema extends FrontmatterS
   const { path: collectionPath, frontmatterSchema, transformFileName, transformConfig } = collection
   console.info(`Generating collection db for ${collectionPath}...`)
 
-  const contentDir = path.join(CONTENT_GEN_DB_DIR_PATH, collectionPath)
-  await fs.mkdir(contentDir, { mode: 0o755, recursive: true })
-  const collectionContentDirPath = path.join(CONTENT_DIR_PATH, collectionPath)
+  const contentDir = join(CONTENT_GEN_DB_DIR_PATH, collectionPath)
+  await mkdir(contentDir, { mode: 0o755, recursive: true })
+  const collectionContentDirPath = join(CONTENT_DIR_PATH, collectionPath)
   const result = await parseDirectory(FS_MODULE, collectionContentDirPath, () => 'index.mdoc', {
     frontmatterSchema,
     transformConfig: {
@@ -127,8 +129,8 @@ async function generateCollectionDbInner<TFrontmatterSchema extends FrontmatterS
 
   const data = result.data satisfies FileMap<unknown>
   const flattenedFileMapIndex = createFlattenedFileMapIndex(data, collection.compareFileMapItems)
-  const contentGenDbFilePath = path.join(contentDir, 'db.json')
-  await fs.writeFile(contentGenDbFilePath, JSON.stringify(flattenedFileMapIndex), { mode: 0o644 })
+  const contentGenDbFilePath = join(contentDir, 'db.json')
+  await writeFile(contentGenDbFilePath, JSON.stringify(flattenedFileMapIndex), { mode: 0o644 })
 
   console.info(`Generated collection db for ${collectionPath}`)
 }
