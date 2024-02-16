@@ -3,9 +3,12 @@ import type { Metadata } from 'next'
 import { trim } from '@gpahal/std/string'
 
 export const WEBSITE_TITLE = 'Garvit Pahal'
+export const WEBSITE_DESCRIPTION = 'Software engineer interested in technology and football'
 export const WEBSITE_HOSTNAME = 'garvitpahal.com'
-export const WEBSITE_ORGIN = `https://${WEBSITE_HOSTNAME}`
-export const WEBSITE_URL = new URL(WEBSITE_ORGIN)
+export const WEBSITE_URL = `https://${WEBSITE_HOSTNAME}`
+export const WEBSITE_URL_OBJECT = new URL(WEBSITE_URL)
+export const WEBSITE_IMAGE_PATH = '/images/self/self-320x320.jpg'
+export const WEBSITE_IMAGE_URL = `${WEBSITE_URL}${WEBSITE_IMAGE_PATH}`
 
 export const AUTHOR_NAME = 'Garvit Pahal'
 export const AUTHOR_URL = WEBSITE_URL
@@ -30,11 +33,11 @@ export function generatePageMetadata({
   }
 }): Partial<Metadata> {
   pathname = trim(pathname || '', '/')
-  const url = `${WEBSITE_ORGIN}${pathname ? `/${pathname}` : ''}`
+  const url = `${WEBSITE_URL}${pathname ? `/${pathname}` : ''}`
 
   const title = trim(titleProp || WEBSITE_TITLE)
   const browserTitle = trim(browserTitleProp || title)
-  const description = trim(descriptionProp || 'Software engineer interested in technology and football')
+  const description = trim(descriptionProp || WEBSITE_DESCRIPTION)
 
   let openGraph: NonNullable<Metadata['openGraph']> = {
     type: article ? 'article' : 'website',
@@ -48,7 +51,7 @@ export function generatePageMetadata({
     description,
     creator: AUTHOR_TWITTER_USERNAME,
     images: {
-      url: `${WEBSITE_ORGIN}/images/self/self-320x320.jpg?v=1`,
+      url: WEBSITE_IMAGE_URL,
       alt: WEBSITE_TITLE,
       type: 'image/jpeg',
       width: 320,
@@ -57,7 +60,7 @@ export function generatePageMetadata({
   }
 
   const metadata: Partial<Metadata> = {
-    metadataBase: WEBSITE_URL,
+    metadataBase: WEBSITE_URL_OBJECT,
     title: browserTitle,
     description,
     authors: {

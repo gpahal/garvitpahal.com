@@ -1,6 +1,8 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
 
+import { RssIcon } from 'lucide-react'
+
 import selfImage from '@public/images/self/self-320x320.jpg'
 
 import { getTopLevelBlogPosts } from '@/lib/blog.server'
@@ -68,11 +70,24 @@ export default function HomePage() {
         </div>
       </div>
       <div className="prose mt-8">
+        <div className="mb-[1.125rem] mt-12 flex items-center justify-between">
+          <H2 className="my-0">Blog</H2>
+          <Link
+            variant="unstyled"
+            href="/rss.xml"
+            className={cn(
+              buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
+              'underline-offset-4 opacity-80 hocus-visible:opacity-100',
+            )}
+            aria-label="RSS"
+          >
+            <RssIcon className="size-[1.125rem]" />
+          </Link>
+        </div>
+        <BlogPostSummaries blogPosts={blogPosts} maxBlogPostsVisible={3} />
+
         <H2 className="mb-[1.125rem] mt-12">Projects</H2>
         <ProjectSummaries projects={PROJECTS} maxProjectsVisible={3} />
-
-        <H2 className="mb-[1.125rem] mt-12">Blog</H2>
-        <BlogPostSummaries blogPosts={blogPosts} maxBlogPostsVisible={3} />
       </div>
     </>
   )

@@ -13,14 +13,14 @@ export const NAV_LINK_ITEMS: NavLinkItem[] = [
     requiresExactMatch: true,
   },
   {
-    label: 'Projects',
-    description: "Projects I've worked on",
-    path: '/projects',
-  },
-  {
     label: 'Blog',
     description: "Blog posts I've written",
     path: '/blog',
+  },
+  {
+    label: 'Projects',
+    description: "Projects I've worked on",
+    path: '/projects',
   },
   {
     label: 'Uses',

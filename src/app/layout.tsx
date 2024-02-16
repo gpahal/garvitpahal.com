@@ -6,7 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 
-import { WEBSITE_URL } from '@/lib/metadata'
+import { WEBSITE_URL_OBJECT } from '@/lib/metadata'
 import { SOCIAL_LINKS } from '@/lib/social'
 import { cn } from '@/lib/styles'
 import { Link } from '@/components/lib/link'
@@ -18,7 +18,7 @@ import { RootScripts } from './root-scripts'
 import '@/styles/global.css'
 
 export const metadata: Metadata = {
-  metadataBase: WEBSITE_URL,
+  metadataBase: WEBSITE_URL_OBJECT,
   icons: [
     {
       rel: 'icon',
@@ -37,6 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml" />
+
         <RootScripts />
       </head>
       <body className={cn(GeistSans.variable, GeistMono.variable)}>
@@ -47,15 +50,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="relative mb-10 mt-2 w-full sm:mb-0 sm:mt-[4rem] md:mt-[4.5rem]">
             {children}
             <footer className="border-divider mt-10 flex w-full items-center justify-between gap-4 border-t pt-1.5">
-              <span className="-ml-2 inline-flex">
+              <div className="-ml-2 flex items-center gap-0.5 text-fg-subtle">
                 <Link
                   variant="unstyled"
-                  href="/"
+                  href="/rss.xml"
                   className={cn(buttonStyles({ variant: 'ghost', size: 'sm' }), 'h-7 px-2 text-fg-subtle')}
                 >
-                  Garvit Pahal
+                  RSS
                 </Link>
-              </span>
+                <span>•</span>
+                <Link
+                  variant="unstyled"
+                  href="/sitemap.xml"
+                  className={cn(buttonStyles({ variant: 'ghost', size: 'sm' }), 'h-7 px-2 text-fg-subtle')}
+                >
+                  Sitemap
+                </Link>
+              </div>
               <div className="-mr-2 flex flex-row flex-wrap items-center gap-1">
                 {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                   <Link
@@ -68,12 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     )}
                     aria-label={label}
                   >
-                    <Icon
-                      aria-label={label}
-                      stroke="currentColor"
-                      fill="transparent"
-                      className="size-4 rounded-md text-base"
-                    />
+                    <Icon aria-label={label} stroke="currentColor" fill="transparent" className="size-4 text-base" />
                   </Link>
                 ))}
               </div>

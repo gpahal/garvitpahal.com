@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 
 import { getAllBlogPosts } from '@/lib/blog.server'
-import { WEBSITE_ORGIN } from '@/lib/metadata'
+import { WEBSITE_URL } from '@/lib/metadata'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const blogPosts = getAllBlogPosts()
@@ -9,23 +9,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: `${WEBSITE_ORGIN}`,
+      url: `${WEBSITE_URL}`,
       lastModified,
     },
     {
-      url: `${WEBSITE_ORGIN}/projects`,
+      url: `${WEBSITE_URL}/projects`,
       lastModified,
     },
     {
-      url: `${WEBSITE_ORGIN}/blog`,
+      url: `${WEBSITE_URL}/blog`,
       lastModified,
     },
-    ...blogPosts.map((post) => ({
-      url: `${WEBSITE_ORGIN}/blog/${post.path}`,
+    ...blogPosts.map((blogPost) => ({
+      url: `${WEBSITE_URL}/blog/${blogPost.path}`,
       lastModified,
     })),
     {
-      url: `${WEBSITE_ORGIN}/uses`,
+      url: `${WEBSITE_URL}/uses`,
       lastModified,
     },
   ]

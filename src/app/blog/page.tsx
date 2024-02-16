@@ -1,8 +1,13 @@
 import type { Metadata } from 'next'
 
+import { RssIcon } from 'lucide-react'
+
 import { getTopLevelBlogPosts } from '@/lib/blog.server'
 import { generatePageMetadata } from '@/lib/metadata'
+import { cn } from '@/lib/styles'
 import { H1 } from '@/components/lib/heading'
+import { Link } from '@/components/lib/link'
+import { buttonStyles } from '@/components/lib/styles'
 import { BlogPostSummaries } from '@/components/blog/blog-post-summaries'
 
 export const runtime = 'edge'
@@ -17,8 +22,19 @@ export default function BlogPage() {
 
   return (
     <>
-      <header className="mb-5">
+      <header className="mb-5 flex items-center justify-between">
         <H1>Blog</H1>
+        <Link
+          variant="unstyled"
+          href="/rss.xml"
+          className={cn(
+            buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
+            'underline-offset-4 opacity-80 hocus-visible:opacity-100',
+          )}
+          aria-label="RSS"
+        >
+          <RssIcon className="size-5" />
+        </Link>
       </header>
       <BlogPostSummaries blogPosts={blogPosts} />
     </>
