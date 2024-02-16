@@ -59,7 +59,12 @@ export default function HomePage() {
           </div>
         </div>
         <div className="mb-8 mr-auto sm:mb-0 sm:mt-14 md:ml-4">
-          <Image src={selfImage} alt="Garvit Pahal" className="min-w-[128px] sm:min-w-[160px] rounded-xl border" priority />
+          <Image
+            src={selfImage}
+            alt="Garvit Pahal"
+            className="min-w-[128px] rounded-xl border sm:min-w-[160px]"
+            priority
+          />
         </div>
       </div>
       <div className="prose mt-8">

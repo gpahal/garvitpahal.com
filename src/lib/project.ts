@@ -6,18 +6,23 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
-    name: 'Superstream',
-    description: 'A Solana-based protocol for real-time streaming payments',
-    href: 'https://superstream.finance/',
-  },
-  {
     name: 'garvitpahal.com',
     description: 'My personal website. You are here',
     href: 'https://garvitpahal.com/',
   },
   {
+    name: 'Superstream',
+    description: 'A Solana-based protocol for real-time streaming payments',
+    href: 'https://superstream.finance/',
+  },
+  {
+    name: 'solana-fellowship',
+    description: 'Stuff I worked on as part of the Solana Fellowship',
+    href: 'https://github.com/gpahal/solana-fellowship',
+  },
+  {
     name: 'jslib',
-    description: 'JS/TS libraries and configs I use in my personal projects',
+    description: 'JS/TS libraries and configs I use in my projects',
     href: 'https://github.com/gpahal/jslib',
   },
   {
@@ -29,11 +34,6 @@ export const PROJECTS: Project[] = [
     name: 'hgraph',
     description: 'Graph datastore implemented in Haskell',
     href: 'https://github.com/gpahal/hgraph',
-  },
-  {
-    name: 'solana-fellowship',
-    description: 'Stuff I worked on as part of the Solana Fellowship',
-    href: 'https://github.com/gpahal/solana-fellowship',
   },
   {
     name: 'go-algos',

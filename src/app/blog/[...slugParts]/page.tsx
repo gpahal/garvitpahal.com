@@ -58,9 +58,9 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
     <>
       <header className="mb-4 flex flex-col">
         <H1>
-          <Balancer>{blogPost.data.frontmatter.title}</Balancer>
+          <Balancer ratio={0.5}>{blogPost.data.frontmatter.title}</Balancer>
         </H1>
-        <p className="mt-0.5 text-sm text-fg-subtle">
+        <p className="mt-1 text-[0.9375rem] text-fg-subtle">
           {format(blogPost.data.frontmatter.publishedOn, 'MMMM dd, yyyy')}
           {' • '}
           {blogPost.data.readTimeResults.text}

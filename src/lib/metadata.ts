@@ -8,7 +8,7 @@ export const WEBSITE_ORGIN = `https://${WEBSITE_HOSTNAME}`
 export const WEBSITE_URL = new URL(WEBSITE_ORGIN)
 
 export const AUTHOR_NAME = 'Garvit Pahal'
-export const AUTHOR_URL = 'https://garvitpahal.com'
+export const AUTHOR_URL = WEBSITE_URL
 export const AUTHOR_TWITTER_USERNAME = '@g10pahal'
 
 export const DEFAULT_IMAGE_PATH = '?v=1'
