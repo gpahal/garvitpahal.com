@@ -7,7 +7,7 @@ export const WEBSITE_DESCRIPTION = 'Software developer from India interested in 
 export const WEBSITE_HOSTNAME = 'garvitpahal.com'
 export const WEBSITE_URL = `https://${WEBSITE_HOSTNAME}`
 export const WEBSITE_URL_OBJECT = new URL(WEBSITE_URL)
-export const WEBSITE_IMAGE_PATH = '/images/self/self-320x320.jpg'
+export const WEBSITE_IMAGE_PATH = '/images/self/self-320x320.jpg?v=1'
 export const WEBSITE_IMAGE_URL = `${WEBSITE_URL}${WEBSITE_IMAGE_PATH}`
 
 export const AUTHOR_NAME = 'Garvit Pahal'
