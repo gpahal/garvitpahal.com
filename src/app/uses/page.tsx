@@ -19,7 +19,7 @@ export default function UsesPage() {
       </header>
       <div className="prose">
         <p>
-          This is rough list of the products I use daily as a software engineer. Check out{' '}
+          This is rough list of the products I use daily as a software developer. Check out{' '}
           <Link href="https://uses.tech/">uses.tech</Link> for a list of other people&apos;s /uses pages!
         </p>
         <p>

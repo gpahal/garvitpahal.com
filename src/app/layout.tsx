@@ -31,6 +31,7 @@ export const metadata: Metadata = {
       url: '/favicon.ico',
     },
   ],
+  robots: 'index, follow',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

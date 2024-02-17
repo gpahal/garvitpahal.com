@@ -36,7 +36,7 @@ export default function HomePage() {
 
           <div className="prose">
             <p>
-              I&apos;m a software engineer from India. I work at <Link href="https://perch.app/">Perch</Link> as
+              I&apos;m a software developer from India. I work at <Link href="https://perch.app/">Perch</Link> as a
               founding engineer. We want to make the world smarter by helping people develop a reading habit.
             </p>
             <p>

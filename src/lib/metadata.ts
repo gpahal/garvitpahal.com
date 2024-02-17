@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { trim } from '@gpahal/std/string'
 
 export const WEBSITE_TITLE = 'Garvit Pahal'
-export const WEBSITE_DESCRIPTION = 'Software engineer interested in technology and football'
+export const WEBSITE_DESCRIPTION = 'Software developer from India interested in technology, football and movies'
 export const WEBSITE_HOSTNAME = 'garvitpahal.com'
 export const WEBSITE_URL = `https://${WEBSITE_HOSTNAME}`
 export const WEBSITE_URL_OBJECT = new URL(WEBSITE_URL)
