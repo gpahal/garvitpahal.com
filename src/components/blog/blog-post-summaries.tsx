@@ -18,7 +18,7 @@ export function BlogPostSummaries({ blogPosts, maxBlogPostsVisible, className, .
   const showViewAllBlogPostsLink = maxBlogPostsVisible && blogPosts.length > maxBlogPostsVisible
 
   return (
-    <div {...props} className={cn('-my-2.5 divide-y divide-neutral-6/40', className)}>
+    <div {...props} className={cn('-my-2.5', className)}>
       {visibleBlogPosts.map((blogPost) => (
         <BlogPostSummary key={blogPost.path} blogPost={blogPost} />
       ))}

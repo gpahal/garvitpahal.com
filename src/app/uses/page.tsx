@@ -4,8 +4,6 @@ import { generatePageMetadata } from '@/lib/metadata'
 import { H1, H2 } from '@/components/lib/heading'
 import { Link } from '@/components/lib/link'
 
-export const runtime = 'edge'
-
 export const metadata: Metadata = generatePageMetadata({
   pathname: '/uses',
   title: 'Uses - Garvit Pahal',

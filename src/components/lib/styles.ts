@@ -1,25 +1,28 @@
 import { cva } from 'class-variance-authority'
 
-export const linkStyles = cva('underline-offset-2 decoration-neutral-7 hocus-visible:outline-none text-opacity-100', {
-  variants: {
-    variant: {
-      unstyled: 'no-underline',
-      highlighted: 'underline hocus-visible:decoration-neutral-8',
-      'hover-highlighted': 'no-underline hocus-visible:underline',
-      link: 'text-link-10 no-underline hocus-visible:text-link-11',
+export const linkStyles = cva(
+  'underline-offset-[3px] decoration-neutral-7 hocus-visible:outline-none text-opacity-100',
+  {
+    variants: {
+      variant: {
+        unstyled: 'no-underline',
+        highlighted: 'underline hocus-visible:decoration-neutral-8',
+        'hover-highlighted': 'no-underline hocus-visible:underline',
+        link: 'text-link-10 no-underline hocus-visible:text-link-11',
+      },
+    },
+    defaultVariants: {
+      variant: 'highlighted',
     },
   },
-  defaultVariants: {
-    variant: 'highlighted',
-  },
-})
+)
 
 export const buttonStyles = cva(
   'relative inline-flex items-center justify-center font-semimedium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info-10 focus-visible:ring-offset-1',
   {
     variants: {
       variant: {
-        outline: 'text-fg shadow-sm border border-neutral-7 hocus-visible:bg-bg-emphasis-3',
+        outline: 'text-fg shadow-sm border border-neutral-6 hocus-visible:bg-bg-emphasis-3',
         ghost: 'text-fg hover:bg-bg-emphasis-3',
         inverted: 'bg-fg text-bg shadow-sm hocus-visible:bg-fg-muted',
         'link-unstyled': linkStyles({ variant: 'unstyled' }),

@@ -94,7 +94,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
               <Link
                 variant="unstyled"
                 href={`/blog/${prev.path}`}
-                className="border-divider w-full transform rounded-md border p-1 hocus:bg-bg-emphasis-2 md:mr-2 md:max-w-[47.5%]"
+                className="w-full transform rounded-md border p-1 hocus:bg-bg-emphasis-2 md:mr-2 md:max-w-[47.5%]"
               >
                 <div className="h-full px-2.5 pb-1.5 pt-1">
                   <p className="text-sm font-medium text-fg-subtle/80">Prev in the series</p>
@@ -108,7 +108,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
                 href={`/blog/${next.path}`}
                 className={cn(
                   prev ? 'mt-6 md:mt-0' : '',
-                  'unstyled border-divider w-full transform rounded-md border p-1 hocus:bg-bg-emphasis-3 md:ml-2 md:max-w-[47.5%]',
+                  'unstyled w-full transform rounded-md border p-1 hocus:bg-bg-emphasis-3 md:ml-2 md:max-w-[47.5%]',
                 )}
               >
                 <div className="h-full px-2.5 pb-1.5 pt-1">

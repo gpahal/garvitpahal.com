@@ -1,11 +1,11 @@
-const { fontFamily } = require('tailwindcss/defaultTheme')
+import type { Config } from 'tailwindcss'
+import { fontFamily } from 'tailwindcss/defaultTheme'
 
-const darkTheme = require('./color-themes/dark.cjs')
-const lightTheme = require('./color-themes/light.cjs')
+import { darkTheme } from './color-themes/dark'
+import { lightTheme } from './color-themes/light'
 
-/** @type {import('tailwindcss').Config} */
-const config = {
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+const config: Config = {
+  content: ['./src/components/**/*.{js,ts,jsx,tsx,mdx}', './src/app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     fontFamily: {
       sans: ['var(--font-geist-sans)', ...fontFamily.sans],
@@ -76,7 +76,7 @@ const config = {
             margin: 0,
             padding: 0,
             fontSize: '1rem',
-            lineHeight: '1.725rem',
+            lineHeight: '1.5625rem',
             fontWeight: '400',
 
             strong: {
@@ -96,6 +96,26 @@ const config = {
             'h1, h2, h3, h4, h5, h6': {
               position: 'relative',
               scrollMarginTop: '100px',
+            },
+
+            h1: {
+              marginTop: 0,
+              marginBottom: '1em',
+            },
+
+            h2: {
+              marginTop: '1.5em',
+              marginBottom: '0.675em',
+            },
+
+            h3: {
+              marginTop: '1.4em',
+              marginBottom: '0.375em',
+            },
+
+            h4: {
+              marginTop: '1.375em',
+              marginBottom: '0.4em',
             },
 
             'a:not(.heading-anchor)': {
@@ -226,5 +246,4 @@ const config = {
     require('@gpahal/tailwindcss-variants').default,
   ],
 }
-
-module.exports = config
+export default config

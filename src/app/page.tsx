@@ -7,17 +7,14 @@ import selfImage from '@public/images/self/self-320x320.jpg'
 
 import { getTopLevelBlogPosts } from '@/lib/blog.server'
 import { generatePageMetadata } from '@/lib/metadata'
-import { PROJECTS } from '@/lib/project'
-import { SOCIAL_LINKS } from '@/lib/social'
+import { NAV_LINK_ITEMS } from '@/lib/nav'
+import { MAIL_LINK, SOCIAL_LINKS } from '@/lib/social'
 import { cn } from '@/lib/styles'
 import { H1, H2 } from '@/components/lib/heading'
 import { Image } from '@/components/lib/image'
 import { Link } from '@/components/lib/link'
 import { buttonStyles } from '@/components/lib/styles'
 import { BlogPostSummaries } from '@/components/blog/blog-post-summaries'
-import { ProjectSummaries } from '@/components/project/project-summaries'
-
-export const runtime = 'edge'
 
 export const metadata: Metadata = generatePageMetadata({
   pathname: '/',
@@ -42,22 +39,31 @@ export default function HomePage() {
             <p>
               I spend my days fixing bugs, rooting for FC Barcelona, watching movies and stuck in Bangalore traffic.
             </p>
-            <div className="mx-[-0.4rem] flex flex-wrap items-center gap-2.5 pb-2">
+
+            <p className="flex flex-wrap items-center gap-2 py-1">
+              <Link
+                key={MAIL_LINK.label}
+                variant="unstyled"
+                href={MAIL_LINK.href}
+                className={cn(buttonStyles({ variant: 'outline', size: 'sm' }), 'gap-1.5')}
+                aria-label={MAIL_LINK.label}
+              >
+                <MAIL_LINK.Icon className="size-3.5" />
+                {MAIL_LINK.label}
+              </Link>
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                 <Link
                   key={label}
                   variant="unstyled"
                   href={href}
-                  className={cn(
-                    buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
-                    'underline-offset-4 opacity-80 hocus-visible:opacity-100',
-                  )}
+                  className={cn(buttonStyles({ variant: 'outline', size: 'sm' }), 'gap-1.5')}
                   aria-label={label}
                 >
-                  <Icon className="size-[1.125rem]" />
+                  <Icon className="size-3" />
+                  {label}
                 </Link>
               ))}
-            </div>
+            </p>
           </div>
         </div>
         <div className="mb-8 mr-auto sm:mb-0 sm:mt-14 md:ml-4">
@@ -71,23 +77,35 @@ export default function HomePage() {
       </div>
       <div className="prose mt-8">
         <div className="mb-[1.125rem] mt-12 flex items-center justify-between">
-          <H2 className="my-0">Blog</H2>
+          <H2 className="my-0">Featured posts from my blog</H2>
           <Link
             variant="unstyled"
-            href="/rss.xml"
+            href="/blog.rss.xml"
             className={cn(
-              buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
+              buttonStyles({ variant: 'outline', size: 'sm', shape: 'square' }),
               'underline-offset-4 opacity-80 hocus-visible:opacity-100',
             )}
-            aria-label="RSS"
+            aria-label="Blog RSS"
           >
             <RssIcon className="size-[1.125rem]" />
           </Link>
         </div>
         <BlogPostSummaries blogPosts={blogPosts} maxBlogPostsVisible={3} />
 
-        <H2 className="mb-[1.125rem] mt-12">Projects</H2>
-        <ProjectSummaries projects={PROJECTS} maxProjectsVisible={3} />
+        <H2>Quick links</H2>
+        <ul>
+          {NAV_LINK_ITEMS.filter((item) => item.id !== 'about').map(({ label, description, path }) => (
+            <li key={label}>
+              <Link href={path}>{description}</Link>
+            </li>
+          ))}
+          <li>
+            <Link href="/blog.rss.xml">Blog RSS feed</Link>
+          </li>
+          <li>
+            <Link href="/sitemap.xml">Sitemap</Link>
+          </li>
+        </ul>
       </div>
     </>
   )

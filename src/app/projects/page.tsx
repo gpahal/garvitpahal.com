@@ -5,8 +5,6 @@ import { PROJECTS } from '@/lib/project'
 import { H1 } from '@/components/lib/heading'
 import { ProjectSummaries } from '@/components/project/project-summaries'
 
-export const runtime = 'edge'
-
 export const metadata: Metadata = generatePageMetadata({
   pathname: '/projects',
   title: 'Projects - Garvit Pahal',

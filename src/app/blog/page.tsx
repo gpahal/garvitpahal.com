@@ -10,8 +10,6 @@ import { Link } from '@/components/lib/link'
 import { buttonStyles } from '@/components/lib/styles'
 import { BlogPostSummaries } from '@/components/blog/blog-post-summaries'
 
-export const runtime = 'edge'
-
 export const metadata: Metadata = generatePageMetadata({
   pathname: '/blog',
   title: 'Blog - Garvit Pahal',
@@ -26,12 +24,12 @@ export default function BlogPage() {
         <H1>Blog</H1>
         <Link
           variant="unstyled"
-          href="/rss.xml"
+          href="/blog.rss.xml"
           className={cn(
-            buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
+            buttonStyles({ variant: 'outline', size: 'sm', shape: 'square' }),
             'underline-offset-4 opacity-80 hocus-visible:opacity-100',
           )}
-          aria-label="RSS"
+          aria-label="Blog RSS"
         >
           <RssIcon className="size-5" />
         </Link>

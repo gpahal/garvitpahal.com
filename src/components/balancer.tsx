@@ -6,6 +6,7 @@ import { IS_SERVER } from '@/lib/env'
 import { useIsomorphicLayoutEffect } from '@/hooks/use-isomorphic-layout-effect'
 
 const SYMBOL_KEY = '__wrap_b'
+const SYMBOL_NATIVE_KEY = '__wrap_n'
 const SYMBOL_OBSERVER_KEY = '__wrap_o'
 
 type WrapperElement = HTMLElement & {
@@ -76,15 +77,18 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Window {
     [SYMBOL_KEY]: RelayoutFn
+    [SYMBOL_NATIVE_KEY]?: number
   }
 }
+
+const IS_TEXT_WRAP_BALANCE_SUPPORTED = `(self.CSS&&CSS.supports("text-wrap","balance")?1:2)`
 
 function BalancerScriptUnmemoized() {
   return (
     <script
       id="balancer-script"
       dangerouslySetInnerHTML={{
-        __html: `self.${SYMBOL_KEY}=${RELAYOUT_STR};`,
+        __html: `self.${SYMBOL_NATIVE_KEY}=self.${SYMBOL_NATIVE_KEY}||${IS_TEXT_WRAP_BALANCE_SUPPORTED};self.${SYMBOL_KEY}=${RELAYOUT_STR};`,
       }}
       suppressHydrationWarning
     />
@@ -112,6 +116,9 @@ export function Balancer<ElementType extends React.ElementType = React.ElementTy
   const Wrapper: React.ElementType = props.as || 'span'
 
   useIsomorphicLayoutEffect(() => {
+    if (self[SYMBOL_NATIVE_KEY] === 1) {
+      return
+    }
     if (wrapperRef.current) {
       ;(self[SYMBOL_KEY] = relayout)(0, ratio, wrapperRef.current)
     }
@@ -119,10 +126,17 @@ export function Balancer<ElementType extends React.ElementType = React.ElementTy
 
   useIsomorphicLayoutEffect(() => {
     return () => {
-      if (!wrapperRef.current) return
+      if (self[SYMBOL_NATIVE_KEY] === 1) {
+        return
+      }
+      if (!wrapperRef.current) {
+        return
+      }
 
       const resizeObserver = wrapperRef.current[SYMBOL_OBSERVER_KEY]
-      if (!resizeObserver) return
+      if (!resizeObserver) {
+        return
+      }
 
       resizeObserver.disconnect()
       delete wrapperRef.current[SYMBOL_OBSERVER_KEY]
@@ -140,6 +154,7 @@ export function Balancer<ElementType extends React.ElementType = React.ElementTy
           display: 'inline-block',
           verticalAlign: 'top',
           textDecoration: 'inherit',
+          textWrap: 'balance',
         }}
         suppressHydrationWarning
       >
@@ -148,7 +163,7 @@ export function Balancer<ElementType extends React.ElementType = React.ElementTy
       <script
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: `self.${SYMBOL_KEY}("${id}",${ratio});`,
+          __html: `self.${SYMBOL_NATIVE_KEY}!=1&&self.${SYMBOL_KEY}("${id}",${ratio});`,
         }}
       />
     </>

@@ -9,7 +9,7 @@ export async function GET() {
     description: WEBSITE_DESCRIPTION,
     id: WEBSITE_URL,
     link: WEBSITE_URL,
-    feed: `${WEBSITE_URL}/rss.xml`,
+    feed: `${WEBSITE_URL}/blog.rss.xml`,
     image: WEBSITE_IMAGE_URL,
     language: 'en',
     copyright: `All rights reserved ${new Date().getFullYear()}, ${AUTHOR_NAME}`,
