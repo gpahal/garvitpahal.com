@@ -21,7 +21,7 @@ export const metadata: Metadata = generatePageMetadata({
 })
 
 export default function HomePage() {
-  const blogPosts = getTopLevelBlogPosts()
+  const blogPosts = getTopLevelBlogPosts().filter((blogPost) => blogPost.data.frontmatter.isFeatured)
 
   return (
     <>

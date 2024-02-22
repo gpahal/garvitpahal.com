@@ -33,9 +33,12 @@ export const BLOG_FRONTMATTER_SCHEMA = z.object({
     }
   }),
   tags: z.array(z.string().trim().min(1)).default(() => []),
+  isFeatured: z.boolean().nullish(),
 })
 
 export type BlogFrontmatterSchema = typeof BLOG_FRONTMATTER_SCHEMA
+
+export type BlogFrontmatter = z.infer<BlogFrontmatterSchema>
 
 export type BlogPostData = ContentData<BlogFrontmatterSchema>
 
