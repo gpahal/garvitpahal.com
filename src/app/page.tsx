@@ -85,7 +85,7 @@ export default function HomePage() {
               buttonStyles({ variant: 'outline', size: 'sm', shape: 'square' }),
               'underline-offset-4 opacity-80 hocus-visible:opacity-100',
             )}
-            aria-label="Blog RSS"
+            aria-label="Blog RSS feed"
           >
             <RssIcon className="size-[1.125rem]" />
           </Link>
@@ -94,17 +94,11 @@ export default function HomePage() {
 
         <H2>Quick links</H2>
         <ul>
-          {NAV_LINK_ITEMS.filter((item) => item.id !== 'about').map(({ label, description, path }) => (
-            <li key={label}>
+          {NAV_LINK_ITEMS.filter((item) => item.id !== 'about').map(({ id, description, path }) => (
+            <li key={id}>
               <Link href={path}>{description}</Link>
             </li>
           ))}
-          <li>
-            <Link href="/blog.rss.xml">Blog RSS feed</Link>
-          </li>
-          <li>
-            <Link href="/sitemap.xml">Sitemap</Link>
-          </li>
         </ul>
       </div>
     </>

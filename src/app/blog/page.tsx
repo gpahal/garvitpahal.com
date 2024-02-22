@@ -29,7 +29,7 @@ export default function BlogPage() {
             buttonStyles({ variant: 'outline', size: 'sm', shape: 'square' }),
             'underline-offset-4 opacity-80 hocus-visible:opacity-100',
           )}
-          aria-label="Blog RSS"
+          aria-label="Blog RSS feed"
         >
           <RssIcon className="size-5" />
         </Link>

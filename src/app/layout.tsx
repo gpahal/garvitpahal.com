@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
-        <link rel="alternate" type="application/rss+xml" title="Blog RSS" href="/blog.rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="Blog RSS feed" href="/blog.rss.xml" />
 
         <RootScripts />
       </head>
@@ -78,9 +78,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
                     'flex-shrink-0 !font-normal text-fg-subtle',
                   )}
-                  aria-label="Blog RSS"
+                  aria-label="Blog RSS feed"
+                  title="Blog RSS feed"
                 >
-                  <RssIcon aria-label="Blog RSS" className="size-[0.9375rem]" />
+                  <RssIcon aria-label="Blog RSS feed" className="size-[0.9375rem]" />
                 </Link>
                 <Link
                   variant="unstyled"
@@ -90,6 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     'flex-shrink-0 !font-normal text-fg-subtle',
                   )}
                   aria-label="Sitemap"
+                  title="Sitemap"
                 >
                   <NetworkIcon aria-label="Sitemap" className="size-[0.9375rem]" />
                 </Link>
@@ -101,6 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     'flex-shrink-0 !font-normal text-fg-subtle',
                   )}
                   aria-label={MAIL_LINK.label}
+                  title={MAIL_LINK.label}
                 >
                   <MAIL_LINK.Icon aria-label={MAIL_LINK.label} className="size-[0.9375rem]" />
                 </Link>
@@ -114,6 +117,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       'flex-shrink-0 !font-normal text-fg-subtle',
                     )}
                     aria-label={label}
+                    title={label}
                   >
                     <Icon aria-label={label} className="size-[0.825rem]" />
                   </Link>
