@@ -11,7 +11,7 @@ export function BlogPostSummary({
   blogPost: {
     path,
     data: {
-      frontmatter: { title, publishedOn },
+      frontmatter: { title, publishedAt },
       readTimeResults,
     },
   },
@@ -23,7 +23,7 @@ export function BlogPostSummary({
           <span className="relative inline-flex w-full flex-col justify-between pb-2.5 pt-2">
             <span className="inline-block font-semimedium">{title}</span>
             <span className="shrink-0 text-sm text-fg-subtle/80">
-              {format(publishedOn, 'MMM d, yyyy')} • {readTimeResults.text.replace('read', '').trim()}
+              {format(publishedAt, 'MMM d, yyyy')} • {readTimeResults.text.replace('read', '').trim()}
             </span>
           </span>
         </span>

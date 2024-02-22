@@ -22,7 +22,7 @@ export async function GET() {
       title: blogPost.data.frontmatter.title,
       description: blogPost.data.frontmatter.description,
       link: `${WEBSITE_URL}/blog/${blogPost.path}`,
-      date: new Date(blogPost.data.frontmatter.publishedOn),
+      date: new Date(blogPost.data.frontmatter.publishedAt),
       category: blogPost.data.frontmatter.tags.map((tag) => ({ name: tag })),
     })
   }

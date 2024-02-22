@@ -29,7 +29,7 @@ export function generateMetadata({ params: { slugParts } }: BlogPostPageProps): 
     title: `${blogPost.data.frontmatter.title} - Garvit Pahal`,
     description: blogPost.data.frontmatter.description,
     article: {
-      publishedTime: blogPost.data.frontmatter.publishedOn,
+      publishedTime: blogPost.data.frontmatter.publishedAt,
       tags: blogPost.data.frontmatter.tags,
     },
   })
@@ -61,7 +61,7 @@ export default function BlogPostPage({ params: { slugParts } }: BlogPostPageProp
           <Balancer ratio={0.5}>{blogPost.data.frontmatter.title}</Balancer>
         </H1>
         <p className="mt-1 text-[0.9375rem] text-fg-subtle">
-          {format(blogPost.data.frontmatter.publishedOn, 'MMMM dd, yyyy')}
+          {format(blogPost.data.frontmatter.publishedAt, 'MMMM dd, yyyy')}
           {' • '}
           {blogPost.data.readTimeResults.text}
         </p>

@@ -140,7 +140,7 @@ const BLOG_CONTENT_COLLECTION_METADATA: ContentCollectionMetadata<BlogFrontmatte
   frontmatterSchema: BLOG_FRONTMATTER_SCHEMA,
   getTitle: (frontmatter) => frontmatter.title,
   getDescription: (frontmatter) => frontmatter.description,
-  compareFileMapItems: (a, b) => b.data.frontmatter.publishedOn - a.data.frontmatter.publishedOn,
+  compareFileMapItems: (a, b) => b.data.frontmatter.publishedAt - a.data.frontmatter.publishedAt,
 }
 
 const CONTENT_COLLECTION_MATADATAS = [BLOG_CONTENT_COLLECTION_METADATA] as const
