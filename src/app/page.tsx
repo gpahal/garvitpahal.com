@@ -81,13 +81,11 @@ export default function HomePage() {
           <Link
             variant="unstyled"
             href="/blog.rss.xml"
-            className={cn(
-              buttonStyles({ variant: 'outline', size: 'sm', shape: 'square' }),
-              'underline-offset-4 opacity-80 hocus-visible:opacity-100',
-            )}
+            className={cn(buttonStyles({ variant: 'outline', size: 'sm' }), '-mt-0.5 gap-1.5')}
             aria-label="Blog RSS feed"
           >
-            <RssIcon className="size-[1.125rem]" />
+            <RssIcon className="size-3.5" />
+            RSS
           </Link>
         </div>
         <BlogPostSummaries blogPosts={blogPosts} maxBlogPostsVisible={3} />

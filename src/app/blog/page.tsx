@@ -25,13 +25,11 @@ export default function BlogPage() {
         <Link
           variant="unstyled"
           href="/blog.rss.xml"
-          className={cn(
-            buttonStyles({ variant: 'outline', size: 'sm', shape: 'square' }),
-            'underline-offset-4 opacity-80 hocus-visible:opacity-100',
-          )}
+          className={cn(buttonStyles({ variant: 'outline', size: 'sm' }), '-mt-1 gap-1.5')}
           aria-label="Blog RSS feed"
         >
-          <RssIcon className="size-5" />
+          <RssIcon className="size-3.5" />
+          RSS
         </Link>
       </header>
       <BlogPostSummaries blogPosts={blogPosts} />

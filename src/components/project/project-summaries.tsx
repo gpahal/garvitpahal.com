@@ -18,7 +18,7 @@ export function ProjectSummaries({ projects, maxProjectsVisible, className, ...p
   const showViewAllProjectsLink = maxProjectsVisible && projects.length > maxProjectsVisible
 
   return (
-    <div {...props} className={cn('-my-2.5', className)}>
+    <div {...props} className={cn('-my-2', className)}>
       {visibleProjects.map((project) => (
         <ProjectSummary key={project.name} project={project} />
       ))}

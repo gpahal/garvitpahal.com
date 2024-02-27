@@ -15,7 +15,7 @@ export function WorkExperienceComponent({ workExperience }: WorkExperienceCompon
       <AccordionTrigger>
         <span className="inline-flex w-full flex-col items-start">
           <span className="text-base font-medium">{workExperience.data.frontmatter.company}</span>
-          <span className="text-[0.9375rem]/[1.35rem] text-fg-subtle/80">{`${workExperience.data.frontmatter.designation}, ${format(workExperience.data.frontmatter.startedAt, 'MMM yyyy')} — ${workExperience.data.frontmatter.endedAt ? format(workExperience.data.frontmatter.endedAt, 'MMM yyyy') : 'now'}`}</span>
+          <span className="text-[0.9375rem]/[1.35rem] font-normal text-fg-subtle/80">{`${workExperience.data.frontmatter.designation}, ${format(workExperience.data.frontmatter.startedAt, 'MMM yyyy')} — ${workExperience.data.frontmatter.endedAt ? format(workExperience.data.frontmatter.endedAt, 'MMM yyyy') : 'now'}`}</span>
         </span>
       </AccordionTrigger>
       <AccordionContent className="-mb-1 -mt-3">

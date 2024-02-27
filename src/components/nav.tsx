@@ -20,7 +20,7 @@ export function Nav() {
             Garvit Pahal
           </Link>
           <ul className="relative flex items-center space-x-2 sm:space-x-2.5">
-            {NAV_LINK_ITEMS.filter((item) => !item.shouldHideInMainNav).map(({ label, path, requiresExactMatch }) => (
+            {NAV_LINK_ITEMS.map(({ label, path, requiresExactMatch }) => (
               <li key={label}>
                 <Link
                   variant="unstyled"

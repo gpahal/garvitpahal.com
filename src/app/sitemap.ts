@@ -13,20 +13,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
     },
     {
+      url: `${WEBSITE_URL}/blog`,
+      lastModified,
+    },
+    {
       url: `${WEBSITE_URL}/work`,
       lastModified,
     },
     {
-      url: `${WEBSITE_URL}/blog`,
+      url: `${WEBSITE_URL}/uses`,
+      lastModified,
+    },
+    {
+      url: `${WEBSITE_URL}/contact`,
       lastModified,
     },
     ...blogPosts.map((blogPost) => ({
       url: `${WEBSITE_URL}/blog/${blogPost.path}`,
       lastModified,
     })),
-    {
-      url: `${WEBSITE_URL}/uses`,
-      lastModified,
-    },
   ]
 }
