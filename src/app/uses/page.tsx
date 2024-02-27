@@ -50,6 +50,10 @@ export default function UsesPage() {
           </li>
           <li>
             Headphones:{' '}
+            <Link href="https://www.amazon.com/Philips-SHP9500S-Precision-Over-ear-Headphones/dp/B00ENMK1DW">
+              Philips SHP9500 Wired
+            </Link>{' '}
+            and{' '}
             <Link href="https://www.bose.com/products/headphones/noise_cancelling_headphones/quietcomfort-headphones-45.html">
               Bose QuietComfort 45 Wireless
             </Link>
@@ -58,8 +62,8 @@ export default function UsesPage() {
         <H2>Development Tools</H2>
         <ul>
           <li>
-            IDE: <Link href="https://www.jetbrains.com/idea/">IntelliJ IDEA</Link> and{' '}
-            <Link href="https://code.visualstudio.com/">VS Code</Link>
+            IDE: <Link href="https://code.visualstudio.com/">VS Code</Link> and{' '}
+            <Link href="https://www.jetbrains.com/idea/">IntelliJ IDEA</Link>
           </li>
           <li>
             Code management: <Link href="https://github.com/">Github</Link>
