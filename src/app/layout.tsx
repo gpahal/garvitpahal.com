@@ -7,18 +7,15 @@ import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 
 import { WEBSITE_URL_OBJECT } from '@/lib/metadata'
+import { MAIL_LINK, SOCIAL_LINKS } from '@/lib/social'
 import { cn } from '@/lib/styles'
+import { Link } from '@/components/lib/link'
+import { buttonStyles } from '@/components/lib/styles'
 import { Nav } from '@/components/nav'
 
 import { RootScripts } from './root-scripts'
 
 import '@/styles/global.css'
-
-import { NetworkIcon, RssIcon } from 'lucide-react'
-
-import { MAIL_LINK, SOCIAL_LINKS } from '@/lib/social'
-import { Link } from '@/components/lib/link'
-import { buttonStyles } from '@/components/lib/styles'
 
 export const metadata: Metadata = {
   metadataBase: WEBSITE_URL_OBJECT,
@@ -64,37 +61,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="-ml-2 flex items-center gap-0.5 text-fg-subtle">
                 <Link
                   variant="unstyled"
-                  href="/"
+                  href="/blog.rss.xml"
                   className={cn(buttonStyles({ variant: 'ghost', size: 'sm' }), 'h-7 px-2 text-fg-subtle')}
                 >
-                  © 2024 Garvit Pahal
+                  Blog RSS
                 </Link>
-              </div>
-              <div className="-mr-2 flex flex-row flex-wrap items-center gap-1">
-                <Link
-                  variant="unstyled"
-                  href="/blog.rss.xml"
-                  className={cn(
-                    buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
-                    'flex-shrink-0 !font-normal text-fg-subtle',
-                  )}
-                  aria-label="Blog RSS feed"
-                  title="Blog RSS feed"
-                >
-                  <RssIcon aria-label="Blog RSS feed" className="size-[0.9375rem]" />
-                </Link>
+                <span>•</span>
                 <Link
                   variant="unstyled"
                   href="/sitemap.xml"
-                  className={cn(
-                    buttonStyles({ variant: 'ghost', size: 'sm', shape: 'square' }),
-                    'flex-shrink-0 !font-normal text-fg-subtle',
-                  )}
-                  aria-label="Sitemap"
-                  title="Sitemap"
+                  className={cn(buttonStyles({ variant: 'ghost', size: 'sm' }), 'h-7 px-2 text-fg-subtle')}
                 >
-                  <NetworkIcon aria-label="Sitemap" className="size-[0.9375rem]" />
+                  Sitemap
                 </Link>
+              </div>
+              <div className="-mr-2 flex flex-row flex-wrap items-center gap-1">
                 <Link
                   variant="unstyled"
                   href={MAIL_LINK.href}

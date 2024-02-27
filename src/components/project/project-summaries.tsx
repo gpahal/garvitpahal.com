@@ -1,9 +1,11 @@
+import * as React from 'react'
+
 import { MoveRightIcon } from 'lucide-react'
 
 import type { Project } from '@/lib/project'
 import { cn } from '@/lib/styles'
+import { Link } from '@/components/lib/link'
 
-import { Link } from '../lib/link'
 import { ProjectSummary } from './project-summary'
 
 export type ProjectSummariesProps = React.HTMLAttributes<HTMLDivElement> & {

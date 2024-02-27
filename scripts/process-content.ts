@@ -11,7 +11,9 @@ import { FS_MODULE } from '@gpahal/std-node/fs'
 import { createFlattenedFileMapIndex, type FileMap } from '@gpahal/std/fs'
 import { isAbsoluteUrl } from '@gpahal/std/url'
 
-import { BLOG_FRONTMATTER_SCHEMA, type BlogFrontmatterSchema } from '../src/lib/blog'
+import { SCHEMA_WORK_FRONTMATTER, type WorkFrontmatterSchema } from '@/lib/work'
+
+import { SCHEMA_BLOG_FRONTMATTER, type BlogFrontmatterSchema } from '../src/lib/blog'
 import type { ContentCollectionMetadata } from '../src/lib/content'
 
 const DIRNAME = dirname(fileURLToPath(import.meta.url))
@@ -137,16 +139,19 @@ async function generateCollectionDbInner<TFrontmatterSchema extends FrontmatterS
 
 const BLOG_CONTENT_COLLECTION_METADATA: ContentCollectionMetadata<BlogFrontmatterSchema> = {
   path: 'blog',
-  frontmatterSchema: BLOG_FRONTMATTER_SCHEMA,
-  getTitle: (frontmatter) => frontmatter.title,
-  getDescription: (frontmatter) => frontmatter.description,
+  frontmatterSchema: SCHEMA_BLOG_FRONTMATTER,
   compareFileMapItems: (a, b) => b.data.frontmatter.publishedAt - a.data.frontmatter.publishedAt,
 }
 
-const CONTENT_COLLECTION_MATADATAS = [BLOG_CONTENT_COLLECTION_METADATA] as const
+const WORK_CONTENT_COLLECTION_METADATA: ContentCollectionMetadata<WorkFrontmatterSchema> = {
+  path: 'work',
+  frontmatterSchema: SCHEMA_WORK_FRONTMATTER,
+  compareFileMapItems: (a, b) => b.data.frontmatter.startedAt - a.data.frontmatter.startedAt,
+}
 
 async function generateCollectionDbs(): Promise<void> {
-  await Promise.all(CONTENT_COLLECTION_MATADATAS.map((collection) => generateCollectionDb(collection)))
+  await generateCollectionDb(BLOG_CONTENT_COLLECTION_METADATA)
+  await generateCollectionDb(WORK_CONTENT_COLLECTION_METADATA)
 }
 
 void generateCollectionDbs()

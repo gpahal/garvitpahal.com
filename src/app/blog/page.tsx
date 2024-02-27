@@ -21,7 +21,7 @@ export default function BlogPage() {
   return (
     <>
       <header className="mb-5 flex items-center justify-between">
-        <H1>Blog</H1>
+        <H1>My blog</H1>
         <Link
           variant="unstyled"
           href="/blog.rss.xml"

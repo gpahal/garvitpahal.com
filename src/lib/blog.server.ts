@@ -25,26 +25,28 @@ export function getBlogPostBySlugParts(slugParts: string[]): FlattenedBlogPost |
 }
 
 export function getTopLevelBlogPosts(limit?: number): FlattenedBlogPost[] {
-  return flattenedBlog.filter((post) => post.parentIndex == null).slice(0, limit && limit > 0 ? limit : undefined)
+  return flattenedBlog
+    .filter((blogPost) => blogPost.parentIndex == null)
+    .slice(0, limit && limit > 0 ? limit : undefined)
 }
 
 export function getAllBlogPosts(limit?: number): FlattenedBlogPost[] {
   return flattenedBlog.slice(0, limit && limit > 0 ? limit : undefined)
 }
 
-export function getRecommendedBlogPosts(post: FlattenedBlogPost, limit?: number): FlattenedBlogPost[] {
+export function getRecommendedBlogPosts(blogPost: FlattenedBlogPost, limit?: number): FlattenedBlogPost[] {
   return flattenedBlog
     .map((candidatePost, i): [number, number] => {
-      // Don't recommend the same post, parent, children or siblings
+      // Don't recommend the same blog post, parent, children or siblings
       if (
-        candidatePost.path === post.path ||
-        candidatePost.index === post.parentIndex ||
+        candidatePost.path === blogPost.path ||
+        candidatePost.index === blogPost.parentIndex ||
         (candidatePost.parentIndex != null &&
-          (candidatePost.parentIndex === post.index || candidatePost.parentIndex === post.parentIndex))
+          (candidatePost.parentIndex === blogPost.index || candidatePost.parentIndex === blogPost.parentIndex))
       ) {
         return [-1, -1]
       }
-      return [i, calculateBlogPostsMatchScore(candidatePost, post)]
+      return [i, calculateBlogPostsMatchScore(candidatePost, blogPost)]
     })
     .filter((pair) => pair[0] >= 0 && pair[1] > 0)
     .sort((a, b) => {

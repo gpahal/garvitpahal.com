@@ -1,5 +1,5 @@
 export type NavLinkItem = {
-  id: 'about' | 'blog' | 'blog-rss' | 'projects' | 'uses' | 'sitemap'
+  id: 'about' | 'work' | 'blog' | 'blog-rss' | 'uses' | 'sitemap'
   label: string
   description: string
   path: string
@@ -16,9 +16,15 @@ export const NAV_LINK_ITEMS: NavLinkItem[] = [
     requiresExactMatch: true,
   },
   {
+    id: 'work',
+    label: 'Work',
+    description: 'My work history',
+    path: '/work',
+  },
+  {
     id: 'blog',
     label: 'Blog',
-    description: "Blog posts I've written",
+    description: 'My blog',
     path: '/blog',
   },
   {
@@ -27,12 +33,6 @@ export const NAV_LINK_ITEMS: NavLinkItem[] = [
     description: 'RSS feed of my blog posts',
     path: '/blog.rss.xml',
     shouldHideInMainNav: true,
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
-    description: "Projects I've worked on",
-    path: '/projects',
   },
   {
     id: 'uses',

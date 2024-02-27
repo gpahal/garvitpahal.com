@@ -43,8 +43,6 @@ export type FlattenedContentCollection<TFrontmatterSchema extends FrontmatterSch
 export type ContentCollectionMetadata<TFrontmatterSchema extends FrontmatterSchema> = {
   path: string
   frontmatterSchema: TFrontmatterSchema
-  getTitle: (frontmatter: z.infer<TFrontmatterSchema>) => string
-  getDescription?: (frontmatter: z.infer<TFrontmatterSchema>) => string | undefined
   compareFileMapItems: (
     a: ContentCollectionFileMapItem<TFrontmatterSchema>,
     b: ContentCollectionFileMapItem<TFrontmatterSchema>,

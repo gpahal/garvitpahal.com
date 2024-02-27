@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
     },
     {
-      url: `${WEBSITE_URL}/projects`,
+      url: `${WEBSITE_URL}/work`,
       lastModified,
     },
     {

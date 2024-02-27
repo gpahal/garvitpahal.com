@@ -6,14 +6,14 @@ import { Link } from '@/components/lib/link'
 
 export const metadata: Metadata = generatePageMetadata({
   pathname: '/uses',
-  title: 'Uses - Garvit Pahal',
+  title: 'Tech stack I use daily - Garvit Pahal',
 })
 
 export default function UsesPage() {
   return (
     <>
       <header className="mb-5">
-        <H1>Uses</H1>
+        <H1>Tech stack I use daily</H1>
       </header>
       <div className="prose">
         <p>

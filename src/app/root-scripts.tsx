@@ -1,6 +1,6 @@
 'use client'
 
-import { BalancerScript } from '@/components/balancer'
+import { BalancerScript } from '@/components/lib/balancer'
 
 export function RootScripts() {
   return (

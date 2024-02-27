@@ -4,8 +4,8 @@ import { MoveRightIcon } from 'lucide-react'
 
 import type { FlattenedBlogPost } from '@/lib/blog'
 import { cn } from '@/lib/styles'
+import { Link } from '@/components/lib/link'
 
-import { Link } from '../lib/link'
 import { BlogPostSummary } from './blog-post-summary'
 
 export type BlogPostSummariesProps = React.HTMLAttributes<HTMLDivElement> & {
