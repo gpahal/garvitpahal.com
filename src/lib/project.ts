@@ -6,11 +6,6 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
-    name: 'garvitpahal.com',
-    description: 'My personal website. You are here',
-    href: 'https://garvitpahal.com/',
-  },
-  {
     name: 'Superstream',
     description: 'A Solana-based protocol for real-time streaming payments',
     href: 'https://superstream.finance/',
@@ -19,6 +14,11 @@ export const PROJECTS: Project[] = [
     name: 'solana-fellowship',
     description: 'Stuff I worked on as part of the Solana Fellowship',
     href: 'https://github.com/gpahal/solana-fellowship',
+  },
+  {
+    name: 'garvitpahal.com',
+    description: 'My personal website. You are here',
+    href: 'https://garvitpahal.com/',
   },
   {
     name: 'jslib',

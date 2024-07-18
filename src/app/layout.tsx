@@ -3,11 +3,8 @@ import type { Metadata } from 'next'
 
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
 
 import { WEBSITE_URL_OBJECT } from '@/lib/metadata'
-import { cn } from '@/lib/styles'
 import { Nav } from '@/components/nav'
 
 import { RootScripts } from './root-scripts'
@@ -47,9 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <RootScripts />
       </head>
-      <body className={cn(GeistSans.variable, GeistMono.variable)}>
-        <div className="relative flex w-full flex-col px-6 py-4 sm:mx-auto sm:max-w-[42rem] sm:py-6">
-          <div className="fixed inset-x-0 bottom-0 z-10 bg-bg sm:bottom-auto sm:top-0 sm:pb-2 sm:pt-3 md:pb-2.5 md:pt-3.5">
+      <body>
+        <div className="relative flex w-full flex-col px-6 py-4 sm:mx-auto sm:max-w-[42rem]">
+          <div className="fixed inset-x-0 bottom-0 z-10 bg-bg sm:bottom-auto sm:top-0 sm:pb-2 md:pb-2.5">
             <Nav />
           </div>
           <main className="relative mb-10 mt-2 w-full sm:mb-0 sm:mt-[4rem] md:mt-[4.5rem]">{children}</main>

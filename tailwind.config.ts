@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss'
-import { fontFamily } from 'tailwindcss/defaultTheme'
 
 import { darkTheme } from './color-themes/dark'
 import { lightTheme } from './color-themes/light'
@@ -7,10 +6,6 @@ import { lightTheme } from './color-themes/light'
 const config: Config = {
   content: ['./src/components/**/*.{js,ts,jsx,tsx,mdx}', './src/app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
-    fontFamily: {
-      sans: ['var(--font-geist-sans)', ...fontFamily.sans],
-      mono: ['var(--font-geist-mono)', ...fontFamily.mono],
-    },
     fontWeight: {
       inherit: 'inherit',
       thin: '100',

@@ -33,11 +33,8 @@ export default function HomePage() {
 
           <div className="prose">
             <p>
-              I&apos;m a software developer from India. I work at <Link href="https://perch.app/">Perch</Link> as a
-              founding engineer. We want to make the world smarter by helping people develop a reading habit.
-            </p>
-            <p>
-              I spend my days fixing bugs, rooting for FC Barcelona, watching movies and stuck in Bangalore traffic.
+              I&apos;m a software developer from India. I spend my days fixing bugs, rooting for FC Barcelona, watching
+              movies and stuck in Bangalore traffic.
             </p>
 
             <p className="flex flex-wrap items-center gap-2 py-1">
@@ -66,7 +63,7 @@ export default function HomePage() {
             </p>
           </div>
         </div>
-        <div className="mb-8 mr-auto sm:mb-0 sm:mt-14 md:ml-4">
+        <div className="mb-8 mr-auto sm:mb-0 md:ml-4">
           <Image
             src={selfImage}
             alt="Garvit Pahal"
