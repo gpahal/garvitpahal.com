@@ -1,0 +1,116 @@
+---
+import AboutIcon from '@/icons/nav/about.astro'
+import BlogIcon from '@/icons/nav/blog.astro'
+import ProjectsIcon from '@/icons/nav/projects.astro'
+import UsesIcon from '@/icons/nav/uses.astro'
+import WorkIcon from '@/icons/nav/work.astro'
+import EmailIcon from '@/icons/social/email.astro'
+import GitHubIcon from '@/icons/social/github.astro'
+import LinkedInIcon from '@/icons/social/linkedin.astro'
+import TwitterIcon from '@/icons/social/twitter.astro'
+
+type Props = {
+  isFullPage?: boolean
+}
+
+const { isFullPage } = Astro.props as Props
+
+const links = [
+  {
+    path: '/',
+    label: 'About',
+    Icon: AboutIcon,
+  },
+  {
+    path: '/blog',
+    label: 'Blog',
+    Icon: BlogIcon,
+  },
+  {
+    path: '/work',
+    label: 'Work',
+    Icon: WorkIcon,
+  },
+  {
+    path: '/projects',
+    label: 'Projects',
+    Icon: ProjectsIcon,
+  },
+  {
+    path: '/uses',
+    label: 'Uses',
+    Icon: UsesIcon,
+  },
+] as const
+
+const socials = [
+  {
+    href: 'mailto:g10pahal@gmail.com',
+    label: 'Email',
+    Icon: EmailIcon,
+  },
+  {
+    href: 'https://twitter.com/g10pahal',
+    label: 'Twitter',
+    Icon: TwitterIcon,
+  },
+  {
+    href: 'https://github.com/gpahal',
+    label: 'GitHub',
+    Icon: GitHubIcon,
+  },
+  {
+    href: 'https://www.linkedin.com/in/gpahal/',
+    label: 'LinkedIn',
+    Icon: LinkedInIcon,
+  },
+] as const
+---
+
+<div class="relative z-30 mx-auto px-4 py-6 lg:mx-0 lg:min-h-full lg:flex-auto lg:px-6">
+  <section class="text-center lg:text-left">
+    <div class="text-xl font-semibold">
+      <a href="/" class="unstyled">Garvit Pahal</a>
+    </div>
+    <div class="mt-2 font-medium">Software engineer interested in technology, football and movies.</div>
+    <ul class="unstyled -mx-2 mt-3 flex justify-center gap-2 lg:justify-start lg:gap-1">
+      {
+        socials.map(({ href, label, Icon }) => (
+          <li class="unstyled">
+            <a href={href} class="unstyled inline-block p-2 text-gray-9 hocus:text-gray-12" aria-label={label}>
+              <Icon class="size-[1.125rem] shrink-0" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <section class="mt-2 lg:mt-12">
+    <div class="mb-4 h-px bg-gradient-to-r from-gray-1 via-gray-5 to-gray-1 lg:mb-0 lg:hidden"></div>
+    <nav class="mt-1 flex justify-center gap-8 text-sm font-medium lg:flex-col lg:gap-1.5 lg:text-base">
+      {
+        links.map(({ path, label, Icon }) => (
+          <div class="-mx-2">
+            <a
+              href={path}
+              class="unstyled group flex w-full items-center justify-start rounded px-2 py-1.5 hocus:bg-gray-4"
+              aria-label={label}
+            >
+              <Icon class="size-[1.125rem] shrink-0 text-gray-9 group-hover:text-gray-11 lg:size-5" />
+              <span class="ml-2.5 block grow lg:ml-3">{label}</span>
+            </a>
+          </div>
+        ))
+      }
+    </nav>
+  </section>
+  {
+    !isFullPage && (
+      <section class="mt-8 flex items-center justify-center lg:hidden">
+        <button data-drawer-close class="w-full max-w-lg rounded border py-2">
+          Close Menu
+        </button>
+      </section>
+    )
+  }
+</div>
