@@ -18,6 +18,7 @@ type Props = {
 
 const { title: titleProp, description: descriptionProp, article } = Astro.props
 const url = new URL(Astro.url.pathname, Astro.site)
+const twitterImageUrl = new URL('/images/self/self-320x320.jpg', Astro.site)
 
 const title = trim(titleProp ? `${titleProp} | Garvit Pahal` : 'Garvit Pahal')
 const description = trim(descriptionProp || 'Software engineer interested in technology, football and movies.')
@@ -71,7 +72,7 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
     <meta property="twitter:description" content={description} />
     <meta property="twitter:url" content={url} />
     <meta property="twitter:creator" content="@g10pahal" />
-    <meta property="twitter:image" content="/images/self/self-320x320.jpg" />
+    <meta property="twitter:image" content={twitterImageUrl} />
     <meta property="twitter:image:alt" content={title} />
     <meta property="twitter:image:type" content="image/jpeg" />
     <meta property="twitter:image:width" content="320" />
