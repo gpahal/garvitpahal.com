@@ -16,7 +16,7 @@ const { blogPost } = Astro.props
 const { Content } = await render(blogPost)
 ---
 
-<Layout title={`${blogPost.data.title} - Blog`}>
+<Layout title={`${blogPost.data.title} | Blog`}>
   <header>
     <H1>{blogPost.data.title}</H1>
   </header>

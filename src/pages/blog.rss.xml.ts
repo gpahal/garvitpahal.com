@@ -8,7 +8,7 @@ export async function GET(context: APIContext) {
 
   return rss({
     site: context.site!,
-    title: `Garvit Pahal - Blog`,
+    title: `Garvit Pahal | Blog`,
     description: 'Software engineer interested in technology, football and movies.',
     trailingSlash: false,
     stylesheet: '/rss.xsl',

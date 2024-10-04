@@ -18,9 +18,8 @@ type Props = {
 
 const { title: titleProp, description: descriptionProp, article } = Astro.props
 const url = new URL(Astro.url.pathname, Astro.site)
-const imageUrl = new URL('/images/self/self-320x320.jpg?v=1', Astro.site)
 
-const title = trim(titleProp ? `${titleProp} - Garvit Pahal` : 'Garvit Pahal')
+const title = trim(titleProp ? `${titleProp} | Garvit Pahal` : 'Garvit Pahal')
 const description = trim(descriptionProp || 'Software engineer interested in technology, football and movies.')
 
 const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
@@ -50,7 +49,7 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Garvit Pahal" />
-    <link rel="author" href={url} />
+    <link rel="author" href={Astro.site} />
     <meta property="og:site_name" content="Garvit Pahal" />
     <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:title" content={title} />
@@ -72,7 +71,7 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
     <meta property="twitter:description" content={description} />
     <meta property="twitter:url" content={url} />
     <meta property="twitter:creator" content="@g10pahal" />
-    <meta property="twitter:image" content={imageUrl} />
+    <meta property="twitter:image" content="/images/self/self-320x320.jpg" />
     <meta property="twitter:image:alt" content={title} />
     <meta property="twitter:image:type" content="image/jpeg" />
     <meta property="twitter:image:width" content="320" />
@@ -84,7 +83,7 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
     <meta name="robots" content="index, follow" />
 
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
-    <link rel="alternate" type="application/rss+xml" title={`Garvit Pahal - Blog`} href="/blog.rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Garvit Pahal | Blog" href="/blog.rss.xml" />
 
     <link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi/variable.woff2" crossorigin="anonymous" />
     <link
