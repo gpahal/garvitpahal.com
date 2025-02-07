@@ -13,7 +13,7 @@ export async function GET(context: APIContext) {
     trailingSlash: false,
     stylesheet: '/rss.xsl',
     items: blog.map((post) => ({
-      link: `/blog/${post.slug}/`,
+      link: `/blog/${post.id}/`,
       title: post.data.title,
       pubDate: post.data.publishedOn,
       categories: post.data.tags || [],

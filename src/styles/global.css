@@ -231,7 +231,7 @@
   blockquote:not(.unstyled) {
     @apply my-[1.15rem] border-s-[0.25rem] ps-[1.55rem] text-[1.2rem] font-medium italic leading-[1.55] text-gray-11;
 
-    quotes: '"\201C""\201D""\2018""\2019"';
+    quotes: '\201C' '\201D' '\2018' '\2019';
   }
 
   blockquote p:first-of-type:not(.unstyled)::before {
