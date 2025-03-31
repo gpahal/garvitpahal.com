@@ -7,6 +7,6 @@
       "@public/*": ["./public/*"]
     }
   },
-  "include": ["src", "tailwind", "*.config.ts", "eslint.config.d.ts", "src/env.d.ts"],
+  "include": ["src", "scripts", "*.config.ts", "eslint.config.d.ts", "src/env.d.ts"],
   "exclude": ["node_modules"]
 }

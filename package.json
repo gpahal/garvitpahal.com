@@ -26,7 +26,7 @@
     "@astrojs/markdoc": "^0.13.2",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.3.0",
-    "@gpahal/eslint-config": "^0.0.59",
+    "@gpahal/eslint-config": "^0.0.60",
     "@gpahal/prettier-config": "^0.0.20",
     "@gpahal/std": "^0.0.26",
     "@gpahal/stylelint-config": "^0.0.16",

@@ -21,8 +21,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       '@gpahal/eslint-config':
-        specifier: ^0.0.59
-        version: 0.0.59(eslint-plugin-import@2.29.1(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2)))(eslint@9.23.0(jiti@2.4.2))(tailwindcss@4.0.17)(turbo@2.4.0)(typescript@5.8.2)
+        specifier: ^0.0.60
+        version: 0.0.60(eslint-plugin-import@2.29.1(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2)))(eslint@9.23.0(jiti@2.4.2))(turbo@2.4.0)(typescript@5.8.2)
       '@gpahal/prettier-config':
         specifier: ^0.0.20
         version: 0.0.20
@@ -705,8 +705,8 @@ packages:
     resolution: {integrity: sha512-JubJ5B2pJ4k4yGxaNLdbjrnk9d/iDz6/q8wOilpIowd6PJPgaxCuHBnBszq7Ce2TyMrywm5r4PnKm6V3iiZF+g==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@gpahal/eslint-config@0.0.59':
-    resolution: {integrity: sha512-52oKap6OUnEO6myOMkYSdOpUlvjeIG5uwd8cqOd6av66zZZBSaFd55QcWO5PdLu1e7jxhrE9kIU2UN3z/q723g==}
+  '@gpahal/eslint-config@0.0.60':
+    resolution: {integrity: sha512-EEDC8bFQ2SXyL7z3BRZ58yv2LIqYyG2/DcPhjjppkIzdGlS7yI5d1/LzRpCYY+AY7B0AFDzVC8izOLmVqRiSWA==}
 
   '@gpahal/prettier-config@0.0.20':
     resolution: {integrity: sha512-BffJRU3nxRpyJ94c3pDT8nOXtu07LTjRSaFaQDyM59nTTNWgrbhut0+Y05pI1Nx7zdJFlzgsHGStz8ksBd8giA==}
@@ -2110,12 +2110,6 @@ packages:
         optional: true
       typescript:
         optional: true
-
-  eslint-plugin-tailwindcss@3.18.0:
-    resolution: {integrity: sha512-PQDU4ZMzFH0eb2DrfHPpbgo87Zgg2EXSMOj1NSfzdZm+aJzpuwGerfowMIaVehSREEa0idbf/eoNYAOHSJoDAQ==}
-    engines: {node: '>=18.12.0'}
-    peerDependencies:
-      tailwindcss: ^3.4.0
 
   eslint-plugin-turbo@2.4.4:
     resolution: {integrity: sha512-myEnQTjr3FkI0j1Fu0Mqnv1z8n0JW5iFTOUNzHaEevjzl+1uzMSsFwks/x8i3rGmI3EYtC1BY8K2B2pS0Vfx6w==}
@@ -5280,7 +5274,7 @@ snapshots:
       '@eslint/core': 0.12.0
       levn: 0.4.1
 
-  '@gpahal/eslint-config@0.0.59(eslint-plugin-import@2.29.1(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2)))(eslint@9.23.0(jiti@2.4.2))(tailwindcss@4.0.17)(turbo@2.4.0)(typescript@5.8.2)':
+  '@gpahal/eslint-config@0.0.60(eslint-plugin-import@2.29.1(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2)))(eslint@9.23.0(jiti@2.4.2))(turbo@2.4.0)(typescript@5.8.2)':
     dependencies:
       '@eslint-react/eslint-plugin': 1.38.4(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
       '@gpahal/std': 0.0.26
@@ -5293,7 +5287,6 @@ snapshots:
       eslint-plugin-import-x: 4.9.4(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.23.0(jiti@2.4.2))
       eslint-plugin-react-hooks: 5.2.0(eslint@9.23.0(jiti@2.4.2))
-      eslint-plugin-tailwindcss: 3.18.0(tailwindcss@4.0.17)
       eslint-plugin-turbo: 2.4.4(eslint@9.23.0(jiti@2.4.2))(turbo@2.4.0)
       eslint-plugin-unicorn: 58.0.0(eslint@9.23.0(jiti@2.4.2))
       eslint-plugin-vitest: 0.5.4(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
@@ -5304,7 +5297,6 @@ snapshots:
       - eslint
       - eslint-plugin-import
       - supports-color
-      - tailwindcss
       - ts-api-utils
       - turbo
       - typescript
@@ -6994,12 +6986,6 @@ snapshots:
       typescript: 5.8.2
     transitivePeerDependencies:
       - supports-color
-
-  eslint-plugin-tailwindcss@3.18.0(tailwindcss@4.0.17):
-    dependencies:
-      fast-glob: 3.3.3
-      postcss: 8.5.3
-      tailwindcss: 4.0.17
 
   eslint-plugin-turbo@2.4.4(eslint@9.23.0(jiti@2.4.2))(turbo@2.4.0):
     dependencies:
