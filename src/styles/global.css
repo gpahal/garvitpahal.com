@@ -1,28 +1,39 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './color-theme.css';
+@import '@gpahal/tailwindcss-variants';
 
-@font-face {
-  font-family: 'Satoshi';
-  font-style: normal;
-  font-weight: 300 900;
-  font-display: swap;
-  src:
-    url('/fonts/satoshi/variable.woff2') format('woff2'),
-    url('/fonts/satoshi/variable.woff') format('woff');
-}
+@theme {
+  --font-*: initial;
+  --font-sans:
+    Satoshi, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
-@font-face {
-  font-family: 'Satoshi';
-  font-style: italic;
-  font-weight: 300 900;
-  font-display: swap;
-  src:
-    url('/fonts/satoshi/variable-italic.woff2') format('woff2'),
-    url('/fonts/satoshi/variable-italic.woff') format('woff');
+  --color-transparent: transparent;
+  --color-inherit: inherit;
+  --color-current: currentColor;
 }
 
 @layer base {
+  @font-face {
+    font-family: 'Satoshi';
+    font-style: normal;
+    font-weight: 300 900;
+    font-display: swap;
+    src:
+      url('/fonts/satoshi/variable.woff2') format('woff2'),
+      url('/fonts/satoshi/variable.woff') format('woff');
+  }
+
+  @font-face {
+    font-family: 'Satoshi';
+    font-style: italic;
+    font-weight: 300 900;
+    font-display: swap;
+    src:
+      url('/fonts/satoshi/variable-italic.woff2') format('woff2'),
+      url('/fonts/satoshi/variable-italic.woff') format('woff');
+  }
+
   :root {
     [data-theme='light'] {
       @apply block;
@@ -66,9 +77,11 @@
   }
 
   *,
-  *::before,
-  *::after {
-    @apply box-border border-gray-6;
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    @apply border-gray-6 box-border;
   }
 
   * {
@@ -85,11 +98,11 @@
   }
 
   body {
-    @apply flex flex-col bg-bg font-sans tracking-tight text-gray-12;
+    @apply bg-bg text-gray-12 flex flex-col font-sans tracking-tight;
   }
 
   main {
-    @apply text-[1.05rem] font-[450] leading-[1.6];
+    @apply text-[1.05rem] leading-[1.6] font-[450];
   }
 
   .content > :first-child {
@@ -105,15 +118,15 @@
   }
 
   [class~='lead']:not(.unstyled) {
-    @apply my-[0.88rem] text-[1.275rem] leading-[1.55] text-gray-9;
+    @apply text-gray-9 my-[0.88rem] text-[1.275rem] leading-[1.55];
   }
 
   a:not(.heading-anchor, .unstyled) {
-    @apply font-medium text-anchor no-underline decoration-gray-a-6 decoration-solid decoration-[min(2px,max(2px,0.05em))] underline-offset-[calc(.025em+1px)] focus-visible:rounded-[0.075em] focus-visible:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-8 disabled:cursor-not-allowed [&:not(.no-underline-always)]:hover:underline;
+    @apply text-anchor decoration-gray-a-6 focus-visible:outline-gray-8 font-medium no-underline decoration-solid decoration-[min(2px,max(2px,0.05em))] underline-offset-[calc(.025em+1px)] focus-visible:rounded-[0.075em] focus-visible:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed [&:not(.no-underline-always)]:hover:underline;
   }
 
   a.heading-anchor {
-    @apply absolute bottom-0 left-[-1.25rem] right-0 top-0 hidden font-medium text-gray-8 no-underline hover:inline-block;
+    @apply text-gray-8 absolute top-0 right-0 bottom-0 left-[-1.25rem] hidden font-medium no-underline hover:inline-block;
   }
 
   *:hover > a.heading-anchor {
@@ -121,7 +134,7 @@
   }
 
   a.heading-anchor + a {
-    @apply z-[1];
+    @apply z-1;
   }
 
   strong:not(.unstyled) {
@@ -183,7 +196,7 @@
   }
 
   ol > li:not(.unstyled)::marker {
-    @apply font-normal text-gray-9;
+    @apply text-gray-9 font-normal;
   }
 
   ul:not(ul ul, ol ul) > li p:not(.unstyled),
@@ -229,7 +242,7 @@
   }
 
   blockquote:not(.unstyled) {
-    @apply my-[1.15rem] border-s-[0.25rem] ps-[1.55rem] text-[1.2rem] font-medium italic leading-[1.55] text-gray-11;
+    @apply text-gray-11 my-[1.15rem] border-s-[0.25rem] ps-[1.55rem] text-[1.2rem] leading-[1.55] font-medium italic;
 
     quotes: '\201C' '\201D' '\2018' '\2019';
   }
@@ -252,7 +265,7 @@
   }
 
   h1:not(.unstyled) {
-    @apply mb-5 mt-0 text-[2rem] font-extrabold leading-10 tracking-[-0.02em];
+    @apply mt-0 mb-5 text-[2rem] leading-10 font-extrabold tracking-[-0.02em];
   }
 
   h1 strong:not(.unstyled) {
@@ -260,7 +273,7 @@
   }
 
   h2:not(.unstyled) {
-    @apply mb-3 mt-8 text-[1.375rem] font-bold leading-8 tracking-[-0.0125em];
+    @apply mt-8 mb-3 text-[1.375rem] leading-8 font-bold tracking-[-0.0125em];
   }
 
   h2 strong:not(.unstyled) {
@@ -268,7 +281,7 @@
   }
 
   h3:not(.unstyled) {
-    @apply mb-2 mt-7 text-[1.2rem] font-semibold leading-[1.75rem];
+    @apply mt-7 mb-2 text-[1.2rem] leading-[1.75rem] font-semibold;
   }
 
   h3 strong:not(.unstyled) {
@@ -276,7 +289,7 @@
   }
 
   h4:not(.unstyled) {
-    @apply mb-1.5 mt-5 text-[1.075rem] font-semibold leading-[1.55rem];
+    @apply mt-5 mb-1.5 text-[1.075rem] leading-[1.55rem] font-semibold;
   }
 
   h4 strong:not(.unstyled) {
@@ -307,12 +320,12 @@
   }
 
   kbd:not(.unstyled) {
-    @apply rounded-[0.3125rem] py-[0.1875rem] pe-1.5 ps-1.5 font-[inherit] text-sm font-medium text-gray-12 shadow-[0_0_0_1px_rgb(var(--colors-gray-12)/10%),_0_3px_0_rgb(var(--colors-gray-12)/10%)];
+    @apply text-gray-12 rounded-[0.3125rem] py-[0.1875rem] ps-1.5 pe-1.5 font-[inherit] text-sm font-medium shadow-[0_0_0_1px_rgb(var(--colors-gray-12)/10%),_0_3px_0_rgb(var(--colors-gray-12)/10%)];
   }
 
   code,
   pre {
-    @apply font-mono font-[0.9375rem] leading-[1.65];
+    @apply font-mono leading-[1.65] font-[0.9375rem];
   }
 
   code {
@@ -326,7 +339,7 @@
   }
 
   code:not(.unstyled, pre code) {
-    @apply rounded-md bg-gray-3 px-1 py-0.5 text-[0.9375rem] text-gray-11;
+    @apply bg-gray-3 text-gray-11 rounded-md px-1 py-0.5 text-[0.9375rem];
   }
 
   a code,
@@ -348,7 +361,7 @@
   }
 
   pre:not(.unstyled) {
-    @apply my-[1.7rem] overflow-x-auto rounded-md bg-gray-3 py-[0.85rem] pe-[1.15rem] ps-[1.15rem] font-[inherit];
+    @apply bg-gray-3 my-[1.7rem] overflow-x-auto rounded-md py-[0.85rem] ps-[1.15rem] pe-[1.15rem] font-[inherit];
   }
 
   pre code:not(.unstyled) {
@@ -371,7 +384,7 @@
   }
 
   thead th:not(.unstyled) {
-    @apply pb-[0.55rem] pe-[0.55rem] ps-[0.55rem] align-bottom font-semibold;
+    @apply ps-[0.55rem] pe-[0.55rem] pb-[0.55rem] align-bottom font-semibold;
   }
 
   thead th:first-child:not(.unstyled) {
@@ -409,7 +422,7 @@
 
   tbody td:not(.unstyled),
   tfoot td:not(.unstyled) {
-    @apply py-[0.55rem] pe-[0.55rem] ps-[0.55rem];
+    @apply py-[0.55rem] ps-[0.55rem] pe-[0.55rem];
   }
 
   tbody td:first-child:not(.unstyled),
@@ -431,7 +444,7 @@
   }
 
   figcaption:not(.unstyled) {
-    @apply text-sm leading-[1.4rem] text-gray-11;
+    @apply text-gray-11 text-sm leading-[1.4rem];
   }
 
   input,
@@ -447,15 +460,15 @@
 }
 
 .drawer-overlay {
-  @apply fixed inset-0 top-0 z-10 h-full w-full select-none overflow-auto bg-gray-9 opacity-0 transition-opacity duration-300 will-change-[opacity];
+  @apply bg-gray-9 fixed inset-0 top-0 z-10 h-full w-full overflow-auto opacity-0 transition-opacity duration-300 will-change-[opacity] select-none;
 }
 
 .drawer-wrapper {
-  @apply fixed inset-x-0 bottom-0 z-20 flex w-full translate-y-full flex-col overflow-auto bg-bg transition-transform duration-300 will-change-transform;
+  @apply bg-bg fixed inset-x-0 bottom-0 z-20 flex w-full translate-y-full flex-col overflow-auto transition-transform duration-300 will-change-transform;
 }
 
 .drawer-content {
-  @apply relative grow overflow-y-auto overflow-x-hidden;
+  @apply relative grow overflow-x-hidden overflow-y-auto;
 }
 
 .drawer.is-active {

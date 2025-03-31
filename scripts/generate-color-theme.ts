@@ -1,5 +1,7 @@
 import { slate, slateA, slateDark, slateDarkA, slateDarkP3, slateDarkP3A, slateP3, slateP3A } from '@radix-ui/colors'
 
+import { generateCSSFile } from '@gpahal/tailwindcss-color-themes'
+
 type Color = string
 
 type BaseColors = {
@@ -95,3 +97,25 @@ export const darkTheme = {
     },
   },
 } satisfies Theme
+
+async function main() {
+  await generateCSSFile(
+    {
+      default: lightTheme,
+      defaultDark: darkTheme,
+      selections: [
+        {
+          selector: '.light-theme',
+          theme: lightTheme,
+        },
+        {
+          selector: '.dark-theme',
+          theme: darkTheme,
+        },
+      ],
+    },
+    'src/styles/color-theme.css',
+  )
+}
+
+main()

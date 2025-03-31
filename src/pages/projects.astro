@@ -10,14 +10,14 @@ allBlogPosts.sort((a, b) => b.data.publishedOn.getTime() - a.data.publishedOn.ge
 
 const projects = [
   {
+    href: 'https://github.com/gpahal/microgpt',
+    name: 'microgpt',
+    description: 'A micro GPT implementation and training pipeline in PyTorch',
+  },
+  {
     href: 'https://superstream.finance/',
     name: 'superstream',
     description: 'Solana-based protocol for real-time streaming payments',
-  },
-  {
-    href: 'https://github.com/gpahal/golib',
-    name: 'golib',
-    description: 'Go libraries that I use in my projects',
   },
   {
     href: 'https://github.com/gpahal/jslib',
@@ -25,9 +25,9 @@ const projects = [
     description: 'JS/TS libraries and configs I use in my projects',
   },
   {
-    href: 'https://github.com/gpahal/kvs',
-    name: 'kvs',
-    description: 'Go interface for kv stores with an in-memory implementation',
+    href: 'https://github.com/gpahal/golib',
+    name: 'golib',
+    description: 'Go libraries that I use in my projects',
   },
   {
     href: 'https://github.com/gpahal/head',
@@ -35,14 +35,19 @@ const projects = [
     description: 'Go library for parsing information in a HTML head tag',
   },
   {
-    href: 'https://github.com/gpahal/solana-fellowship',
-    name: 'solana-fellowship',
-    description: 'Stuff I worked on as part of the Solana Fellowship',
+    href: 'https://github.com/gpahal/kvs',
+    name: 'kvs',
+    description: 'Go interface for kv stores with an in-memory implementation',
   },
   {
     href: 'https://github.com/gpahal/hgraph',
     name: 'hgraph',
     description: 'Toy graph datastore implemented in Haskell',
+  },
+  {
+    href: 'https://github.com/gpahal/solana-fellowship',
+    name: 'solana-fellowship',
+    description: 'Stuff I worked on as part of my Solana Fellowship',
   },
   {
     href: '/',
@@ -63,8 +68,8 @@ const projects = [
         return (
           <li class="unstyled">
             <a href={project.href} class="unstyled group -mx-2 block rounded-md px-2 py-1 hocus:bg-gray-3">
-              <H3 class="!my-0 !font-medium">{project.name}</H3>
-              <p class="!mb-0 !mt-[-0.05rem] text-base text-gray-11">{project.description}</p>
+              <H3 class="my-0! font-medium!">{project.name}</H3>
+              <p class="mb-0! mt-[-0.05rem]! text-base text-gray-11">{project.description}</p>
             </a>
           </li>
         )

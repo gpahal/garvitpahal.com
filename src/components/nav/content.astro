@@ -45,9 +45,9 @@ const links = [
     Icon: AboutIcon,
   },
   {
-    path: '/blog',
-    label: 'Blog',
-    Icon: BlogIcon,
+    path: '/projects',
+    label: 'Projects',
+    Icon: ProjectsIcon,
   },
   {
     path: '/work',
@@ -55,9 +55,9 @@ const links = [
     Icon: WorkIcon,
   },
   {
-    path: '/projects',
-    label: 'Projects',
-    Icon: ProjectsIcon,
+    path: '/blog',
+    label: 'Blog',
+    Icon: BlogIcon,
   },
   {
     path: '/uses',
@@ -86,7 +86,7 @@ const links = [
     </ul>
   </section>
   <section class="mt-2 lg:mt-10">
-    <div class="mb-4 h-px bg-gradient-to-r from-gray-1 via-gray-5 to-gray-1 lg:mb-0 lg:hidden"></div>
+    <div class="mb-4 h-px bg-linear-to-r from-gray-1 via-gray-5 to-gray-1 lg:mb-0 lg:hidden"></div>
     <nav
       class="mt-1 flex flex-wrap justify-center gap-x-8 gap-y-2.5 text-sm font-medium lg:flex-col lg:gap-x-0 lg:gap-y-[0.15rem] lg:text-[0.9375rem]"
     >
@@ -95,7 +95,7 @@ const links = [
           <div class="-mx-2">
             <a
               href={path}
-              class="unstyled group flex w-full items-center justify-start rounded px-2 py-1.5 hocus:bg-gray-4"
+              class="unstyled group flex w-full items-center justify-start rounded-sm px-2 py-1.5 hocus:bg-gray-4"
               aria-label={label}
             >
               <Icon class="size-[1.125rem] shrink-0 text-gray-10 group-hover:text-gray-11 lg:size-[1.15rem]" />
@@ -109,7 +109,7 @@ const links = [
   {
     !isFullPage && (
       <section class="mt-8 flex items-center justify-center lg:hidden">
-        <button data-drawer-close class="w-full max-w-lg rounded border py-2">
+        <button data-drawer-close class="w-full max-w-lg rounded-sm border py-2">
           Close Menu
         </button>
       </section>

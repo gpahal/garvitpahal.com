@@ -40,8 +40,9 @@ notablePersonalProjectsWithContent.sort((a, b) => b.data.startedOn.getTime() - a
       delight is my biggest motivator. Since then, I have focused on building consumer-facing and enterprise products.
     </p>
     <p>
-      Apart from my day jobs (listed below), I work on a few <a href="/projects">side projects</a> from time to time. I also
-      have some open-source projects on <a href="https://github.com/gpahal">GitHub</a>.
+      Apart from my day jobs (listed below), I work on a few <a href="/projects">side projects</a> from time to time. A couple
+      recent ones that I'm proud of are <a href="https://github.com/gpahal/microgpt">microgpt</a> and
+      <a href="https://superstream.finance/">superstream</a>.
     </p>
     <H2 id="work-experiences">
       <span>Work Experiences</span>
@@ -52,8 +53,8 @@ notablePersonalProjectsWithContent.sort((a, b) => b.data.startedOn.getTime() - a
         workExperiencesWithContent.map((work) => {
           return (
             <li class="unstyled">
-              <H3 class="!mb-0 ">{work.data.company}</H3>
-              <p class="!mt-[-0.05rem] text-base text-gray-11">
+              <H3 class="mb-0! ">{work.data.company}</H3>
+              <p class="mt-[-0.05rem]! text-base text-gray-11">
                 {work.data.role}, {format(work.data.startedOn, 'MMM yyyy')} -{' '}
                 {work.data.endedOn ? format(work.data.endedOn, 'MMM yyyy') : 'Present'}
               </p>
@@ -71,8 +72,8 @@ notablePersonalProjectsWithContent.sort((a, b) => b.data.startedOn.getTime() - a
         notablePersonalProjectsWithContent.map((project) => {
           return (
             <li class="unstyled">
-              <H3 class="!mb-0 ">{project.data.project}</H3>
-              <p class="!mt-[-0.05rem] text-base text-gray-11">
+              <H3 class="mb-0! ">{project.data.project}</H3>
+              <p class="mt-[-0.05rem]! text-base text-gray-11">
                 {format(project.data.startedOn, 'MMM yyyy')} -{' '}
                 {project.data.endedOn ? format(project.data.endedOn, 'MMM yyyy') : 'Present'}
               </p>
