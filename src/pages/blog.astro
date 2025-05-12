@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content'
+
+import { format } from 'date-fns'
+
+import Layout from '@/layouts/layout.astro'
+import H1 from '@/components/heading/h1.astro'
+import H3 from '@/components/heading/h3.astro'
+import LinkButton from '@/components/link-button.astro'
+import RssIcon from '@/icons/blog/rss.astro'
+
+const blog = await getCollection('blog')
+blog.sort((a, b) => b.data.publishedOn.getTime() - a.data.publishedOn.getTime())
+console.dir(
+  blog.map((blogPost) => blogPost.id),
+  { depth: null },
+)
+---
+
+<Layout title="Blog">
+  <header>
+    <H1>
+      <span>Blog</span>
+      <LinkButton href="/blog.rss.xml"><RssIcon class="size-4" /><span>RSS Feed</span></LinkButton>
+    </H1>
+  </header>
+
+  <ul class="unstyled space-y-1.5">
+    {
+      blog.map((blogPost) => {
+        return (
+          <li class="unstyled">
+            <a href={`/blog/${blogPost.id}`} class="unstyled group -mx-2 block rounded-md px-2 py-1 hocus:bg-gray-3">
+              <H3 class="my-0! font-medium!">{blogPost.data.title}</H3>
+              <p class="mb-0! mt-[-0.05rem]! text-base text-gray-11">{format(blogPost.data.publishedOn, 'MMM yyyy')}</p>
+            </a>
+          </li>
+        )
+      })
+    }
+  </ul>
+</Layout>

@@ -1,0 +1,22 @@
+---
+import { type HTMLAttributes } from 'astro/types'
+
+type Props = HTMLAttributes<'h1'> & {
+  level: number
+}
+
+const { level, class: className, ...otherProps } = Astro.props
+const id = otherProps.id
+const Tag = `h${level}`
+---
+
+<Tag class:list={['relative', className]} {...otherProps}>
+  {
+    !!id && (
+      <a href={`#${id}`} class={`heading-anchor ${Tag}-anchor`} aria-label="Link to this heading">
+        #
+      </a>
+    )
+  }
+  <slot />
+</Tag>

@@ -1,0 +1,32 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+
+import { format } from 'date-fns'
+
+import Layout from '@/layouts/layout.astro'
+import H1 from '@/components/heading/h1.astro'
+
+export async function getStaticPaths() {
+  const blog = await getCollection('blog')
+  return blog.map((blogPost) => ({
+    params: { id: blogPost.id },
+    props: { blogPost },
+  }))
+}
+
+type Props = {
+  blogPost: CollectionEntry<'blog'>
+}
+
+const { blogPost } = Astro.props
+const { Content } = await render(blogPost)
+---
+
+<Layout title={`${blogPost.data.title} | Blog`}>
+  <header>
+    <H1 class="mb-0!">{blogPost.data.title}</H1>
+    <p class="mb-5! mt-0.5! text-base text-gray-11">{format(blogPost.data.publishedOn, 'MMM yyyy')}</p>
+  </header>
+
+  <Content class="content" />
+</Layout>

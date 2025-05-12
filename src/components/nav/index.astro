@@ -1,0 +1,52 @@
+---
+import IconMenu from '@/icons/nav/menu.astro'
+
+import NavContent from './content.astro'
+
+type Props = {
+  isFullPage?: boolean
+}
+
+const { isFullPage } = Astro.props
+---
+
+<div
+  class="fixed inset-x-0 bottom-0 z-10 border-t bg-gray-2 lg:right-auto lg:top-0 lg:flex lg:w-[17.5rem] lg:shrink-0 lg:items-start lg:overflow-y-auto lg:border-r lg:border-t-0 lg:border-gray-4"
+>
+  <div class={isFullPage ? '' : 'hidden lg:block'}><NavContent isFullPage={isFullPage} /></div>
+  {
+    !isFullPage && (
+      <div class="relative lg:hidden">
+        <div class="flex items-center justify-between px-6 py-3 font-medium">
+          <a href="/" class="unstyled text-xl font-semibold">
+            Garvit Pahal
+          </a>
+          <div class="relative size-8">
+            <noscript>
+              <a href="/nav" class="unstyled absolute inset-0">
+                <IconMenu class="size-8" />
+              </a>
+            </noscript>
+            <button
+              data-drawer-trigger
+              aria-controls="menu-bottom-drawer"
+              aria-expanded="false"
+              aria-label="Open Menu"
+              class="unstyled script-button absolute inset-0 hidden"
+            >
+              <IconMenu class="size-8" />
+            </button>
+          </div>
+        </div>
+        <div data-drawer-target id="menu-bottom-drawer" class="drawer">
+          <div data-drawer-close class="drawer-overlay" tabindex="-1" />
+          <div class="drawer-wrapper">
+            <div class="drawer-content bg-gray-2">
+              <NavContent />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+</div>
