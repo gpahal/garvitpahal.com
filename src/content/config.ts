@@ -27,9 +27,9 @@ const SCHEMA_DATE = z.string().transform((dateStr, ctx) => {
   return validateAndTransformDateStr(dateStr, ctx)
 })
 
-const SCHEMA_DATE_NULLABLE = z
+const SCHEMA_DATE_NULLISH = z
   .string()
-  .nullable()
+  .nullish()
   .transform((dateStr, ctx) => {
     if (!dateStr) {
       return null
@@ -45,7 +45,7 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     publishedOn: SCHEMA_DATE,
-    tags: z.array(z.string()).nullable(),
+    tags: z.array(z.string()).nullish(),
   }),
 })
 
@@ -56,9 +56,9 @@ const workExperiences = defineCollection({
   }),
   schema: z.object({
     company: z.string(),
-    role: z.string(),
+    role: z.string().nullish(),
     startedOn: SCHEMA_DATE,
-    endedOn: SCHEMA_DATE_NULLABLE,
+    endedOn: SCHEMA_DATE_NULLISH,
   }),
 })
 
@@ -70,7 +70,7 @@ const notablePersonalProjects = defineCollection({
   schema: z.object({
     project: z.string(),
     startedOn: SCHEMA_DATE,
-    endedOn: SCHEMA_DATE_NULLABLE,
+    endedOn: SCHEMA_DATE_NULLISH,
   }),
 })
 

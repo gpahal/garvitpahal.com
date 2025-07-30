@@ -1,18 +1,25 @@
 ---
-import { getCollection } from 'astro:content'
-
 import Layout from '@/layouts/layout.astro'
 import H1 from '@/components/heading/h1.astro'
 import H3 from '@/components/heading/h3.astro'
 
-const allBlogPosts = await getCollection('blog')
-allBlogPosts.sort((a, b) => b.data.publishedOn.getTime() - a.data.publishedOn.getTime())
-
 const projects = [
+  {
+    href: 'https://github.com/gpahal/pdf-rag-embed-bench',
+    name: 'pdf-rag-embed-bench',
+    description:
+      'Benchmark for PDF RAG embedding systems - from text to multimodal to multi vector and a combination of them',
+  },
   {
     href: 'https://github.com/gpahal/microgpt',
     name: 'microgpt',
-    description: 'A micro GPT implementation and training pipeline in PyTorch',
+    description: 'Micro GPT implementation and training pipeline in PyTorch',
+  },
+  {
+    href: 'https://github.com/gpahal/durable-execution',
+    name: 'durable-execution',
+    description:
+      'Durable execution engine for running functions and workflows durably and resiliently, ideal for AI workflows',
   },
   {
     href: 'https://superstream.finance/',
@@ -20,14 +27,19 @@ const projects = [
     description: 'Solana-based protocol for real-time streaming payments',
   },
   {
+    href: 'https://github.com/gpahal/solana-fellowship',
+    name: 'solana-fellowship',
+    description: 'Stuff I worked on as part of my Solana Fellowship',
+  },
+  {
     href: 'https://github.com/gpahal/jslib',
     name: 'jslib',
     description: 'JS/TS libraries and configs I use in my projects',
   },
   {
-    href: 'https://github.com/gpahal/golib',
-    name: 'golib',
-    description: 'Go libraries that I use in my projects',
+    href: 'https://github.com/gpahal/hgraph',
+    name: 'hgraph',
+    description: 'Toy graph datastore implemented in Haskell',
   },
   {
     href: 'https://github.com/gpahal/head',
@@ -40,19 +52,9 @@ const projects = [
     description: 'Go interface for kv stores with an in-memory implementation',
   },
   {
-    href: 'https://github.com/gpahal/hgraph',
-    name: 'hgraph',
-    description: 'Toy graph datastore implemented in Haskell',
-  },
-  {
-    href: 'https://github.com/gpahal/solana-fellowship',
-    name: 'solana-fellowship',
-    description: 'Stuff I worked on as part of my Solana Fellowship',
-  },
-  {
-    href: '/',
-    name: 'garvitpahal.com',
-    description: 'My website. You are here',
+    href: 'https://github.com/gpahal/golib',
+    name: 'golib',
+    description: 'Go libraries that I use in my projects',
   },
 ] as const
 ---
