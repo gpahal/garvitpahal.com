@@ -28,9 +28,10 @@ pnpm dev
 
 ## Deployment
 
-Commit and push changes to [gpahal/garvitpahal.com](https://github.com/gpahal/garvitpahal.com) to trigger automatic
-deployment.
+Commit and push changes to [gpahal/garvitpahal.com](https://github.com/gpahal/garvitpahal.com) to
+trigger automatic deployment.
 
 ## License
 
-Licensed under MIT license ([LICENSE](LICENSE) or [opensource.org/licenses/MIT](https://opensource.org/licenses/MIT))
+Licensed under MIT license ([LICENSE](LICENSE) or
+[opensource.org/licenses/MIT](https://opensource.org/licenses/MIT))

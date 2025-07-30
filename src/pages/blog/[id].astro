@@ -25,7 +25,9 @@ const { Content } = await render(blogPost)
 <Layout title={`${blogPost.data.title} | Blog`}>
   <header>
     <H1 class="mb-0!">{blogPost.data.title}</H1>
-    <p class="mb-5! mt-0.5! text-base text-gray-11">{format(blogPost.data.publishedOn, 'MMM yyyy')}</p>
+    <p class="mb-5! mt-0.5! text-base text-gray-11">
+      {format(blogPost.data.publishedOn, 'MMM yyyy')}
+    </p>
   </header>
 
   <Content class="content" />

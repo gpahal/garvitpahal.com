@@ -1,4 +1,13 @@
-import { slate, slateA, slateDark, slateDarkA, slateDarkP3, slateDarkP3A, slateP3, slateP3A } from '@radix-ui/colors'
+import {
+  slate,
+  slateA,
+  slateDark,
+  slateDarkA,
+  slateDarkP3,
+  slateDarkP3A,
+  slateP3,
+  slateP3A,
+} from '@radix-ui/colors'
 
 import { generateCSSFile } from '@gpahal/tailwindcss-color-themes'
 
@@ -38,7 +47,11 @@ type Theme = {
 }
 
 type Template<T, S extends string, V = void> = {
-  [K in keyof T as K extends number ? (S extends `${infer F}` ? `${F}${K}` : K) : never]: V extends void ? T[K] : V
+  [K in keyof T as K extends number
+    ? S extends `${infer F}`
+      ? `${F}${K}`
+      : K
+    : never]: V extends void ? T[K] : V
 }
 
 type RadixColors<S extends string> = Template<BaseColors, S, string>

@@ -30,9 +30,14 @@ console.dir(
       blog.map((blogPost) => {
         return (
           <li class="unstyled">
-            <a href={`/blog/${blogPost.id}`} class="unstyled group -mx-2 block rounded-md px-2 py-1 hocus:bg-gray-3">
+            <a
+              href={`/blog/${blogPost.id}`}
+              class="unstyled group -mx-2 block rounded-md px-2 py-1 hocus:bg-gray-3"
+            >
               <H3 class="my-0! font-medium!">{blogPost.data.title}</H3>
-              <p class="mb-0! mt-[-0.05rem]! text-base text-gray-11">{format(blogPost.data.publishedOn, 'MMM yyyy')}</p>
+              <p class="mb-0! mt-[-0.05rem]! text-base text-gray-11">
+                {format(blogPost.data.publishedOn, 'MMM yyyy')}
+              </p>
             </a>
           </li>
         )

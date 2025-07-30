@@ -39,7 +39,7 @@
     "@gpahal/stylelint-config": "^0.0.19",
     "@gpahal/tailwindcss-color-themes": "^0.0.31",
     "@gpahal/tailwindcss-variants": "^0.0.26",
-    "@gpahal/tsconfig": "^0.0.19",
+    "@gpahal/tsconfig": "^0.0.20",
     "@ianvs/prettier-plugin-sort-imports": "^4.5.1",
     "@radix-ui/colors": "^3.0.0",
     "@tailwindcss/postcss": "^4.1.11",

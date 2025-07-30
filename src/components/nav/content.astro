@@ -74,12 +74,18 @@ const links = [
     <div class="text-xl font-semibold">
       <a href="/" class="unstyled">Garvit Pahal</a>
     </div>
-    <div class="mt-2 font-medium">Software engineer interested in technology, football and movies.</div>
+    <div class="mt-2 font-medium">
+      Software engineer interested in technology, football and movies.
+    </div>
     <ul class="unstyled -mx-2 mt-3 flex justify-center gap-2 lg:justify-start lg:gap-1">
       {
         socials.map(({ href, label, Icon }) => (
           <li class="unstyled">
-            <a href={href} class="unstyled inline-block p-2 text-gray-10 hocus:text-gray-12" aria-label={label}>
+            <a
+              href={href}
+              class="unstyled inline-block p-2 text-gray-10 hocus:text-gray-12"
+              aria-label={label}
+            >
               <Icon class="size-[1.125rem] shrink-0 lg:size-[1.15rem]" />
             </a>
           </li>

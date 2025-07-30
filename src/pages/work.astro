@@ -25,7 +25,9 @@ const notablePersonalProjectsWithContent = await Promise.all(
     return { ...project, Content }
   }),
 )
-notablePersonalProjectsWithContent.sort((a, b) => b.data.startedOn.getTime() - a.data.startedOn.getTime())
+notablePersonalProjectsWithContent.sort(
+  (a, b) => b.data.startedOn.getTime() - a.data.startedOn.getTime(),
+)
 ---
 
 <Layout title="Work">
@@ -35,13 +37,16 @@ notablePersonalProjectsWithContent.sort((a, b) => b.data.startedOn.getTime() - a
 
   <div class="content">
     <p>
-      I've worked in the tech industry for nearly eight years. The initial years were a rollercoaster - founded a
-      startup and worked for a graph database company and a high-frequency trading firm. I discovered that customer
-      delight is my biggest motivator. Since then, I have focused on building consumer-facing and enterprise products.
+      I've worked in the tech industry for nearly eight years. The initial years were a
+      rollercoaster - founded a startup and worked for a graph database company and a high-frequency
+      trading firm. I discovered that customer delight is my biggest motivator. Since then, I have
+      focused on building consumer-facing and enterprise products.
     </p>
     <p>
-      Apart from my day jobs (listed below), I work on a few <a href="/projects">side projects</a> from time to time. A couple
-      recent ones that I'm proud of are <a href="https://github.com/gpahal/microgpt">microgpt</a> and
+      Apart from my day jobs (listed below), I work on a few <a href="/projects">side projects</a> from
+      time to time. A couple recent ones that I'm proud of are <a
+        href="https://github.com/gpahal/microgpt">microgpt</a
+      > and
       <a href="https://superstream.finance/">superstream</a>.
     </p>
     <H2 id="work-experiences">
