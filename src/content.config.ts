@@ -9,7 +9,7 @@ function validateAndTransformDateStr(dateStr: string, ctx: z.RefinementCtx) {
     const parsed = parse(`${dateStr} 12:00:00 Z`, 'dd/MM/yyyy HH:mm:ss X', new Date())
     if (!parsed) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'Invalid date - use format 13/02/2022',
       })
       return z.NEVER
@@ -17,7 +17,7 @@ function validateAndTransformDateStr(dateStr: string, ctx: z.RefinementCtx) {
     return parsed
   } catch {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       message: 'Invalid date - use format 13/02/2022',
     })
     return z.NEVER
