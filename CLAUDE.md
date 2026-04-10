@@ -37,7 +37,7 @@ pnpm build
 pnpm preview
 
 # Type checking (without emitting files)
-pnpm type-check
+pnpm typecheck
 
 # Linting
 pnpm lint           # Runs all linters (ESLint + Stylelint)
@@ -51,7 +51,7 @@ pnpm fmt-check      # Check formatting without writing
 pnpm generate-color-theme
 
 # Pre-push validation (runs automatically via git hook)
-pnpm pre-push       # Runs type-check, lint, fmt-check, and astro check
+pnpm pre-push       # Runs typecheck, lint, fmt-check, and astro check
 ```
 
 ## Architecture
@@ -163,6 +163,6 @@ When working with collections:
 
 ## Git Workflow
 
-- Pre-push hook runs: `type-check`, `lint`, `fmt-check`, and `astro check`
+- Pre-push hook runs: `typecheck`, `lint`, `fmt-check`, and `astro check`
 - Ensure all validations pass before pushing
 - Configuration: `.simple-git-hooks.json`

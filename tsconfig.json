@@ -1,7 +1,6 @@
 {
   "extends": "@gpahal/tsconfig/astro-app.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@public/*": ["./public/*"]

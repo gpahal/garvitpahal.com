@@ -60,7 +60,7 @@
       "Bash(pnpm start:*)",
       "Bash(pnpm build:*)",
       "Bash(pnpm preview:*)",
-      "Bash(pnpm type-check:*)",
+      "Bash(pnpm typecheck:*)",
       "Bash(pnpm lint:*)",
       "Bash(pnpm lint-fix:*)",
       "Bash(pnpm fmt:*)",
