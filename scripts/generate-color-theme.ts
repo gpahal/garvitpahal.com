@@ -47,11 +47,9 @@ type Theme = {
 }
 
 type Template<T, S extends string, V = void> = {
-  [K in keyof T as K extends number
-    ? S extends `${infer F}`
-      ? `${F}${K}`
-      : K
-    : never]: V extends void ? T[K] : V
+  [
+    K in keyof T as K extends number ? (S extends `${infer F}` ? `${F}${K}` : K) : never
+  ]: V extends void ? T[K] : V
 }
 
 type RadixColors<S extends string> = Template<BaseColors, S, string>
@@ -59,17 +57,15 @@ type RadixColors<S extends string> = Template<BaseColors, S, string>
 function toBaseColors<S extends string>(colors: RadixColors<S>): BaseColors {
   const newObj = {} as BaseColors
   for (const [k, v] of Object.entries(colors)) {
-    const key = (
-      k.endsWith('10') || k.endsWith('11') || k.endsWith('12')
-        ? Number.parseInt(k.slice(-2), 10)
-        : Number.parseInt(k.slice(-1), 10)
+    const key = Number(
+      k.endsWith('10') || k.endsWith('11') || k.endsWith('12') ? k.slice(-2) : k.slice(-1),
     ) as keyof BaseColors
     newObj[key] = v as Color
   }
   return newObj
 }
 
-export const lightTheme = {
+const lightTheme = {
   bg: '#ffffff',
   anchor: '#2867ed',
   gray: {
@@ -90,7 +86,7 @@ export const lightTheme = {
   },
 } satisfies Theme
 
-export const darkTheme = {
+const darkTheme = {
   bg: '#111111',
   anchor: '#5ba0f9',
   gray: {

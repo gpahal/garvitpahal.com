@@ -232,13 +232,15 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
       }
 
       function keydownHandler(event) {
-        if (event.key === 'Escape' || event.keyCode === 27) {
-          const drawers = document.querySelectorAll(drawerSettings.selectorTarget)
-          let i
-          for (i = 0; i < drawers.length; ++i) {
-            if (drawers[i].classList.contains(drawerSettings.activeClass)) {
-              closeDrawer(drawers[i])
-            }
+        if (!(event.key === 'Escape' || event.keyCode === 27)) {
+          return
+        }
+
+        const drawers = document.querySelectorAll(drawerSettings.selectorTarget)
+        let i
+        for (i = 0; i < drawers.length; ++i) {
+          if (drawers[i].classList.contains(drawerSettings.activeClass)) {
+            closeDrawer(drawers[i])
           }
         }
       }
@@ -246,14 +248,13 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
       function setupMenuDrawer() {
         if (!Element.prototype.closest) {
           Element.prototype.closest = function (s) {
-            // eslint-disable-next-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias
+            // eslint-disable-next-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias, unicorn/no-this-outside-of-class
             const el = this
-            // eslint-disable-next-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias
-            let ancestor = this
             if (!document.documentElement.contains(el)) {
               return null
             }
 
+            let ancestor = el
             do {
               if (ancestor.matches(s)) {
                 return ancestor
@@ -264,8 +265,8 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
           }
         }
 
-        document.addEventListener('click', clickHandler, false)
-        document.addEventListener('keydown', keydownHandler, false)
+        document.addEventListener('click', clickHandler, { capture: false })
+        document.addEventListener('keydown', keydownHandler, { capture: false })
       }
 
       document.addEventListener('astro:page-load', () => {

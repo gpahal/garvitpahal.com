@@ -38,6 +38,8 @@ const SCHEMA_DATE_NULLISH = z
     return validateAndTransformDateStr(dateStr, ctx)
   })
 
+const SCHEMA_TAGS = z.array(z.string()).nullish()
+
 const blog = defineCollection({
   loader: glob({
     pattern: '**/*.mdx',
@@ -46,7 +48,7 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     publishedOn: SCHEMA_DATE,
-    tags: z.array(z.string()).nullish(),
+    tags: SCHEMA_TAGS,
   }),
 })
 

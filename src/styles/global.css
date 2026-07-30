@@ -1,5 +1,5 @@
-@import url('./color-theme.css');
-@import url('@gpahal/tailwindcss-variants');
+@import './color-theme.css';
+@import '@gpahal/tailwindcss-variants';
 
 @theme {
   --font-*: initial; /* stylelint-disable-line custom-property-pattern */

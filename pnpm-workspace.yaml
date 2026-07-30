@@ -1,6 +1,13 @@
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
-  - sharp
-  - simple-git-hooks
-  - unrs-resolver
+allowBuilds:
+  '@tailwindcss/oxide': true
+  esbuild: true
+  sharp: true
+  simple-git-hooks: true
+  unrs-resolver: true
+minimumReleaseAgeExclude:
+  - '@gpahal/eslint-config@0.0.129'
+  - '@gpahal/prettier-config@0.0.36'
+  - '@gpahal/std@0.0.44'
+  - '@gpahal/tailwindcss-color-themes@0.0.44'
+  - '@gpahal/tailwindcss-variants@0.0.31'
+  - '@gpahal/tsconfig@0.0.21'

@@ -1,7 +1,6 @@
 export default {
   plugins: {
     'postcss-flexbugs-fixes': {},
-    '@tailwindcss/postcss': {},
     'postcss-preset-env': {
       autoprefixer: {
         flexbox: 'no-2009',
@@ -11,6 +10,6 @@ export default {
         'nesting-rules': false,
       },
     },
-    ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
+    ...(process.env.NODE_ENV === 'production' && { cssnano: {} }),
   },
 }
