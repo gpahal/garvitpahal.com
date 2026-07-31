@@ -12,7 +12,15 @@
   --color-transparent: transparent;
   --color-inherit: inherit;
   --color-current: currentcolor;
-  --color-overlay: rgb(0 0 0 / 55%);
+  /* Restored after color-theme.css resets `--color-*: initial`. These are absolutes rather than
+     theme colours - for scrims and for marks drawn over video, which must not follow the theme -
+     so they belong here and not in the generated per-theme file. */
+  --color-white: #fff;
+  --color-black: #000;
+  /* Hover pair for solid `bg-gray-12` buttons. Going the whole way to gray-11 drops them to a mid
+     grey and washes the label out, so shift only slightly toward it. Derived from the steps rather
+     than a literal, so it inverts with the theme like they do. */
+  --color-gray-12-hover: color-mix(in oklab, var(--color-gray-12) 85%, var(--color-gray-11));
 }
 
 @layer base {

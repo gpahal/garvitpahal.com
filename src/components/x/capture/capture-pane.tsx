@@ -64,7 +64,7 @@ export function CapturePane({ onImage, disabled = false }: CapturePaneProps): Re
           onFiles(event.dataTransfer.files)
         }}
         className={`unstyled flex min-h-44 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed px-6 py-10 text-center ${
-          dragging ? 'border-anchor bg-gray-3' : 'border-gray-6 hocus:bg-gray-2'
+          dragging ? 'border-anchor bg-gray-3' : 'border-gray-6 hocus-visible:bg-gray-2'
         } ${disabled ? 'pointer-events-none opacity-50' : ''}`}
       >
         <span className="text-sm font-medium text-gray-12">Upload a picture of the puzzle</span>
@@ -93,7 +93,7 @@ export function CapturePane({ onImage, disabled = false }: CapturePaneProps): Re
             setCameraOpen(true)
           }}
           aria-label="Take a picture with the camera"
-          className="unstyled absolute top-3 right-3 inline-flex size-10 items-center justify-center rounded-lg border border-gray-6 bg-bg text-gray-12 focus-visible:ring-2 focus-visible:ring-anchor focus-visible:outline-none disabled:opacity-50 hocus:bg-gray-4"
+          className="unstyled absolute top-3 right-3 inline-flex size-10 items-center justify-center rounded-lg border border-gray-6 bg-bg text-gray-12 focus-visible:ring-2 focus-visible:ring-anchor focus-visible:outline-none disabled:opacity-50 hocus-visible:bg-gray-4"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

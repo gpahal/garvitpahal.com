@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, RefObject } from 'react'
 
 import { Dialog as BaseDialog } from '@base-ui/react/dialog'
 
@@ -21,6 +21,11 @@ type DialogContentProps = {
   hideTitle?: boolean
   description?: string
   showCloseButton?: boolean
+  /**
+   * Focused when the dialog opens. Base UI otherwise takes the first tabbable element, which is
+   * whatever happens to be highest in the DOM rather than the action the dialog exists for.
+   */
+  initialFocus?: RefObject<HTMLElement | null>
 }
 
 export function DialogContent({
@@ -30,6 +35,7 @@ export function DialogContent({
   hideTitle = false,
   description,
   showCloseButton = true,
+  initialFocus,
 }: DialogContentProps): ReactNode {
   return (
     <BaseDialog.Portal>
@@ -38,8 +44,9 @@ export function DialogContent({
         dismissed mid-animation. Exit timing needs no `keepMounted` - Base UI waits on
         `element.getAnimations()` before unmounting.
       */}
-      <BaseDialog.Backdrop className="fixed inset-0 z-50 bg-overlay backdrop-blur-sm data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:transition-opacity motion-safe:duration-150" />
+      <BaseDialog.Backdrop className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:transition-opacity motion-safe:duration-150" />
       <BaseDialog.Popup
+        initialFocus={initialFocus}
         className={`fixed top-1/2 left-1/2 z-50 flex max-h-[90dvh] w-[min(32rem,calc(100vw-2rem))] -translate-1/2 flex-col overflow-hidden rounded-xl border border-gray-6 bg-bg shadow-lg shadow-gray-a-5 data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 motion-safe:transition-[opacity,transform] motion-safe:duration-150 ${className ?? ''}`}
       >
         <div className={hideTitle ? 'sr-only' : 'shrink-0 border-b border-gray-6 px-5 py-3'}>
@@ -56,7 +63,7 @@ export function DialogContent({
         {showCloseButton ? (
           <BaseDialog.Close
             aria-label="Close"
-            className="unstyled absolute top-2.5 right-2.5 inline-flex size-8 items-center justify-center rounded-md text-gray-11 focus-visible:ring-2 focus-visible:ring-anchor focus-visible:outline-none hocus:bg-gray-4 hocus:text-gray-12"
+            className="unstyled absolute top-2.5 right-2.5 inline-flex size-8 items-center justify-center rounded-md text-gray-11 focus-visible:ring-2 focus-visible:ring-anchor focus-visible:outline-none hocus-visible:bg-gray-4 hocus-visible:text-gray-12"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

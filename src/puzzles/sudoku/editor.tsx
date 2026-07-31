@@ -16,7 +16,7 @@ import {
 } from './model'
 
 const PAD_BUTTON =
-  'unstyled border-gray-6 hocus:bg-gray-4 focus-visible:ring-anchor inline-flex h-9 items-center justify-center rounded-md border text-sm font-medium focus-visible:ring-2 focus-visible:outline-none'
+  'unstyled border-gray-6 hocus-visible:bg-gray-4 focus-visible:ring-anchor inline-flex h-9 items-center justify-center rounded-md border text-sm font-medium focus-visible:ring-2 focus-visible:outline-none'
 
 type SudokuEditorProps = {
   grid: SudokuGrid
@@ -159,7 +159,7 @@ export function SudokuEditor({ grid, uncertain, onChange }: SudokuEditorProps): 
                   ? 'z-10 bg-gray-5 ring-2 ring-gray-12'
                   : isUncertain
                     ? 'z-10 bg-gray-4 ring-1 ring-gray-8'
-                    : 'bg-bg hocus:bg-gray-3',
+                    : 'bg-bg hocus-visible:bg-gray-3',
                 // Inset, not a `ring`: a ring draws outwards and spills past the grid's border.
                 isSelected ? 'z-20 outline-[3px] -outline-offset-[3px] outline-anchor' : '',
                 'text-gray-12',
@@ -225,7 +225,7 @@ function SizePad({
             onChange(resizeGrid(grid, size, geometry.boxWidth, geometry.boxHeight))
           }}
           className={`${PAD_BUTTON} px-2.5 ${
-            size === n ? 'border-gray-12 bg-gray-12 text-gray-contrast' : 'text-gray-12'
+            size === n ? 'border-gray-12 bg-gray-12 text-gray-1' : 'text-gray-12'
           }`}
         >
           {size}&times;{size}
@@ -290,7 +290,7 @@ function ValuePad({
         aria-label="Clear every cell"
         disabled={!hasValues}
         onClick={onClearAll}
-        className={`${PAD_BUTTON} px-3 text-gray-11 disabled:opacity-40 disabled:hocus:bg-transparent`}
+        className={`${PAD_BUTTON} px-3 text-gray-11 disabled:opacity-40 disabled:hocus-visible:bg-transparent`}
       >
         Clear all
       </button>

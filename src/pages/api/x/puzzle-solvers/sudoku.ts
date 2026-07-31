@@ -61,7 +61,7 @@ export async function POST(context: APIContext): Promise<Response> {
   } catch {
     return done(
       'invalid_json',
-      extractErrorResponse({ code: 'invalid_request', message: 'Expected a JSON body.' }, 400),
+      extractErrorResponse({ code: 'invalid_request', message: 'Expected a JSON body' }, 400),
     )
   }
 
@@ -81,7 +81,7 @@ export async function POST(context: APIContext): Promise<Response> {
   if (approximateBytes > SUDOKU_MAX_IMAGE_BYTES) {
     return done(
       'image_too_large',
-      extractErrorResponse({ code: 'image_too_large', message: 'That image is too large.' }, 413),
+      extractErrorResponse({ code: 'image_too_large', message: 'That image is too large' }, 413),
       { approximateBytes },
     )
   }
@@ -192,7 +192,7 @@ async function read(
       outcome: 'unexpected_error',
       code: 'model_failed',
       status: 502,
-      message: 'Could not read the puzzle from that image.',
+      message: 'Could not read the puzzle from that image',
     }
   }
 

@@ -59,8 +59,8 @@ function FlipToggle({
       onClick={onClick}
       className={`${CAPTURE_BUTTON} border ${
         isPressed
-          ? 'border-gray-12 bg-gray-12 text-gray-contrast'
-          : 'border-gray-6 text-gray-12 hocus:bg-gray-4'
+          ? 'border-gray-12 bg-gray-12 text-gray-1'
+          : 'border-gray-6 text-gray-12 hocus-visible:bg-gray-4'
       }`}
     >
       <svg

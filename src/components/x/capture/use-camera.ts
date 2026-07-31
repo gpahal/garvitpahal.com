@@ -26,26 +26,26 @@ function toCameraError(error: unknown): CameraError {
     case 'SecurityError': {
       return {
         kind: 'denied',
-        message: 'Camera access was blocked. You can still upload a picture instead.',
+        message: 'Camera access was blocked. You can still upload a picture instead',
       }
     }
     case 'NotFoundError':
     case 'OverconstrainedError': {
       return {
         kind: 'not-found',
-        message: 'No camera was found. You can still upload a picture instead.',
+        message: 'No camera was found. You can still upload a picture instead',
       }
     }
     case 'NotReadableError': {
       return {
         kind: 'unavailable',
-        message: 'The camera is already in use by another app.',
+        message: 'The camera is already in use by another app',
       }
     }
     default: {
       return {
         kind: 'unknown',
-        message: 'The camera could not be started. You can still upload a picture instead.',
+        message: 'The camera could not be started. You can still upload a picture instead',
       }
     }
   }

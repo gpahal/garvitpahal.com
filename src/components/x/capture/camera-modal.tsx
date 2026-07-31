@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 
 import { flipImage, flipTransform, NO_FLIP, type Flip } from '@/lib/capture/flip'
 import { Dialog, DialogBody, DialogContent, DialogFooter } from '@/components/x/ui/dialog'
+import { ErrorPanel } from '@/components/x/ui/error-panel'
 
 import { CAPTURE_BUTTON, FlipToggles } from './controls'
 import { useCamera } from './use-camera'
@@ -13,14 +14,18 @@ type CameraModalProps = {
 }
 
 export function CameraModal({ isOpen, onOpenChange, onCapture }: CameraModalProps): ReactNode {
+  // Owned here rather than in the view: `initialFocus` sits on the popup, one level up.
+  const shutterRef = useRef<HTMLButtonElement | null>(null)
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent title="Take a picture">
+      <DialogContent title="Take a picture" initialFocus={shutterRef}>
         {/*
           CameraView is only mounted while the dialog is open, so its unmount cleanup is what stops
           the media tracks. Holding the camera hook out here would leave the device light on.
         */}
         <CameraView
+          shutterRef={shutterRef}
           onCapture={(image) => {
             onCapture(image)
             onOpenChange(false)
@@ -35,14 +40,22 @@ export function CameraModal({ isOpen, onOpenChange, onCapture }: CameraModalProp
  * Two states: a live viewfinder, then a frozen review. Nothing leaves this component until the user
  * explicitly confirms the still they took.
  */
-function CameraView({ onCapture }: { onCapture: (image: Blob) => void }): ReactNode {
+function CameraView({
+  shutterRef,
+  onCapture,
+}: {
+  shutterRef: RefObject<HTMLButtonElement | null>
+  onCapture: (image: Blob) => void
+}): ReactNode {
   const { videoRef, status, error, canSwitchCamera, switchCamera, capture } = useCamera()
   const [review, setReview] = useState<{ blob: Blob; url: string } | undefined>(undefined)
   const [captureError, setCaptureError] = useState<string | undefined>(undefined)
   const [isSaving, setIsSaving] = useState(false)
   // Kept across a retake: a camera that shows the world upside down keeps doing so.
   const [flip, setFlip] = useState<Flip>(NO_FLIP)
+  const confirmRef = useRef<HTMLButtonElement | null>(null)
 
+  const isLive = status === 'live'
   const transform = flipTransform(flip)
 
   const clearReview = useCallback(() => {
@@ -57,6 +70,13 @@ function CameraView({ onCapture }: { onCapture: (image: Blob) => void }): ReactN
   // Object URLs are not reclaimed automatically.
   useEffect(() => clearReview, [clearReview])
 
+  // Taking a shot swaps the whole footer, so the button that was focused unmounts and focus would
+  // fall to the body. Hand it to whichever primary action replaced it.
+  useEffect(() => {
+    const target = review ? confirmRef.current : shutterRef.current
+    target?.focus()
+  }, [review, shutterRef])
+
   const onShutter = useCallback(async () => {
     try {
       const blob = await capture()
@@ -64,7 +84,7 @@ function CameraView({ onCapture }: { onCapture: (image: Blob) => void }): ReactN
       setReview({ blob, url: URL.createObjectURL(blob) })
       setCaptureError(undefined)
     } catch {
-      setCaptureError('Could not take that picture. Try again.')
+      setCaptureError('Could not take that picture. Try again')
     }
   }, [capture, clearReview])
 
@@ -77,7 +97,7 @@ function CameraView({ onCapture }: { onCapture: (image: Blob) => void }): ReactN
     try {
       onCapture(await flipImage(review.blob, flip))
     } catch {
-      setCaptureError('Could not prepare that picture. Try again.')
+      setCaptureError('Could not prepare that picture. Try again')
       setIsSaving(false)
     }
   }, [flip, onCapture, review])
@@ -124,19 +144,15 @@ function CameraView({ onCapture }: { onCapture: (image: Blob) => void }): ReactN
           ) : undefined}
 
           {error ? (
-            <p className="unstyled absolute inset-0 my-0! flex items-center justify-center px-6 text-center text-sm text-gray-12">
-              {error.message}
-            </p>
+            <div className="absolute inset-0 flex items-center justify-center px-6">
+              <ErrorPanel message={error.message} className="bg-bg" />
+            </div>
           ) : undefined}
         </div>
       </DialogBody>
 
       <DialogFooter>
-        {captureError ? (
-          <p role="alert" className="unstyled mt-0! mb-2! text-sm text-gray-11">
-            {captureError}
-          </p>
-        ) : undefined}
+        {captureError ? <ErrorPanel message={captureError} className="mb-3" /> : undefined}
 
         <div className="mb-3">
           <FlipToggles flip={flip} onChange={setFlip} />
@@ -147,15 +163,16 @@ function CameraView({ onCapture }: { onCapture: (image: Blob) => void }): ReactN
             <button
               type="button"
               onClick={clearReview}
-              className={`${CAPTURE_BUTTON} border border-gray-6 text-gray-12 hocus:bg-gray-4`}
+              className={`${CAPTURE_BUTTON} border border-gray-6 text-gray-12 hocus-visible:bg-gray-4`}
             >
               Retake
             </button>
             <button
+              ref={confirmRef}
               type="button"
               onClick={() => void onUsePicture()}
               disabled={isSaving}
-              className={`${CAPTURE_BUTTON} bg-gray-12 text-gray-contrast disabled:opacity-50 hocus:bg-gray-11`}
+              className={`${CAPTURE_BUTTON} bg-gray-12 text-gray-1 disabled:opacity-50 hocus-visible:bg-gray-12-hover`}
             >
               Use picture
             </button>
@@ -167,17 +184,29 @@ function CameraView({ onCapture }: { onCapture: (image: Blob) => void }): ReactN
                 type="button"
                 onClick={switchCamera}
                 disabled={!canSwitchCamera}
-                className={`${CAPTURE_BUTTON} border border-gray-6 text-gray-12 disabled:invisible hocus:bg-gray-4`}
+                className={`${CAPTURE_BUTTON} border border-gray-6 text-gray-12 disabled:invisible hocus-visible:bg-gray-4`}
               >
                 Switch camera
               </button>
             </div>
+            {/*
+              `aria-disabled` rather than `disabled` while the stream warms up: a disabled button
+              cannot take focus, so the dialog would open with focus on a flip toggle instead of on
+              the one thing it exists to do. This stays focusable and announces as unavailable.
+            */}
             <button
+              ref={shutterRef}
               type="button"
-              onClick={() => void onShutter()}
-              disabled={status !== 'live'}
+              onClick={() => {
+                if (isLive) {
+                  void onShutter()
+                }
+              }}
+              aria-disabled={!isLive}
               aria-label="Take picture"
-              className="unstyled size-14 shrink-0 rounded-full border-4 border-gray-8 bg-gray-12 focus-visible:ring-2 focus-visible:ring-anchor focus-visible:outline-none disabled:opacity-40 hocus:bg-gray-11"
+              className={`unstyled size-14 shrink-0 rounded-full border-4 border-gray-8 bg-gray-12 focus-visible:ring-2 focus-visible:ring-anchor focus-visible:outline-none ${
+                isLive ? 'hocus-visible:bg-gray-12-hover' : 'opacity-40'
+              }`}
             />
             <div aria-hidden="true" className="flex-1" />
           </div>

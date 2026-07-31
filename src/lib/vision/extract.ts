@@ -52,7 +52,7 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
     logErrorEvent('vision.not_configured', { requestId })
     throw new VisionExtractionError(
       'not_configured',
-      'The puzzle solver is not configured on this server.',
+      'The puzzle solver is not configured on this server',
     )
   }
 
@@ -158,7 +158,7 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
       anthropicRequestId: stream.request_id ?? null,
       category: message.stop_details?.category ?? null,
     })
-    throw new VisionExtractionError('refusal', 'The model declined to read this image.')
+    throw new VisionExtractionError('refusal', 'The model declined to read this image')
   }
   if (message.stop_reason === 'max_tokens') {
     logErrorEvent('vision.truncated', {
@@ -170,7 +170,7 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
       thinkingTokens: usage.output_tokens_details?.thinking_tokens ?? null,
       hint: 'raise MAX_TOKENS or lower the model effort in src/lib/vision/extract.ts',
     })
-    throw new VisionExtractionError('truncated', 'The model ran out of room before finishing.')
+    throw new VisionExtractionError('truncated', 'The model ran out of room before finishing')
   }
 
   const text = message.content
@@ -185,7 +185,7 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
       anthropicRequestId: stream.request_id ?? null,
       blockTypes: message.content.map((block) => block.type),
     })
-    throw new VisionExtractionError('empty', 'The model returned no content.')
+    throw new VisionExtractionError('empty', 'The model returned no content')
   }
 
   const parsed = parseResponse(options.responseSchema, text)
@@ -198,7 +198,7 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
       reason: parsed.reason,
       textStart: text.slice(0, 200),
     })
-    throw new VisionExtractionError('unparseable', 'The model returned malformed JSON.')
+    throw new VisionExtractionError('unparseable', 'The model returned malformed JSON')
   }
 
   logEvent('vision.ok', {

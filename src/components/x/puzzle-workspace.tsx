@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 
 import { downscaleToJpeg } from '@/lib/capture/downscale'
+import { ErrorPanel } from '@/components/x/ui/error-panel'
 import { PUZZLES, type PuzzleId } from '@/puzzles/registry'
 import { indexOf, type SudokuGrid, type SudokuSolution } from '@/puzzles/sudoku/model'
 import type { CellRef, SolveResult } from '@/puzzles/types'
@@ -60,7 +61,7 @@ export function PuzzleWorkspace({ puzzleId }: WorkspaceProps): ReactNode {
           setStatus('idle')
         }
       } catch {
-        setError('Could not read that image. Try another picture.')
+        setError('Could not read that image. Try another picture')
         setStatus('idle')
       } finally {
         setExtractStartedAt(undefined)
@@ -138,11 +139,7 @@ export function PuzzleWorkspace({ puzzleId }: WorkspaceProps): ReactNode {
               </button>
             </p>
           )}
-          {error ? (
-            <p role="alert" className="unstyled my-0! text-center text-sm text-gray-12">
-              {error}
-            </p>
-          ) : undefined}
+          {error ? <ErrorPanel message={error} /> : undefined}
         </div>
       ) : undefined}
 
@@ -163,7 +160,7 @@ export function PuzzleWorkspace({ puzzleId }: WorkspaceProps): ReactNode {
                 onClick={() => {
                   setSolveResult(undefined)
                 }}
-                className={`${BUTTON} border border-gray-6 text-gray-12 hocus:bg-gray-4`}
+                className={`${BUTTON} border border-gray-6 text-gray-12 hocus-visible:bg-gray-4`}
               >
                 Back to editing
               </button>
@@ -171,7 +168,7 @@ export function PuzzleWorkspace({ puzzleId }: WorkspaceProps): ReactNode {
               <button
                 type="button"
                 onClick={onSolve}
-                className={`${BUTTON} bg-gray-12 text-gray-contrast hocus:bg-gray-11`}
+                className={`${BUTTON} bg-gray-12 text-gray-1 hocus-visible:bg-gray-12-hover`}
               >
                 Solve
               </button>
@@ -179,7 +176,7 @@ export function PuzzleWorkspace({ puzzleId }: WorkspaceProps): ReactNode {
             <button
               type="button"
               onClick={onReset}
-              className={`${BUTTON} border border-gray-6 text-gray-12 hocus:bg-gray-4`}
+              className={`${BUTTON} border border-gray-6 text-gray-12 hocus-visible:bg-gray-4`}
             >
               Start over
             </button>
@@ -231,21 +228,21 @@ function ReviewBanner({
   switch (result?.status) {
     case 'unsolvable': {
       message =
-        'This grid has no solution, which usually means a digit was read wrong. Check the highlighted cells and try again.'
+        'This grid has no solution, which usually means a digit was read wrong. Check the highlighted cells and try again'
       tone = 'warn'
 
       break
     }
     case 'multiple': {
       message =
-        'This grid has more than one solution, so some givens are probably missing. One valid solution is shown below.'
+        'This grid has more than one solution, so some givens are probably missing. One valid solution is shown below'
       tone = 'warn'
 
       break
     }
     case 'timeout': {
       message =
-        'Solving timed out. That usually points to a misread digit rather than a hard puzzle.'
+        'Solving timed out. That usually points to a misread digit rather than a hard puzzle'
       tone = 'warn'
 
       break
@@ -260,8 +257,8 @@ function ReviewBanner({
         uncertainCount > 0
           ? `Check ${String(uncertainCount)} highlighted ${
               uncertainCount === 1 ? 'cell' : 'cells'
-            } before solving.`
-          : 'Check the grid matches your puzzle, then solve.'
+            } before solving`
+          : 'Check the grid matches your puzzle, then solve'
     }
   }
 

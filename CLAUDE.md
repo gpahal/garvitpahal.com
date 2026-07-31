@@ -112,8 +112,11 @@ Solvers must be pure and isomorphic; they run client-side.
 
 ## Gotchas
 
-- **`bg-black/50` renders nothing.** `color-theme.css` resets `--color-*: initial`, removing every
-  default Tailwind colour.
+- **`bg-red-500` renders nothing.** `color-theme.css` resets `--color-*: initial`, removing every
+  default Tailwind colour. Only what `global.css` re-adds in its `@theme` block exists: `white`,
+  `black`, `transparent`, `inherit`, `current`, plus the generated `gray-*`, `bg` and `anchor`.
+  Reach for `gray-*` first - `white` and `black` are for scrims and marks over video, which must not
+  follow the theme.
 
 - **`imageService: 'custom'`** in `astro.config.ts` is deliberate. `'compile'` filters sharp out by
   name and forces the workerd encoder, producing ~47% larger images.

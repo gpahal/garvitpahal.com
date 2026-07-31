@@ -21,7 +21,10 @@ const tools = [
     {
       tools.map((tool) => (
         <li class="unstyled">
-          <a href={tool.href} class="unstyled hocus:bg-gray-3 -mx-2 block rounded-md px-2 py-1">
+          <a
+            href={tool.href}
+            class="unstyled hocus-visible:bg-gray-3 -mx-2 block rounded-md px-2 py-1"
+          >
             <H3 class="my-0! font-medium!">{tool.name}</H3>
             <p class="text-gray-11 mt-[-0.05rem]! mb-0! text-base">{tool.blurb}</p>
           </a>

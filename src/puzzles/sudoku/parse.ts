@@ -43,7 +43,7 @@ export function parseSudoku(raw: SudokuRaw): ParseResult {
   const { n } = raw
 
   if (!isValidSize(n)) {
-    return { ok: false, message: `Unsupported grid size: ${String(n)}.` }
+    return { ok: false, message: `Unsupported grid size: ${String(n)}` }
   }
 
   let { boxWidth, boxHeight } = raw
@@ -58,7 +58,7 @@ export function parseSudoku(raw: SudokuRaw): ParseResult {
   if (!Array.isArray(raw.cells) || raw.cells.length !== n) {
     return {
       ok: false,
-      message: `Expected ${String(n)} rows, got ${String(raw.cells?.length ?? 0)}.`,
+      message: `Expected ${String(n)} rows, got ${String(raw.cells?.length ?? 0)}`,
     }
   }
 
@@ -67,7 +67,7 @@ export function parseSudoku(raw: SudokuRaw): ParseResult {
     if (!Array.isArray(line) || line.length !== n) {
       return {
         ok: false,
-        message: `Row ${String(row + 1)} has ${String(line?.length ?? 0)} cells, expected ${String(n)}.`,
+        message: `Row ${String(row + 1)} has ${String(line?.length ?? 0)} cells, expected ${String(n)}`,
       }
     }
     for (const [col, cell] of line.entries()) {

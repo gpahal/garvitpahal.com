@@ -37,7 +37,7 @@ async function extract(image: Blob): Promise<ExtractResponse<SudokuGrid>> {
   } catch {
     return {
       ok: false,
-      error: { code: 'network', message: 'Could not reach the server. Check your connection.' },
+      error: { code: 'network', message: 'Could not reach the server. Check your connection' },
     }
   }
 
@@ -46,7 +46,7 @@ async function extract(image: Blob): Promise<ExtractResponse<SudokuGrid>> {
       ok: false,
       error: {
         code: 'network',
-        message: 'Your session expired. Reload the page to sign in again.',
+        message: 'Your session expired. Reload the page to sign in again',
       },
     }
   }
@@ -57,7 +57,7 @@ async function extract(image: Blob): Promise<ExtractResponse<SudokuGrid>> {
   } catch {
     return {
       ok: false,
-      error: { code: 'model_failed', message: 'The server returned an unreadable response.' },
+      error: { code: 'model_failed', message: 'The server returned an unreadable response' },
     }
   }
 

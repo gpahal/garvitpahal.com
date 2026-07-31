@@ -1,7 +1,16 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+  type RefObject,
+} from 'react'
 
 import { flipImage, flipTransform, NO_FLIP, type Flip } from '@/lib/capture/flip'
 import { Dialog, DialogBody, DialogContent, DialogFooter } from '@/components/x/ui/dialog'
+import { ErrorPanel } from '@/components/x/ui/error-panel'
 
 import { CAPTURE_BUTTON, FlipToggles } from './controls'
 
@@ -18,6 +27,9 @@ export function ImageReviewDialog({
   onCancel,
   onConfirm,
 }: ImageReviewDialogProps): ReactNode {
+  // Owned here rather than in the view: `initialFocus` sits on the popup, one level up.
+  const confirmRef = useRef<HTMLButtonElement | null>(null)
+
   return (
     <Dialog
       open={image !== undefined}
@@ -27,10 +39,15 @@ export function ImageReviewDialog({
         }
       }}
     >
-      <DialogContent title="Use this picture?">
+      <DialogContent title="Use this picture?" initialFocus={confirmRef}>
         {/* Only mounted while open, so the flip resets and the object URL is revoked per upload. */}
         {image ? (
-          <ImageReviewView image={image} onCancel={onCancel} onConfirm={onConfirm} />
+          <ImageReviewView
+            image={image}
+            confirmRef={confirmRef}
+            onCancel={onCancel}
+            onConfirm={onConfirm}
+          />
         ) : undefined}
       </DialogContent>
     </Dialog>
@@ -39,10 +56,12 @@ export function ImageReviewDialog({
 
 function ImageReviewView({
   image,
+  confirmRef,
   onCancel,
   onConfirm,
 }: {
   image: Blob
+  confirmRef: RefObject<HTMLButtonElement | null>
   onCancel: () => void
   onConfirm: (image: Blob) => void
 }): ReactNode {
@@ -64,7 +83,7 @@ function ImageReviewView({
     try {
       onConfirm(await flipImage(image, flip))
     } catch {
-      setError('Could not prepare that picture. Try again.')
+      setError('Could not prepare that picture. Try again')
       setIsSaving(false)
     }
   }, [flip, image, onConfirm])
@@ -83,11 +102,7 @@ function ImageReviewView({
       </DialogBody>
 
       <DialogFooter>
-        {error ? (
-          <p role="alert" className="unstyled mt-0! mb-2! text-sm text-gray-11">
-            {error}
-          </p>
-        ) : undefined}
+        {error ? <ErrorPanel message={error} className="mb-3" /> : undefined}
 
         <div className="mb-3">
           <FlipToggles flip={flip} onChange={setFlip} />
@@ -97,15 +112,16 @@ function ImageReviewView({
           <button
             type="button"
             onClick={onCancel}
-            className={`${CAPTURE_BUTTON} border border-gray-6 text-gray-12 hocus:bg-gray-4`}
+            className={`${CAPTURE_BUTTON} border border-gray-6 text-gray-12 hocus-visible:bg-gray-4`}
           >
             Cancel
           </button>
           <button
+            ref={confirmRef}
             type="button"
             onClick={() => void onUsePicture()}
             disabled={isSaving}
-            className={`${CAPTURE_BUTTON} bg-gray-12 text-gray-contrast disabled:opacity-50 hocus:bg-gray-11`}
+            className={`${CAPTURE_BUTTON} bg-gray-12 text-gray-1 disabled:opacity-50 hocus-visible:bg-gray-12-hover`}
           >
             Use picture
           </button>
