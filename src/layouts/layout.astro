@@ -10,13 +10,15 @@ import Nav from '@/components/nav/index.astro'
 type Props = {
   title?: string
   description?: string
+  /** Keeps the page out of search results - used by the private `/x` area. */
+  noindex?: boolean
   article?: {
     publishedTime: number | Date
     tags?: Array<string>
   }
 }
 
-const { title: titleProp, description: descriptionProp, article } = Astro.props
+const { title: titleProp, description: descriptionProp, noindex, article } = Astro.props
 const url = new URL(Astro.url.pathname, Astro.site)
 const twitterImageUrl = new URL('/images/self/self-320x320.jpg', Astro.site)
 
@@ -78,7 +80,7 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
     <meta property="twitter:image:height" content="320" />
 
     <link rel="robots" href="/robots.txt" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
     <link
@@ -110,8 +112,8 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
       <Nav isFullPage={isNavPage} />
       {
         !isNavPage && (
-          <div class:list={['w-full', isNavPage ? '' : 'lg:px-20 xl:px-44 lg:ml-[17.5rem]']}>
-            <main class="main-content w-full px-6 pb-24 pt-6 lg:max-w-xl lg:pb-6">
+          <div class:list={['w-full', isNavPage ? '' : 'lg:px-20 xl:px-44 lg:ml-70']}>
+            <main class="w-full px-6 pb-24 pt-6 lg:max-w-xl lg:pb-6">
               <slot />
             </main>
           </div>
@@ -121,7 +123,7 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
 
     <script is:inline data-astro-rerun>
       function showScriptButtons() {
-        const scriptButtonEls = document.querySelectorAll('button.script-button')
+        const scriptButtonEls = document.querySelectorAll('button[data-script-button]')
         for (const el of scriptButtonEls) {
           const htmlEl = el
           htmlEl.classList.remove('hidden')

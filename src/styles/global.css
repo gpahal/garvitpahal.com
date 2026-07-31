@@ -12,6 +12,7 @@
   --color-transparent: transparent;
   --color-inherit: inherit;
   --color-current: currentcolor;
+  --color-overlay: rgb(0 0 0 / 55%);
 }
 
 @layer base {
@@ -82,11 +83,11 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    @apply border-gray-6 box-border;
+    @apply box-border border-gray-6;
   }
 
   * {
-    @apply m-0 scroll-mt-20 break-words;
+    @apply m-0 scroll-mt-20 wrap-break-word;
   }
 
   html,
@@ -99,43 +100,19 @@
   }
 
   body {
-    @apply bg-bg text-gray-12 flex flex-col font-sans tracking-tight;
+    @apply flex flex-col bg-bg font-sans tracking-tight text-gray-12;
   }
 
   main {
     @apply text-[1.05rem] leading-[1.6] font-[450];
   }
 
-  .content > :first-child {
-    @apply mt-0;
-  }
-
-  .content > :last-child {
-    @apply mb-0;
-  }
-
   p:not(.unstyled) {
     @apply my-3.5;
   }
 
-  [class~='lead']:not(.unstyled) {
-    @apply text-gray-9 my-[0.88rem] text-[1.275rem] leading-[1.55];
-  }
-
   a:not(.heading-anchor, .unstyled) {
-    @apply text-anchor decoration-gray-a-6 focus-visible:outline-gray-8 font-medium no-underline decoration-solid decoration-[min(2px,max(2px,0.05em))] underline-offset-[calc(.025em+1px)] focus-visible:rounded-[0.075em] focus-visible:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed [&:not(.no-underline-always)]:hover:underline;
-  }
-
-  a.heading-anchor {
-    @apply text-gray-8 absolute top-0 right-0 bottom-0 left-[-1.25rem] hidden font-medium no-underline hover:inline-block;
-  }
-
-  *:hover > a.heading-anchor {
-    @apply inline-block;
-  }
-
-  a.heading-anchor + a {
-    @apply z-1;
+    @apply font-medium text-anchor no-underline decoration-gray-a-6 decoration-solid decoration-[min(2px,max(2px,0.05em))] underline-offset-[calc(.025em+1px)] focus-visible:rounded-[0.075em] focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-8 disabled:cursor-not-allowed [&:not(.no-underline-always)]:hover:underline;
   }
 
   strong:not(.unstyled) {
@@ -151,7 +128,7 @@
   ol:not(.unstyled),
   ol[type='1']:not(.unstyled),
   ol[type='1' s]:not(.unstyled) {
-    @apply my-5 list-decimal ps-[1.625rem];
+    @apply my-5 list-decimal ps-6.5;
   }
 
   ol[type='A']:not(.unstyled),
@@ -175,7 +152,7 @@
   }
 
   ul:not(.unstyled) {
-    @apply my-5 list-disc ps-[1.625rem];
+    @apply my-5 list-disc ps-6.5;
   }
 
   ul:not(.unstyled),
@@ -197,7 +174,7 @@
   }
 
   ol > li:not(.unstyled)::marker {
-    @apply text-gray-9 font-normal;
+    @apply font-normal text-gray-9;
   }
 
   ul:not(ul ul, ol ul) > li p:not(.unstyled),
@@ -231,7 +208,7 @@
   }
 
   dd:not(.unstyled) {
-    @apply mt-2 ps-[1.625rem];
+    @apply mt-2 ps-6.5;
   }
 
   hr:not(.unstyled) {
@@ -243,7 +220,7 @@
   }
 
   blockquote:not(.unstyled) {
-    @apply text-gray-11 my-[1.15rem] border-s-[0.25rem] ps-[1.55rem] text-[1.2rem] leading-[1.55] font-medium italic;
+    @apply my-[1.15rem] border-s-4 ps-[1.55rem] text-[1.2rem] leading-[1.55] font-medium text-gray-11 italic;
 
     quotes: '\201C' '\201D' '\2018' '\2019';
   }
@@ -266,7 +243,7 @@
   }
 
   h1:not(.unstyled) {
-    @apply mt-0 mb-5 text-[2rem] leading-10 font-extrabold tracking-[-0.02em];
+    @apply mt-0 mb-5 text-[2rem]/10 font-extrabold tracking-[-0.02em];
   }
 
   h1 strong:not(.unstyled) {
@@ -274,7 +251,7 @@
   }
 
   h2:not(.unstyled) {
-    @apply mt-8 mb-3 text-[1.375rem] leading-8 font-bold tracking-[-0.0125em];
+    @apply mt-8 mb-3 text-[1.375rem]/8 font-bold tracking-[-0.0125em];
   }
 
   h2 strong:not(.unstyled) {
@@ -282,7 +259,7 @@
   }
 
   h3:not(.unstyled) {
-    @apply mt-7 mb-2 text-[1.2rem] leading-[1.75rem] font-semibold;
+    @apply mt-7 mb-2 text-[1.2rem]/7 font-semibold;
   }
 
   h3 strong:not(.unstyled) {
@@ -290,7 +267,7 @@
   }
 
   h4:not(.unstyled) {
-    @apply mt-5 mb-1.5 text-[1.075rem] leading-[1.55rem] font-semibold;
+    @apply mt-5 mb-1.5 text-[1.075rem]/[1.55rem] font-semibold;
   }
 
   h4 strong:not(.unstyled) {
@@ -321,7 +298,7 @@
   }
 
   kbd:not(.unstyled) {
-    @apply text-gray-12 rounded-[0.3125rem] py-[0.1875rem] ps-1.5 pe-1.5 font-[inherit] text-sm font-medium shadow-[0_0_0_1px_rgb(var(--colors-gray-12)/10%),_0_3px_0_rgb(var(--colors-gray-12)/10%)];
+    @apply rounded-[0.3125rem] py-0.75 ps-1.5 pe-1.5 font-[inherit] text-sm font-medium text-gray-12 shadow-[0_0_0_1px_rgb(var(--colors-gray-12)/10%),0_3px_0_rgb(var(--colors-gray-12)/10%)];
   }
 
   code,
@@ -340,7 +317,7 @@
   }
 
   code:not(.unstyled, pre code) {
-    @apply bg-gray-3 text-gray-11 rounded-md px-1 py-0.5 text-[0.9375rem];
+    @apply rounded-md bg-gray-3 px-1 py-0.5 text-[0.9375rem] text-gray-11;
   }
 
   a code,
@@ -362,7 +339,7 @@
   }
 
   pre:not(.unstyled) {
-    @apply bg-gray-3 my-[1.7rem] overflow-x-auto rounded-md py-[0.85rem] ps-[1.15rem] pe-[1.15rem] font-[inherit];
+    @apply my-[1.7rem] overflow-x-auto rounded-md bg-gray-3 py-[0.85rem] ps-[1.15rem] pe-[1.15rem] font-[inherit];
   }
 
   pre code:not(.unstyled) {
@@ -377,7 +354,7 @@
   }
 
   table:not(.unstyled) {
-    @apply my-8 w-full table-auto text-sm leading-[1.7rem];
+    @apply my-8 w-full table-auto text-sm/[1.7rem];
   }
 
   thead:not(.unstyled) {
@@ -445,7 +422,7 @@
   }
 
   figcaption:not(.unstyled) {
-    @apply text-gray-11 text-sm leading-[1.4rem];
+    @apply text-sm/[1.4rem] text-gray-11;
   }
 
   input,
@@ -456,30 +433,59 @@
   }
 }
 
-.drawer {
-  @apply relative hidden;
-}
+/* Everything here is in `components` rather than unlayered so that eslint's `detectComponentClasses`
+   registers these class names and `no-unknown-classes` stops flagging them. */
+@layer components {
+  /* Also what registers `lead` and `unstyled` as known class names. */
+  [class~='lead']:not(.unstyled) {
+    @apply my-[0.88rem] text-[1.275rem] leading-[1.55] text-gray-9;
+  }
 
-.drawer-overlay {
-  @apply bg-gray-9 fixed inset-0 top-0 z-10 h-full w-full overflow-auto opacity-0 transition-opacity duration-300 will-change-[opacity] select-none;
-}
+  .content > :first-child {
+    @apply mt-0;
+  }
 
-.drawer-wrapper {
-  @apply bg-bg fixed inset-x-0 bottom-0 z-20 flex w-full translate-y-full flex-col overflow-auto transition-transform duration-300 will-change-transform;
-}
+  .content > :last-child {
+    @apply mb-0;
+  }
 
-.drawer-content {
-  @apply relative grow overflow-x-hidden overflow-y-auto;
-}
+  a.heading-anchor {
+    @apply absolute inset-y-0 right-0 -left-5 hidden font-medium text-gray-8 no-underline hover:inline-block;
+  }
 
-.drawer.is-active {
-  @apply block;
-}
+  *:hover > a.heading-anchor {
+    @apply inline-block;
+  }
 
-.drawer.is-visible .drawer-wrapper {
-  @apply translate-y-0;
-}
+  a.heading-anchor + a {
+    @apply z-1;
+  }
 
-.drawer.is-visible .drawer-overlay {
-  @apply opacity-80;
+  .drawer {
+    @apply relative hidden;
+  }
+
+  .drawer-overlay {
+    @apply fixed inset-0 top-0 z-10 size-full overflow-auto bg-gray-9 opacity-0 transition-opacity duration-300 will-change-[opacity] select-none;
+  }
+
+  .drawer-wrapper {
+    @apply fixed inset-x-0 bottom-0 z-20 flex w-full translate-y-full flex-col overflow-auto bg-bg transition-transform duration-300 will-change-transform;
+  }
+
+  .drawer-content {
+    @apply relative grow overflow-x-hidden overflow-y-auto;
+  }
+
+  .drawer.is-active {
+    @apply block;
+  }
+
+  .drawer.is-visible .drawer-wrapper {
+    @apply translate-y-0;
+  }
+
+  .drawer.is-visible .drawer-overlay {
+    @apply opacity-80;
+  }
 }

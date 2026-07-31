@@ -58,7 +58,7 @@ notablePersonalProjectsWithContent.sort(
         workExperiencesWithContent.map((work) => {
           return (
             <li class="unstyled">
-              <H3 class="mb-0! ">{work.data.company}</H3>
+              <H3 class="mb-0!">{work.data.company}</H3>
               <p class="mt-[-0.05rem]! text-base text-gray-11">
                 {work.data.role ? `${work.data.role}, ` : ''}
                 {format(work.data.startedOn, 'MMM yyyy')} -{' '}
@@ -78,7 +78,7 @@ notablePersonalProjectsWithContent.sort(
         notablePersonalProjectsWithContent.map((project) => {
           return (
             <li class="unstyled">
-              <H3 class="mb-0! ">{project.data.project}</H3>
+              <H3 class="mb-0!">{project.data.project}</H3>
               <p class="mt-[-0.05rem]! text-base text-gray-11">
                 {format(project.data.startedOn, 'MMM yyyy')} -{' '}
                 {project.data.endedOn ? format(project.data.endedOn, 'MMM yyyy') : 'Present'}

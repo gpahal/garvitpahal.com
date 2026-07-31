@@ -1,6 +1,8 @@
 {
   "extends": "@gpahal/tsconfig/astro-app.json",
   "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "paths": {
       "@/*": ["./src/*"],
       "@public/*": ["./public/*"]

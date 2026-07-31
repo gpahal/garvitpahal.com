@@ -1,0 +1,32 @@
+---
+import Layout from '@/layouts/layout.astro'
+import H1 from '@/components/heading/h1.astro'
+import H3 from '@/components/heading/h3.astro'
+
+const tools = [
+  {
+    href: '/x/puzzle-solvers',
+    name: 'Puzzle solvers',
+    blurb: 'Take a picture of a puzzle and get it solved.',
+  },
+] as const
+---
+
+<Layout title="Personal" noindex>
+  <header>
+    <H1>Personal</H1>
+  </header>
+
+  <ul class="unstyled space-y-1.5">
+    {
+      tools.map((tool) => (
+        <li class="unstyled">
+          <a href={tool.href} class="unstyled hocus:bg-gray-3 -mx-2 block rounded-md px-2 py-1">
+            <H3 class="my-0! font-medium!">{tool.name}</H3>
+            <p class="text-gray-11 mt-[-0.05rem]! mb-0! text-base">{tool.blurb}</p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

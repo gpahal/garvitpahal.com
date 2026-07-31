@@ -4,10 +4,12 @@ allowBuilds:
   sharp: true
   simple-git-hooks: true
   unrs-resolver: true
+  workerd: true
 minimumReleaseAgeExclude:
-  - '@gpahal/eslint-config@0.0.129'
-  - '@gpahal/prettier-config@0.0.36'
+  - '@gpahal/eslint-config@0.0.131'
+  - '@gpahal/prettier-config@0.0.38'
   - '@gpahal/std@0.0.44'
+  - '@gpahal/stylelint-config@0.0.22'
   - '@gpahal/tailwindcss-color-themes@0.0.44'
-  - '@gpahal/tailwindcss-variants@0.0.31'
+  - '@gpahal/tailwindcss-variants@0.0.33'
   - '@gpahal/tsconfig@0.0.21'

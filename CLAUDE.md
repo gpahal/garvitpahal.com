@@ -15,24 +15,34 @@ pnpm pre-push               # typecheck + lint + fmt-check + astro check (git ho
 pnpm generate-color-theme   # regenerates src/styles/color-theme.css
 ```
 
+## Guidelines
+
+- Comments explain the constraint or the why. Never restate what the code already says, and prefer
+  one line to three — delete rather than pad.
+
+- Validate anything crossing a trust boundary with zod, and derive the type with `z.infer` rather
+  than declaring it twice.
+
+- Keep shared modules and these docs generic. Anything true of one puzzle only belongs in that
+  puzzle's own directory.
+
 ## Conventions
 
-- Imports use path aliases: `@/*` → `src/*`, `@public/*` → `public/*`.
+- Path aliases: `@/*` → `src/*`, `@public/*` → `public/*`.
 
-- All content is MDX, never plain Markdown.
+- All content is MDX, never plain Markdown. Dates are `DD/MM/YYYY` strings, parsed by the collection
+  schemas and formatted with `date-fns`.
 
-- Content dates are `DD/MM/YYYY` strings, parsed to `Date` by the collection schemas. Format for
-  display with `date-fns` (usually `format(date, 'MMM yyyy')`).
+- `@gpahal/remark-preset-lint` lints Markdown/MDX (config in `package.json`); it wants a blank line
+  between list items.
 
-- Markdown/MDX is linted by `@gpahal/remark-preset-lint` (config in `package.json`); it wants a
-  blank line between list items.
-
-- Tooling comes from the `@gpahal/*` packages (eslint, prettier, stylelint, tsconfig, tailwind
-  color-themes/variants, std). Don't inline config that those presets already provide.
+- Tooling comes from the `@gpahal/*` presets (eslint, prettier, stylelint, tsconfig, tailwind
+  color-themes/variants, std). Don't inline config they already provide.
 
 ## Content collections
 
-Defined in `src/content.config.ts` using `glob()` loaders over `src/content/<dir>`:
+`src/content.config.ts`, `glob()` loaders over `src/content/<dir>`; read with `getCollection` and
+`render`.
 
 | Collection                | Directory                    | Fields                              |
 | ------------------------- | ---------------------------- | ----------------------------------- |
@@ -40,22 +50,70 @@ Defined in `src/content.config.ts` using `glob()` loaders over `src/content/<dir
 | `workExperiences`         | `work-experiences/`          | company, role?, startedOn, endedOn? |
 | `notablePersonalProjects` | `notable-personal-projects/` | project, startedOn, endedOn?        |
 
-Read with `getCollection(name)` and `render(entry)`.
+## Styling and layout
 
-## Styling
+- `global.css` styles bare HTML elements; add `.unstyled` to opt out. `color-theme.css` is
+  **generated** — edit `scripts/generate-color-theme.ts` and rerun `pnpm generate-color-theme`.
 
-- `src/styles/global.css` styles bare HTML elements globally; add the `.unstyled` class to opt out.
+- Themes switch via `prefers-color-scheme` plus manual `.light-theme` / `.dark-theme`. Tailwind v4
+  is wired through `@tailwindcss/vite`; customization lives in `@theme` blocks, not a config file.
 
-- `src/styles/color-theme.css` is **generated** — edit `scripts/generate-color-theme.ts` and rerun
-  `pnpm generate-color-theme` instead of hand-editing it.
+- `src/layouts/layout.astro` wraps every page: global CSS, SEO meta, nav, `<ClientRouter />`, and
+  the drawer script. `nav.astro` is the mobile nav, `blog.rss.xml.ts` the feed.
 
-- Theme switches via `prefers-color-scheme` plus manual `.light-theme` / `.dark-theme` classes.
+## Private `/x` area
 
-- Tailwind v4 is wired through the `@tailwindcss/vite` plugin; customization lives in `@theme`
-  blocks, not a `tailwind.config` file.
+**Auth is Cloudflare Access, configured in the dashboard — not in this repo**; there is no
+application-level auth code.
 
-## Layout
+- The Access app must cover **both** `garvitpahal.com/x*` and `garvitpahal.com/api/x*`. Missing the
+  second leaves the API endpoints open.
 
-`src/layouts/layout.astro` wraps every page: global CSS, SEO/social meta, nav, `<ClientRouter />`
-view transitions, and the inline drawer/menu script. Pages live in `src/pages/`; `nav.astro` is the
-mobile full-screen nav and `blog.rss.xml.ts` generates the feed.
+- `workers_dev: false` in `wrangler.jsonc`: a `*.workers.dev` URL is not covered by an Access app
+  scoped to the apex domain.
+
+- Access cannot protect `localhost`, so `/x` is ungated under `pnpm dev`.
+
+`/x` pages are prerendered — Access enforces at the edge — and use the public `layout.astro` with
+`noindex`. Only `/api/x/*` needs `export const prerender = false`; the
+`assert-api-routes-are-on-demand` integration fails the build if one is missing it.
+
+### Extraction
+
+`src/lib/vision/extract.ts` owns every puzzle's Claude call.
+
+- Each puzzle names its own `primary` and `fallbacks` and sends them with the request, so they are
+  untrusted: the endpoint re-validates against the allowlist in `src/lib/vision/model.ts`. It
+  verifies each read server-side, escalates through the fallbacks while the result looks wrong, and
+  returns the best one it got — the review step is there to correct it.
+
+- `max_tokens` caps thinking **plus** the response. Effort is per-model; Haiku 4.5 rejects it
+  outright, and is unreliable on real pictures regardless. Shrinking the image does not make the
+  call faster — prefill is not the bottleneck. The call streams; non-streaming risks the SDK's
+  HTTP timeout at this budget.
+
+- Logs are one JSON object per line via `src/lib/x/log.ts`, correlated by `requestId` (`cf-ray`):
+  `<puzzle>.request` → `vision.*` → `<puzzle>.done`, plus `<puzzle>.escalated` per retry.
+  `observability` is on in `wrangler.jsonc`; `wrangler tail` for live.
+
+### Adding a puzzle
+
+1. `src/puzzles/<id>/` — `model.ts`, `api.ts` (endpoint path + response types), `parse.ts`,
+   `solve.ts`, `extraction.ts` (schema + prompt, **server-only**), `index.ts`, `editor.tsx`,
+   `solution.tsx`.
+
+1. Register in `src/puzzles/registry.ts` and `src/puzzles/ui-registry.ts`.
+
+1. Add `src/pages/api/x/puzzle-solvers/<id>.ts` calling `extractStructured` with that puzzle's own
+   schema and prompt.
+
+Keep `registry.ts` free of React, the Anthropic SDK, and prompt text — the browser imports it.
+Solvers must be pure and isomorphic; they run client-side.
+
+## Gotchas
+
+- **`bg-black/50` renders nothing.** `color-theme.css` resets `--color-*: initial`, removing every
+  default Tailwind colour.
+
+- **`imageService: 'custom'`** in `astro.config.ts` is deliberate. `'compile'` filters sharp out by
+  name and forces the workerd encoder, producing ~47% larger images.

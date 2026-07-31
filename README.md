@@ -8,6 +8,16 @@ My personal website: [garvitpahal.com](https://garvitpahal.com/)
 - Styling: [Tailwind CSS](https://tailwindcss.com/)
 - Deployment infrastructure: [Cloudflare](https://www.cloudflare.com/)
 
+## Personal area
+
+`/x` is a private area behind
+[Cloudflare Access](https://www.cloudflare.com/zero-trust/products/access/), configured outside this
+repo. It hosts small personal tools.
+
+**Puzzle solvers** (`/x/puzzle-solvers`): take a picture of a puzzle, Claude reads it, you correct
+anything it misread, and it is solved in the browser. Set `ANTHROPIC_API_KEY` in `.dev.vars` (see
+`.dev.vars.example`) to run it locally.
+
 ## Prerequisites
 
 - [Node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)

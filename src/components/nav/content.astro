@@ -1,7 +1,9 @@
 ---
 import AboutIcon from '@/icons/nav/about.astro'
 import BlogIcon from '@/icons/nav/blog.astro'
+import PersonalIcon from '@/icons/nav/personal.astro'
 import ProjectsIcon from '@/icons/nav/projects.astro'
+import PuzzleSolversIcon from '@/icons/nav/puzzle-solvers.astro'
 import UsesIcon from '@/icons/nav/uses.astro'
 import WorkIcon from '@/icons/nav/work.astro'
 import EmailIcon from '@/icons/social/email.astro'
@@ -65,6 +67,26 @@ const links = [
     Icon: UsesIcon,
   },
 ] as const
+
+/**
+ * Only rendered inside `/x`, so they never reach a public page - including `/nav`, which is indexed.
+ * Convenience for someone Access already let in; the gate is Access, never the missing link.
+ */
+const privateLinks = [
+  {
+    path: '/x',
+    label: 'Personal',
+    Icon: PersonalIcon,
+  },
+  {
+    path: '/x/puzzle-solvers',
+    label: 'Puzzle solvers',
+    Icon: PuzzleSolversIcon,
+  },
+] as const
+
+const pathname = Astro.url.pathname
+const isPrivatePage = pathname === '/x' || pathname.startsWith('/x/')
 ---
 
 <div class="relative z-30 mx-auto px-4 py-6 lg:mx-0 lg:min-h-full lg:flex-auto lg:px-6">
@@ -84,7 +106,7 @@ const links = [
               class="unstyled inline-block p-2 text-gray-10 hocus:text-gray-12"
               aria-label={label}
             >
-              <Icon class="size-[1.125rem] shrink-0 lg:size-[1.15rem]" />
+              <Icon class="size-4.5 shrink-0 lg:size-[1.15rem]" />
             </a>
           </li>
         ))
@@ -104,11 +126,35 @@ const links = [
               class="unstyled group flex w-full items-center justify-start rounded-sm px-2 py-1.5 hocus:bg-gray-4"
               aria-label={label}
             >
-              <Icon class="size-[1.125rem] shrink-0 text-gray-10 group-hover:text-gray-11 lg:size-[1.15rem]" />
+              <Icon class="size-4.5 shrink-0 text-gray-10 group-hover:text-gray-11 lg:size-[1.15rem]" />
               <span class="ml-2.5 block grow lg:ml-3">{label}</span>
             </a>
           </div>
         ))
+      }
+      {
+        isPrivatePage && (
+          <>
+            {/*
+              Solid, not the drawer's gradient: that fades to `gray-1`, lighter than the sidebar's
+              own background. `basis-full` breaks the wrapped mobile row; the desktop column would
+              apply flex-basis to the height instead.
+            */}
+            <div class="my-2 h-px w-full basis-full bg-gray-6 lg:basis-auto" />
+            {privateLinks.map(({ path, label, Icon }) => (
+              <div class="-mx-2">
+                <a
+                  href={path}
+                  class="unstyled group flex w-full items-center justify-start rounded-sm px-2 py-1.5 hocus:bg-gray-4"
+                  aria-label={label}
+                >
+                  <Icon class="size-4.5 shrink-0 text-gray-10 group-hover:text-gray-11 lg:size-[1.15rem]" />
+                  <span class="ml-2.5 block grow lg:ml-3">{label}</span>
+                </a>
+              </div>
+            ))}
+          </>
+        )
       }
     </nav>
   </section>
