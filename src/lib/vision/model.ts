@@ -1,22 +1,23 @@
 import { z } from 'zod'
 
-/** Free of the Anthropic SDK, so the browser can import the types built from these. */
-export const VISION_MODEL_IDS = ['claude-opus-5', 'claude-sonnet-5', 'claude-haiku-4-5'] as const
+/**
+ * The models a request may name. Free of the vision SDK, so the browser can import the types built
+ * from these: a puzzle picks its own chain, sends it with the request, and the endpoint re-validates
+ * it against this list rather than trusting it.
+ */
+export const VISION_MODEL_IDS = ['gpt-5.6-sol', 'gpt-5.6-terra', 'gpt-5.6-luna'] as const
 
-export const VISION_EFFORTS = ['low', 'medium', 'high'] as const
+/** How much the model may reason before answering. `none` disables it entirely. */
+export const VISION_EFFORTS = ['none', 'low', 'medium', 'high', 'xhigh', 'max'] as const
 
 /** Each retry is another model call, so the chain is bounded rather than open-ended. */
 const MAX_FALLBACKS = 3
 
-export const visionModelSchema = z
-  .strictObject({
-    id: z.enum(VISION_MODEL_IDS),
-    effort: z.enum(VISION_EFFORTS).optional(),
-  })
-  // Anthropic answers this combination with a 400, so catch it before spending a request on it.
-  .refine((model) => model.id !== 'claude-haiku-4-5' || model.effort === undefined, {
-    error: 'claude-haiku-4-5 does not accept an effort',
-  })
+export const visionModelSchema = z.strictObject({
+  id: z.enum(VISION_MODEL_IDS),
+  /** Omitted means the provider's default for that model. */
+  effort: z.enum(VISION_EFFORTS).optional(),
+})
 
 export type VisionModel = z.infer<typeof visionModelSchema>
 

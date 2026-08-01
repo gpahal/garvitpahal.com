@@ -80,35 +80,66 @@ application-level auth code.
 
 ### Extraction
 
-`src/lib/vision/extract.ts` owns every puzzle's Claude call.
+`src/lib/vision/extract.ts` owns every puzzle's model call.
 
 - Each puzzle names its own `primary` and `fallbacks` and sends them with the request, so they are
   untrusted: the endpoint re-validates against the allowlist in `src/lib/vision/model.ts`. It
   verifies each read server-side, escalates through the fallbacks while the result looks wrong, and
   returns the best one it got — the review step is there to correct it.
 
-- `max_tokens` caps thinking **plus** the response. Effort is per-model; Haiku 4.5 rejects it
-  outright, and is unreliable on real pictures regardless. Shrinking the image does not make the
-  call faster — prefill is not the bottleneck. The call streams; non-streaming risks the SDK's
-  HTTP timeout at this budget.
+- `max_output_tokens` caps reasoning **plus** the response; exhausting it comes back as
+  `status: 'incomplete'`, not as an error. Reasoning effort is not monotonic — the tiers that read a
+  grid best are mid-range, and the top tiers can talk themselves out of a correct border. `detail`
+  stays `high` and the call streams; shrinking the image costs border fidelity without saving time,
+  and non-streaming risks the SDK's HTTP timeout at this budget.
+
+- Structured output runs in `strict` mode, which requires `additionalProperties: false` and a
+  `required` entry for **every** property on every object in the schema. A schema that omits either
+  is rejected before the model sees the image.
+
+- `extract-endpoint.ts` owns the request envelope, `extract-client.ts` the browser side of it. A
+  puzzle supplies one `interpret` callback returning its payload plus
+  `confidence: 'trusted' | 'suspect'`; `suspect` escalates to the next model.
 
 - Logs are one JSON object per line via `src/lib/x/log.ts`, correlated by `requestId` (`cf-ray`):
-  `<puzzle>.request` → `vision.*` → `<puzzle>.done`, plus `<puzzle>.escalated` per retry.
-  `observability` is on in `wrangler.jsonc`; `wrangler tail` for live.
+  `<puzzle>.request` → `vision.*` → `<puzzle>.read` → `<puzzle>.done`, plus `<puzzle>.escalated` per
+  retry. `observability` is on in `wrangler.jsonc`; `wrangler tail` for live.
+
+### What a puzzle gets, and what it owns
+
+The only things common to every puzzle are getting an image in, calling the model, and the page
+lifecycle. **Nothing shaped may move into the shared layer** — `src/puzzles/types.ts`, the workspace
+and the endpoint must stay usable by a puzzle that is not a grid at all.
+
+| Module                        | What it gives you                                    |
+| ----------------------------- | ---------------------------------------------------- |
+| `src/lib/capture/`            | camera, drop zone, downscale, base64                 |
+| `src/lib/vision/`             | the model call, model allowlist, endpoint and client |
+| `src/lib/csp/`                | `allDifferent`, `table`, `solveCsp`                  |
+| `src/lib/grid/`               | `A1` names, adjacency, connected components          |
+| `src/components/x/workspace/` | capture → review → solve, generic over the puzzle    |
+
+`src/lib/csp/` is a finite-domain constraint solver over **variables and values** — it knows nothing
+about cells. `src/lib/grid/` is the opt-in half: import it only if the puzzle really is a square
+grid. Everything else — model, rules, extraction schema and prompt, editor, wire format — is the
+puzzle's own.
 
 ### Adding a puzzle
 
-1. `src/puzzles/<id>/` — `model.ts`, `api.ts` (endpoint path + response types), `parse.ts`,
-   `solve.ts`, `extraction.ts` (schema + prompt, **server-only**), `index.ts`, `editor.tsx`,
-   `solution.tsx`.
+1. `src/puzzles/<id>/` — at minimum `model.ts`, `api.ts` (endpoint path + wire types + its own
+   `VisionModels`), `parse.ts`, `solve.ts`, `extraction.ts` (schema + prompt, **server-only**),
+   `index.ts`, `editor.tsx`, `solution.tsx`. Split further when a concern earns its own file; see
+   `ken-ken/`, which separates cage editing, cage arithmetic, validation and shared presentation.
 
 1. Register in `src/puzzles/registry.ts` and `src/puzzles/ui-registry.ts`.
 
-1. Add `src/pages/api/x/puzzle-solvers/<id>.ts` calling `extractStructured` with that puzzle's own
-   schema and prompt.
+1. Add `src/pages/api/x/puzzle-solvers/<id>.ts` — `export const prerender = false` plus a
+   `createExtractHandler` call.
 
-Keep `registry.ts` free of React, the Anthropic SDK, and prompt text — the browser imports it.
-Solvers must be pure and isomorphic; they run client-side.
+Keep `registry.ts` free of React, the vision SDK, and prompt text — the browser imports it.
+Solvers must be pure and isomorphic; they run client-side. Review state lives in the puzzle:
+`unreviewedCount` is a count and `solveBlocker` a sentence, so the workspace can gate Solve and say
+why without knowing what a cage or a cell is.
 
 ## Gotchas
 
@@ -119,4 +150,4 @@ Solvers must be pure and isomorphic; they run client-side.
   follow the theme.
 
 - **`imageService: 'custom'`** in `astro.config.ts` is deliberate. `'compile'` filters sharp out by
-  name and forces the workerd encoder, producing ~47% larger images.
+  name and forces the workerd encoder, producing \~47% larger images.

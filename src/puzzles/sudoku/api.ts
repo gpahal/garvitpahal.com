@@ -1,7 +1,7 @@
+import type { CellRef } from '@/lib/grid/geometry'
 import type { VisionModels } from '@/lib/vision/model'
-import type { CellRef, ExtractError } from '@/puzzles/types'
 
-import { buildBoxRegions, type SudokuGrid } from './model'
+import { buildBoxRegions, type SudokuGrid, type SudokuPuzzle } from './model'
 
 export const SUDOKU_EXTRACT_PATH = '/api/x/puzzle-solvers/sudoku'
 
@@ -10,49 +10,46 @@ export const SUDOKU_MAX_IMAGE_BYTES = 6 * 1024 * 1024
 
 export const SUDOKU_MAX_IMAGE_EDGE = 1600
 
-/**
- * Sonnet 5 is the floor for the first read: Haiku 4.5 benchmarks faster on a clean synthetic grid
- * but misreads real pictures, and every miss costs a full retry.
- */
 export const SUDOKU_VISION_MODELS: VisionModels = {
-  primary: { id: 'claude-sonnet-5', effort: 'low' },
-  fallbacks: [{ id: 'claude-opus-5', effort: 'low' }],
+  primary: { id: 'gpt-5.6-terra', effort: 'low' },
+  fallbacks: [
+    { id: 'gpt-5.6-sol', effort: 'medium' },
+    { id: 'gpt-5.6-sol', effort: 'high' },
+  ],
 }
 
-export type SudokuExtractRequest = {
-  mediaType: string
-  /** Base64, without a data-URL prefix. */
-  data: string
-  models: VisionModels
-}
-
-/** Typed arrays do not survive JSON, so the grid crosses the wire as plain arrays. */
-export type SudokuGridWire = {
+/**
+ * Typed arrays do not survive JSON, so the grid crosses the wire as plain arrays. `regions` is left
+ * out: it is derivable from the box geometry, so sending it would be a second source of truth.
+ *
+ * Only ever produced by this app's own endpoint, so it is mapped rather than re-validated - the
+ * untrusted direction is the image going out, which `extractRequestSchema` checks.
+ */
+export type SudokuPuzzleWire = {
   n: number
   boxWidth: number
   boxHeight: number
   values: Array<number>
+  uncertain: Array<CellRef>
 }
 
-export type SudokuExtractResponse =
-  | { ok: true; puzzle: SudokuGridWire; uncertain: Array<CellRef> }
-  | { ok: false; error: ExtractError }
-
-export function gridToWire(grid: SudokuGrid): SudokuGridWire {
+export function puzzleToWire(puzzle: SudokuPuzzle): SudokuPuzzleWire {
   return {
-    n: grid.n,
-    boxWidth: grid.boxWidth,
-    boxHeight: grid.boxHeight,
-    values: [...grid.values],
+    n: puzzle.grid.n,
+    boxWidth: puzzle.grid.boxWidth,
+    boxHeight: puzzle.grid.boxHeight,
+    values: [...puzzle.grid.values],
+    uncertain: puzzle.uncertain,
   }
 }
 
-export function gridFromWire(wire: SudokuGridWire): SudokuGrid {
-  return {
+export function puzzleFromWire(wire: SudokuPuzzleWire): SudokuPuzzle {
+  const grid: SudokuGrid = {
     n: wire.n,
     boxWidth: wire.boxWidth,
     boxHeight: wire.boxHeight,
     values: Uint8Array.from(wire.values),
     regions: buildBoxRegions(wire.n, wire.boxWidth, wire.boxHeight),
   }
+  return { grid, uncertain: wire.uncertain }
 }

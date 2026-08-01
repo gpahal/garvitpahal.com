@@ -121,160 +121,186 @@ const isNavPage = trim(Astro.url.pathname, '/') === 'nav'
       }
     </div>
 
-    <script is:inline data-astro-rerun>
-      function showScriptButtons() {
-        const scriptButtonEls = document.querySelectorAll('button[data-script-button]')
-        for (const el of scriptButtonEls) {
-          const htmlEl = el
-          htmlEl.classList.remove('hidden')
+    {
+      /*
+      Runs once, not per navigation. `astro:page-load` fires on the first load and after every soft
+      navigation, and both that handler and the delegated listeners below sit on `document`, which
+      a swap never replaces - so nothing here needs re-running.
+
+      `data-astro-rerun` used to force exactly that, and this is a classic inline script: its
+      top-level `const` is a global, so the second parse died on "Identifier 'drawerSettings' has
+      already been declared" before a line of it ran, taking the drawer with it. The closure and
+      the guard keep that harmless if the attribute is ever put back.
+
+      The guard is a property on the root element rather than an attribute: `swapRootAttributes`
+      copies `<html>`'s attributes wholesale from the incoming document, so an attribute would be
+      wiped by the very navigation it has to survive. The element itself is never replaced.
+    */
+    }
+    <script is:inline>
+      ;(function () {
+        const root = document.documentElement
+        if (root.navDrawerReady) {
+          return
         }
-      }
+        root.navDrawerReady = true
 
-      const drawerSettings = {
-        speedOpen: 50,
-        speedClose: 350,
-        activeClass: 'is-active',
-        visibleClass: 'is-visible',
-        selectorTarget: '[data-drawer-target]',
-        selectorTrigger: '[data-drawer-trigger]',
-        selectorClose: '[data-drawer-close]',
-      }
+        function showScriptButtons() {
+          const scriptButtonEls = document.querySelectorAll('button[data-script-button]')
+          for (const el of scriptButtonEls) {
+            const htmlEl = el
+            htmlEl.classList.remove('hidden')
+          }
+        }
 
-      // See: https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
-      function trapFocus(el) {
-        const focusableEls = el.querySelectorAll(
-          'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])',
-        )
+        const drawerSettings = {
+          speedOpen: 50,
+          speedClose: 350,
+          activeClass: 'is-active',
+          visibleClass: 'is-visible',
+          selectorTarget: '[data-drawer-target]',
+          selectorTrigger: '[data-drawer-trigger]',
+          selectorClose: '[data-drawer-close]',
+        }
 
-        const firstFocusableEl = focusableEls[0]
-        // eslint-disable-next-line unicorn/prefer-at
-        const lastFocusableEl = focusableEls[focusableEls.length - 1]
+        // See: https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
+        function trapFocus(el) {
+          const focusableEls = el.querySelectorAll(
+            'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])',
+          )
 
-        el.addEventListener('keydown', function (e) {
-          // eslint-disable-next-line unicorn/prefer-keyboard-event-key
-          const isTabPressed = e.key === 'Tab' || e.keyCode === 9
-          if (!isTabPressed) {
+          const firstFocusableEl = focusableEls[0]
+          // eslint-disable-next-line unicorn/prefer-at
+          const lastFocusableEl = focusableEls[focusableEls.length - 1]
+
+          el.addEventListener('keydown', function (e) {
+            // eslint-disable-next-line unicorn/prefer-keyboard-event-key
+            const isTabPressed = e.key === 'Tab' || e.keyCode === 9
+            if (!isTabPressed) {
+              return
+            }
+
+            if (e.shiftKey) {
+              // Shift + Tab
+              if (document.activeElement === firstFocusableEl) {
+                lastFocusableEl.focus()
+                e.preventDefault()
+              }
+            } else {
+              // Tab
+              if (document.activeElement === lastFocusableEl) {
+                firstFocusableEl.focus()
+                e.preventDefault()
+              }
+            }
+          })
+        }
+
+        function toggleAccessibility(el) {
+          if (el.getAttribute('aria-expanded') === 'true') {
+            el.setAttribute('aria-expanded', 'false')
+          } else {
+            el.setAttribute('aria-expanded', 'true')
+          }
+        }
+
+        function openDrawer(triggerEl) {
+          // eslint-disable-next-line unicorn/prefer-query-selector
+          const target = document.getElementById(triggerEl.getAttribute('aria-controls') || '')
+          if (!target) {
             return
           }
 
-          if (e.shiftKey) {
-            // Shift + Tab
-            if (document.activeElement === firstFocusableEl) {
-              lastFocusableEl.focus()
-              e.preventDefault()
-            }
-          } else {
-            // Tab
-            if (document.activeElement === lastFocusableEl) {
-              firstFocusableEl.focus()
-              e.preventDefault()
-            }
+          target.classList.add(drawerSettings.activeClass)
+          document.documentElement.style.overflow = 'hidden'
+          toggleAccessibility(triggerEl)
+          setTimeout(function () {
+            target.classList.add(drawerSettings.visibleClass)
+            trapFocus(target)
+          }, drawerSettings.speedOpen)
+        }
+
+        function closeDrawer(el) {
+          const closestParent = el.closest(drawerSettings.selectorTarget)
+          if (!closestParent) {
+            return
           }
-        })
-      }
 
-      function toggleAccessibility(el) {
-        if (el.getAttribute('aria-expanded') === 'true') {
-          el.setAttribute('aria-expanded', 'false')
-        } else {
-          el.setAttribute('aria-expanded', 'true')
-        }
-      }
-
-      function openDrawer(triggerEl) {
-        // eslint-disable-next-line unicorn/prefer-query-selector
-        const target = document.getElementById(triggerEl.getAttribute('aria-controls') || '')
-        if (!target) {
-          return
+          const childrenTrigger = document.querySelector(
+            '[aria-controls="' + closestParent.id + '"',
+          )
+          closestParent.classList.remove(drawerSettings.visibleClass)
+          document.documentElement.style.overflow = ''
+          if (childrenTrigger) {
+            toggleAccessibility(childrenTrigger)
+          }
+          setTimeout(function () {
+            closestParent.classList.remove(drawerSettings.activeClass)
+          }, drawerSettings.speedClose)
         }
 
-        target.classList.add(drawerSettings.activeClass)
-        document.documentElement.style.overflow = 'hidden'
-        toggleAccessibility(triggerEl)
-        setTimeout(function () {
-          target.classList.add(drawerSettings.visibleClass)
-          trapFocus(target)
-        }, drawerSettings.speedOpen)
-      }
+        function clickHandler(event) {
+          const toggle = event.target
+          if (!toggle) {
+            return
+          }
 
-      function closeDrawer(el) {
-        const closestParent = el.closest(drawerSettings.selectorTarget)
-        if (!closestParent) {
-          return
-        }
-
-        const childrenTrigger = document.querySelector('[aria-controls="' + closestParent.id + '"')
-        closestParent.classList.remove(drawerSettings.visibleClass)
-        document.documentElement.style.overflow = ''
-        if (childrenTrigger) {
-          toggleAccessibility(childrenTrigger)
-        }
-        setTimeout(function () {
-          closestParent.classList.remove(drawerSettings.activeClass)
-        }, drawerSettings.speedClose)
-      }
-
-      function clickHandler(event) {
-        const toggle = event.target
-        if (!toggle) {
-          return
-        }
-
-        const open = toggle.closest(drawerSettings.selectorTrigger)
-        const close = toggle.closest(drawerSettings.selectorClose)
-        if (open) {
-          openDrawer(open)
-        }
-        if (close) {
-          closeDrawer(close)
-        }
-        if (open || close) {
-          event.preventDefault()
-        }
-      }
-
-      function keydownHandler(event) {
-        if (!(event.key === 'Escape' || event.keyCode === 27)) {
-          return
-        }
-
-        const drawers = document.querySelectorAll(drawerSettings.selectorTarget)
-        let i
-        for (i = 0; i < drawers.length; ++i) {
-          if (drawers[i].classList.contains(drawerSettings.activeClass)) {
-            closeDrawer(drawers[i])
+          const open = toggle.closest(drawerSettings.selectorTrigger)
+          const close = toggle.closest(drawerSettings.selectorClose)
+          if (open) {
+            openDrawer(open)
+          }
+          if (close) {
+            closeDrawer(close)
+          }
+          if (open || close) {
+            event.preventDefault()
           }
         }
-      }
 
-      function setupMenuDrawer() {
-        if (!Element.prototype.closest) {
-          Element.prototype.closest = function (s) {
-            // eslint-disable-next-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias, unicorn/no-this-outside-of-class
-            const el = this
-            if (!document.documentElement.contains(el)) {
+        function keydownHandler(event) {
+          if (!(event.key === 'Escape' || event.keyCode === 27)) {
+            return
+          }
+
+          const drawers = document.querySelectorAll(drawerSettings.selectorTarget)
+          let i
+          for (i = 0; i < drawers.length; ++i) {
+            if (drawers[i].classList.contains(drawerSettings.activeClass)) {
+              closeDrawer(drawers[i])
+            }
+          }
+        }
+
+        function setupMenuDrawer() {
+          if (!Element.prototype.closest) {
+            Element.prototype.closest = function (s) {
+              // eslint-disable-next-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias, unicorn/no-this-outside-of-class
+              const el = this
+              if (!document.documentElement.contains(el)) {
+                return null
+              }
+
+              let ancestor = el
+              do {
+                if (ancestor.matches(s)) {
+                  return ancestor
+                }
+                ancestor = ancestor.parentElement
+              } while (ancestor !== null)
               return null
             }
-
-            let ancestor = el
-            do {
-              if (ancestor.matches(s)) {
-                return ancestor
-              }
-              ancestor = ancestor.parentElement
-            } while (ancestor !== null)
-            return null
           }
+
+          document.addEventListener('click', clickHandler, { capture: false })
+          document.addEventListener('keydown', keydownHandler, { capture: false })
         }
 
-        document.addEventListener('click', clickHandler, { capture: false })
-        document.addEventListener('keydown', keydownHandler, { capture: false })
-      }
-
-      document.addEventListener('astro:page-load', () => {
-        showScriptButtons()
+        // Delegated on `document` and registered once, so a navigation neither loses them nor
+        // stacks a second copy on top.
         setupMenuDrawer()
-      })
+        document.addEventListener('astro:page-load', showScriptButtons)
+      })()
     </script>
   </body>
 </html>

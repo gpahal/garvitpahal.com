@@ -1,14 +1,16 @@
+import { kenKen } from './ken-ken'
 import { sudoku } from './sudoku'
 
 /**
  * Adding a puzzle: create `src/puzzles/<id>/`, add it here, add its UI to `ui-registry.ts`, and add
  * an endpoint at `src/pages/api/x/puzzle-solvers/<id>.ts`.
  *
- * Client-safe by construction: no Anthropic SDK, no React, and no prompt text - those live in each
+ * Client-safe by construction: no vision SDK, no React, and no prompt text - those live in each
  * puzzle's `extraction.ts`, which only its endpoint imports.
  */
 export const PUZZLES = {
   sudoku,
+  'ken-ken': kenKen,
 } as const
 
 export type PuzzleId = keyof typeof PUZZLES

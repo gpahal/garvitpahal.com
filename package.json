@@ -28,7 +28,6 @@
     ]
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.115.0",
     "@astrojs/check": "^0.9.10",
     "@astrojs/cloudflare": "^14.1.7",
     "@astrojs/mdx": "^7.0.5",
@@ -61,6 +60,7 @@
     "eslint-plugin-better-tailwindcss": "^4.7.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "npm-run-all2": "^9.0.3",
+    "openai": "^7.2.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^11.3.2",
     "prettier": "^3.9.6",

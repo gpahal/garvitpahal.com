@@ -1,6 +1,10 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
 
-import type { CellRef } from '@/puzzles/types'
+import { indexOf } from '@/lib/grid/geometry'
+import { SelectionMarker } from '@/components/x/ui/selection-marker'
+import { useClickOutside } from '@/components/x/ui/use-click-outside'
+import { useRovingFocus } from '@/components/x/ui/use-roving-focus'
+import type { PuzzleEditorProps } from '@/puzzles/types'
 
 import {
   cloneGrid,
@@ -8,21 +12,15 @@ import {
   EMPTY,
   findConflicts,
   formatValue,
-  indexOf,
   parseKeyboardValue,
   resizeGrid,
   SUDOKU_SIZES,
   type SudokuGrid,
+  type SudokuPuzzle,
 } from './model'
 
 const PAD_BUTTON =
   'unstyled border-gray-6 hocus-visible:bg-gray-4 focus-visible:ring-anchor inline-flex h-9 items-center justify-center rounded-md border text-sm font-medium focus-visible:ring-2 focus-visible:outline-none'
-
-type SudokuEditorProps = {
-  grid: SudokuGrid
-  uncertain: Array<CellRef>
-  onChange: (grid: SudokuGrid) => void
-}
 
 /** Values 10-16 render as two digits, so larger grids need smaller type to avoid overflow. */
 export function cellTextClass(n: number): string {
@@ -42,9 +40,20 @@ export function cellBorderClasses(grid: SudokuGrid, row: number, col: number): s
     .join(' ')
 }
 
-export function SudokuEditor({ grid, uncertain, onChange }: SudokuEditorProps): ReactNode {
+/**
+ * `onBlockerChange` goes unused: every edit here lands on the puzzle the moment it is made, so there
+ * is never uncommitted work the way a Ken Ken cage draft is.
+ */
+export function SudokuEditor({ puzzle, onChange }: PuzzleEditorProps<SudokuPuzzle>): ReactNode {
+  const { grid, uncertain } = puzzle
   const { n } = grid
-  const [selected, setSelected] = useState(0)
+  // Nothing is selected until the user picks a cell, including on first render: a grid that arrives
+  // with a cell already outlined claims a choice the user has not made yet.
+  const [selected, setSelected] = useState<number | undefined>(undefined)
+  const gridRef = useRovingFocus<HTMLDivElement>(selected)
+  const rootRef = useClickOutside<HTMLDivElement>(() => {
+    setSelected(undefined)
+  })
 
   const conflicts = useMemo(() => new Set(findConflicts(grid)), [grid])
   const uncertainSet = useMemo(
@@ -56,22 +65,32 @@ export function SudokuEditor({ grid, uncertain, onChange }: SudokuEditorProps): 
     (cell: number, value: number) => {
       const next = cloneGrid(grid)
       next.values[cell] = value
-      onChange(next)
+      // Typing into a cell is the user reviewing it, so it stops being flagged.
+      onChange({
+        grid: next,
+        uncertain: uncertain.filter((ref) => indexOf(n, ref.row, ref.col) !== cell),
+      })
     },
-    [grid, onChange],
+    [grid, n, uncertain, onChange],
   )
 
   // Clones rather than rebuilding from the size, so a non-rectangular region map would survive.
   const clearAll = useCallback(() => {
     const next = cloneGrid(grid)
     next.values.fill(EMPTY)
-    onChange(next)
+    onChange({ grid: next, uncertain: [] })
   }, [grid, onChange])
 
   const hasValues = useMemo(() => grid.values.some((value) => value !== EMPTY), [grid])
 
+  // On the cells, not the grid: with a roving tabindex the focused element is a cell, and a handler
+  // on a container that can never hold focus is one the keyboard only reaches by accident.
   const onKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (selected === undefined) {
+        return
+      }
+
       const row = Math.floor(selected / n)
       const col = selected % n
       let isHandled = true
@@ -98,6 +117,12 @@ export function SudokuEditor({ grid, uncertain, onChange }: SudokuEditorProps): 
           setValue(selected, EMPTY)
           break
         }
+        case 'Escape': {
+          // The keyboard's way out, since a press on the page is what clears it with a pointer.
+          setSelected(undefined)
+          event.currentTarget.blur()
+          break
+        }
         default: {
           const value = parseKeyboardValue(event.key, n)
           if (value !== EMPTY) {
@@ -116,92 +141,127 @@ export function SudokuEditor({ grid, uncertain, onChange }: SudokuEditorProps): 
   )
 
   return (
-    <div className="flex flex-col gap-3">
-      <SizePad grid={grid} onChange={onChange} />
+    <div ref={rootRef} className="flex flex-col gap-3">
+      <SizePad
+        grid={grid}
+        onResize={(next) => {
+          // A resize re-indexes every cell, so a selection kept across it can point past the end of
+          // the new grid - where typing silently writes nowhere and no cell shows as selected.
+          setSelected(undefined)
+          onChange({ grid: next, uncertain: [] })
+        }}
+      />
 
+      {/* Cells are grouped per row because `gridcell` is only meaningful inside a `row`. The
+          wrappers are `display: contents`, so the CSS grid lays every cell out as before. */}
       <div
+        ref={gridRef}
         role="grid"
         aria-label={`${String(n)} by ${String(n)} Sudoku grid`}
         aria-rowcount={n}
         aria-colcount={n}
-        tabIndex={0}
-        onKeyDown={onKeyDown}
-        className="mx-auto grid w-full max-w-md rounded-md focus-visible:ring-2 focus-visible:ring-anchor focus-visible:outline-none"
+        className="mx-auto grid w-full max-w-md rounded-md"
         style={{ gridTemplateColumns: `repeat(${String(n)}, minmax(0, 1fr))` }}
       >
-        {Array.from({ length: n * n }, (_, cell) => {
-          const row = Math.floor(cell / n)
-          const col = cell % n
-          const value = grid.values[cell] ?? EMPTY
-          const isSelected = cell === selected
-          const isConflict = conflicts.has(cell)
-          const isUncertain = uncertainSet.has(cell)
+        {Array.from({ length: n }, (_, row) => (
+          <div key={row} role="row" className="contents">
+            {Array.from({ length: n }, (_, col) => {
+              const cell = indexOf(n, row, col)
+              const value = grid.values[cell] ?? EMPTY
+              const isSelected = cell === selected
+              const isConflict = conflicts.has(cell)
+              const isUncertain = uncertainSet.has(cell)
 
-          return (
-            <button
-              key={cell}
-              type="button"
-              role="gridcell"
-              aria-rowindex={row + 1}
-              aria-colindex={col + 1}
-              aria-label={`Row ${String(row + 1)}, column ${String(col + 1)}${
-                value === EMPTY ? ', empty' : `, ${formatValue(value)}`
-              }${isUncertain ? ', needs review' : ''}${isConflict ? ', conflicts' : ''}`}
-              tabIndex={-1}
-              onClick={() => {
-                setSelected(cell)
-              }}
-              className={[
-                'unstyled relative flex aspect-square items-center justify-center font-semibold',
-                cellTextClass(n),
-                cellBorderClasses(grid, row, col),
-                isConflict
-                  ? 'z-10 bg-gray-5 ring-2 ring-gray-12'
-                  : isUncertain
-                    ? 'z-10 bg-gray-4 ring-1 ring-gray-8'
-                    : 'bg-bg hocus-visible:bg-gray-3',
-                // Inset, not a `ring`: a ring draws outwards and spills past the grid's border.
-                isSelected ? 'z-20 outline-[3px] -outline-offset-[3px] outline-anchor' : '',
-                'text-gray-12',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-            >
-              <span className={isUncertain ? 'underline decoration-dotted underline-offset-4' : ''}>
-                {formatValue(value)}
-              </span>
-              {isConflict ? (
-                <span
-                  aria-hidden="true"
-                  className="absolute top-0 right-0.5 text-[0.6rem] leading-none text-gray-12"
+              return (
+                <button
+                  key={cell}
+                  type="button"
+                  role="gridcell"
+                  aria-rowindex={row + 1}
+                  aria-colindex={col + 1}
+                  aria-label={`Row ${String(row + 1)}, column ${String(col + 1)}${
+                    value === EMPTY ? ', empty' : `, ${formatValue(value)}`
+                  }${isUncertain ? ', needs review' : ''}${isConflict ? ', conflicts' : ''}`}
+                  // Roving: only the selected cell is tabbable, so arrow keys move real focus and
+                  // each cell's label is announced as it is reached. With nothing selected the
+                  // first cell stands in, or Tab would have no way into the grid at all.
+                  tabIndex={isSelected || (selected === undefined && cell === 0) ? 0 : -1}
+                  onKeyDown={onKeyDown}
+                  // Selection follows focus, so tabbing in picks the cell up rather than leaving a
+                  // focused cell that the controls below say nothing about.
+                  onFocus={() => {
+                    setSelected(cell)
+                  }}
+                  onClick={() => {
+                    setSelected(cell)
+                  }}
+                  className={[
+                    'unstyled relative flex aspect-square items-center justify-center font-semibold',
+                    cellTextClass(n),
+                    cellBorderClasses(grid, row, col),
+                    isConflict
+                      ? 'z-10 bg-gray-5 ring-2 ring-gray-12'
+                      : isUncertain
+                        ? 'z-10 bg-gray-4 ring-1 ring-gray-8'
+                        : 'bg-bg hocus-visible:bg-gray-3',
+                    // Raised so the marker below is not clipped by a neighbour's border.
+                    isSelected ? 'z-20' : '',
+                    'text-gray-12',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
                 >
-                  !
-                </span>
-              ) : undefined}
-            </button>
-          )
-        })}
+                  {isSelected ? <SelectionMarker /> : undefined}
+                  <span
+                    className={isUncertain ? 'underline decoration-dotted underline-offset-4' : ''}
+                  >
+                    {formatValue(value)}
+                  </span>
+                  {isConflict ? (
+                    <span
+                      aria-hidden="true"
+                      className="absolute top-0 right-0.5 text-[0.6rem] leading-none text-gray-12"
+                    >
+                      !
+                    </span>
+                  ) : undefined}
+                </button>
+              )
+            })}
+          </div>
+        ))}
       </div>
 
-      <ValuePad
-        n={n}
-        onPick={(value) => {
-          setValue(selected, value)
-        }}
-        onClearAll={clearAll}
-        hasValues={hasValues}
-      />
+      {/* Every control here acts on the selected cell, so with none there is nothing for them to
+          do - and a pad that writes nowhere is worse than a line saying what to do first. */}
+      {selected === undefined ? (
+        <p role="status" className="unstyled my-0! text-center text-sm text-gray-11">
+          Select a cell to enter a value
+        </p>
+      ) : (
+        <ValuePad
+          n={n}
+          onPick={(value) => {
+            setValue(selected, value)
+          }}
+          onClearAll={clearAll}
+          hasValues={hasValues}
+        />
+      )}
     </div>
   )
 }
 
-/** Size lives with the editor because changing it is almost always a correction. */
+/**
+ * Size lives with the editor because changing it is almost always a correction. A resize re-indexes
+ * every cell, so the caller drops the review flags rather than pointing them at unrelated cells.
+ */
 function SizePad({
   grid,
-  onChange,
+  onResize,
 }: {
   grid: SudokuGrid
-  onChange: (grid: SudokuGrid) => void
+  onResize: (grid: SudokuGrid) => void
 }): ReactNode {
   const { n, boxWidth, boxHeight } = grid
 
@@ -222,7 +282,7 @@ function SizePad({
               return
             }
             const geometry = defaultBoxGeometry(size)
-            onChange(resizeGrid(grid, size, geometry.boxWidth, geometry.boxHeight))
+            onResize(resizeGrid(grid, size, geometry.boxWidth, geometry.boxHeight))
           }}
           className={`${PAD_BUTTON} px-2.5 ${
             size === n ? 'border-gray-12 bg-gray-12 text-gray-1' : 'text-gray-12'
@@ -238,7 +298,7 @@ function SizePad({
           type="button"
           aria-label={`Boxes are ${String(boxWidth)} wide by ${String(boxHeight)} tall. Switch to ${String(boxHeight)} by ${String(boxWidth)}.`}
           onClick={() => {
-            onChange(resizeGrid(grid, n, boxHeight, boxWidth))
+            onResize(resizeGrid(grid, n, boxHeight, boxWidth))
           }}
           className={`${PAD_BUTTON} px-2.5 text-gray-11`}
         >

@@ -18,7 +18,7 @@ function isPersonalRoutePattern(pattern: string): boolean {
 
 /**
  * `/x` is gated by Cloudflare Access at the edge, so prerendered pages under it are still protected.
- * API routes are different: they must run on demand to reach the Anthropic key. This guards against
+ * API routes are different: they must run on demand to reach the API key. This guards against
  * one silently being prerendered into an asset instead.
  *
  * Note: avoid bare utility-like words in comments here. Tailwind's content detection scans this
@@ -69,7 +69,7 @@ export default defineConfig({
     schema: {
       // Optional so builds succeed without secrets present - `astro:env/server` throws at module
       // scope for missing required secrets, and middleware is evaluated while prerendering.
-      ANTHROPIC_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      OPENAI_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
     },
   },
   integrations: [
@@ -81,5 +81,15 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    // One React: a second module instance leaves hooks reading the other copy's dispatcher, which
+    // surfaces as "Invalid hook call" and a null `useState`.
+    //
+    // No `optimizeDeps.include` on purpose - Astro's scanner already pre-bundles what islands
+    // import. Never add `@astrojs/react/client.js`: this config is shared by every Vite
+    // environment, so the prerender one bundles its own React and Astro puts that copy in
+    // `renderer-url`. Use `optimizeDeps.entries` if a scan hint is ever needed.
+    resolve: {
+      dedupe: ['react', 'react-dom'],
+    },
   },
 })

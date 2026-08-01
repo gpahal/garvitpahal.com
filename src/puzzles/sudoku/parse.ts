@@ -1,11 +1,10 @@
 import { z } from 'zod'
 
-import type { CellRef } from '@/puzzles/types'
+import { indexOf, type CellRef } from '@/lib/grid/geometry'
 
 import {
   buildBoxRegions,
   defaultBoxGeometry,
-  indexOf,
   isValidBoxGeometry,
   isValidSize,
   normalizeValue,

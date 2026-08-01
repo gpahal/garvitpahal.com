@@ -11,7 +11,7 @@ const CELL_VALUES = Array.from({ length: MAX_SUDOKU_SIZE + 1 }, (_, value) => va
  * Server-only. Imported by the sudoku endpoint and nothing else, so the prompt never ships to the
  * browser.
  *
- * The schema stays inside Anthropic's structured-output subset: every object needs
+ * The schema stays inside the provider's structured-output subset: every object needs
  * `additionalProperties: false` and `required`, and `minimum`/`maxItems`/`minLength` are not
  * supported. Size constraints are expressed as `enum`; array lengths are checked in `parse`.
  */

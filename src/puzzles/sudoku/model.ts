@@ -1,3 +1,5 @@
+import { indexOf, type CellRef } from '@/lib/grid/geometry'
+
 /** Sizes we accept. Anything else is a misread rather than an exotic puzzle. */
 export const SUDOKU_SIZES = [4, 6, 8, 9, 12, 16] as const
 
@@ -28,8 +30,13 @@ export type SudokuSolution = {
   values: Uint8Array
 }
 
-export function indexOf(n: number, row: number, col: number): number {
-  return row * n + col
+/**
+ * What the workspace holds and the editor edits. `uncertain` rides with the grid rather than beside
+ * it so a resize cannot leave stale refs pointing at unrelated cells.
+ */
+export type SudokuPuzzle = {
+  grid: SudokuGrid
+  uncertain: Array<CellRef>
 }
 
 export function valueAt(grid: SudokuGrid, row: number, col: number): number {
