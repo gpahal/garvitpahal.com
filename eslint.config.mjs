@@ -4,7 +4,9 @@ import eslintCssConfig from '@gpahal/eslint-config/css'
 import eslintReactConfig from '@gpahal/eslint-config/react'
 import eslintTailwindcssConfig from '@gpahal/eslint-config/tailwindcss'
 
-/** @type {import("@gpahal/eslint-config/base").Config} */
+/**
+@type {import("@gpahal/eslint-config/base").Config}
+*/
 export default eslintBaseConfig({
   tsconfigRootDir: import.meta.dirname,
   configs: [

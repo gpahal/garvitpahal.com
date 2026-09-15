@@ -15,13 +15,17 @@ import { ErrorPanel } from '@/components/x/ui/error-panel'
 import { CAPTURE_BUTTON, FlipToggles } from './controls'
 
 type ImageReviewDialogProps = {
-  /** Open whenever there is an image to review. */
+  /**
+  Open whenever there is an image to review.
+  */
   image: Blob | undefined
   onCancel: () => void
   onConfirm: (image: Blob) => void
 }
 
-/** The upload counterpart to the camera's review step. */
+/**
+The upload counterpart to the camera's review step.
+*/
 export function ImageReviewDialog({
   image,
   onCancel,

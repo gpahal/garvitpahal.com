@@ -4,7 +4,9 @@ import { colOf, indexOf, isInside, rowOf } from '@/lib/grid/geometry'
 
 import { cageAnchor, cageIdAt, formatClue, type KenKenGrid } from './model'
 
-/** Presentation both the editor and the solution need, so neither has to import the other. */
+/**
+Presentation both the editor and the solution need, so neither has to import the other.
+*/
 
 type WallDirection = 'up' | 'left'
 
@@ -26,12 +28,16 @@ function hasWall(grid: KenKenGrid, cell: number, direction: WallDirection): bool
   return !isInside(n, row, col) || cageIdAt(grid, cell) !== cageIdAt(grid, indexOf(n, row, col))
 }
 
-/** An 8x8 packs its cells tighter, so its values need to be a shade smaller to stay centred. */
+/**
+An 8x8 packs its cells tighter, so its values need to be a shade smaller to stay centred.
+*/
 export function cellTextClass(n: number): string {
   return n > 6 ? 'text-[clamp(0.6rem,3vw,1rem)]' : 'text-[clamp(0.7rem,3.5vw,1.15rem)]'
 }
 
-/** Clue type, sized to stay legible without crowding a cage's corner on the tightest grid. */
+/**
+Clue type, sized to stay legible without crowding a cage's corner on the tightest grid.
+*/
 export function clueTextClass(n: number): string {
   return n > 6 ? 'text-[clamp(0.6rem,2vw,0.78rem)]' : 'text-[clamp(0.7rem,2.6vw,0.95rem)]'
 }
@@ -58,7 +64,9 @@ export function cageBorderClasses(grid: KenKenGrid, cell: number): string {
     .join(' ')
 }
 
-/** The clue, printed in the cage's top-left cell exactly as a paper puzzle prints it. */
+/**
+The clue, printed in the cage's top-left cell exactly as a paper puzzle prints it.
+*/
 export function CageClue({
   grid,
   cell,
@@ -104,7 +112,9 @@ export function CageClue({
   )
 }
 
-/** Describes a cage the way a screen reader should hear it, since the clue itself is decorative. */
+/**
+Describes a cage the way a screen reader should hear it, since the clue itself is decorative.
+*/
 export function describeCage(grid: KenKenGrid, cell: number, cellCount: number): string {
   const cage = grid.cages[cageIdAt(grid, cell)]
   if (!cage) {

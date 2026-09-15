@@ -7,7 +7,9 @@ import type { SolveOptions, SolveResult } from '@/puzzles/types'
 
 import { EMPTY, type SudokuGrid, type SudokuSolution } from './model'
 
-/** Regions are stored per cell, so the groups are read off the map rather than derived from boxes. */
+/**
+Regions are stored per cell, so the groups are read off the map rather than derived from boxes.
+*/
 function regionGroups(grid: SudokuGrid): Array<Uint16Array> {
   const byRegion = new Map<number, Array<number>>()
   for (let cell = 0; cell < grid.n * grid.n; cell++) {

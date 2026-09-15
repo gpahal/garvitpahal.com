@@ -73,7 +73,9 @@ function readLayout(
   return { cageOf, anchors }
 }
 
-/** Cells of each cage, indexed by cage id. */
+/**
+Cells of each cage, indexed by cage id.
+*/
 function groupCells(cageOf: Uint8Array, cageCount: number): Array<Array<number>> {
   const cells: Array<Array<number>> = Array.from({ length: cageCount }, () => [])
   for (const [cell, id] of cageOf.entries()) {

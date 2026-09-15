@@ -1,6 +1,8 @@
 import { orthogonalNeighbours } from './geometry'
 
-/** Neighbours of `cell` still waiting to be claimed, minus any adjacency `isJoined` vetoes. */
+/**
+Neighbours of `cell` still waiting to be claimed, minus any adjacency `isJoined` vetoes.
+*/
 function reachableFrom(
   n: number,
   cell: number,
@@ -54,9 +56,13 @@ export function connectedComponents(
 }
 
 export type CompactedLabels = {
-  /** Same length as the input, renumbered to `0 .. order.length - 1`. */
+  /**
+  Same length as the input, renumbered to `0 .. order.length - 1`.
+  */
   labels: Uint8Array
-  /** `order[newLabel]` is the label it replaced, so parallel arrays can be reordered to match. */
+  /**
+  `order[newLabel]` is the label it replaced, so parallel arrays can be reordered to match.
+  */
   order: Array<number>
 }
 

@@ -12,12 +12,16 @@ export function bitOf(value: number): number {
   return (1 << (value - 1)) >>> 0
 }
 
-/** Every value from 1 to `count`. Exponentiation, not `1 << count`, which is 0 at 32. */
+/**
+Every value from 1 to `count`. Exponentiation, not `1 << count`, which is 0 at 32.
+*/
 export function fullMask(count: number): number {
   return 2 ** count - 1
 }
 
-/** A mask holding exactly one value, meaning the variable is decided. */
+/**
+A mask holding exactly one value, meaning the variable is decided.
+*/
 export function isSingleBit(mask: number): boolean {
   return mask !== 0 && (mask & (mask - 1)) === 0
 }
@@ -32,7 +36,9 @@ export function popCount(mask: number): number {
   return count
 }
 
-/** The smallest value in the mask. On a single-bit mask this is the decided value. */
+/**
+The smallest value in the mask. On a single-bit mask this is the decided value.
+*/
 export function lowestBitValue(mask: number): number {
   return 31 - Math.clz32(mask & -mask) + 1
 }

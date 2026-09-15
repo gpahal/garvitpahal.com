@@ -16,7 +16,9 @@ export const DialogClose = BaseDialog.Close
 type DialogContentProps = {
   children: ReactNode
   className?: string
-  /** Visually hidden titles still announce correctly; omitting the title entirely does not. */
+  /**
+  Visually hidden titles still announce correctly; omitting the title entirely does not.
+  */
   title: string
   hideTitle?: boolean
   description?: string

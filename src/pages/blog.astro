@@ -21,27 +21,28 @@ console.dir(
   <header>
     <H1>
       <span>Blog</span>
-      <LinkButton href="/blog.rss.xml"><RssIcon class="size-4" /><span>RSS Feed</span></LinkButton>
+      <LinkButton href="/blog.rss.xml">
+        <RssIcon class="size-4" />
+        <span>RSS Feed</span>
+      </LinkButton>
     </H1>
   </header>
 
   <ul class="unstyled space-y-1.5">
-    {
-      blog.map((blogPost) => {
-        return (
-          <li class="unstyled">
-            <a
-              href={`/blog/${blogPost.id}`}
-              class="unstyled group -mx-2 block rounded-md px-2 py-1 hocus:bg-gray-3"
-            >
-              <H3 class="my-0! font-medium!">{blogPost.data.title}</H3>
-              <p class="mb-0! mt-[-0.05rem]! text-base text-gray-11">
-                {format(blogPost.data.publishedOn, 'MMM yyyy')}
-              </p>
-            </a>
-          </li>
-        )
-      })
-    }
+    {blog.map((blogPost) => {
+      return (
+        <li class="unstyled">
+          <a
+            href={`/blog/${blogPost.id}`}
+            class="unstyled group -mx-2 block rounded-md px-2 py-1 hocus:bg-gray-3"
+          >
+            <H3 class="my-0! font-medium!">{blogPost.data.title}</H3>
+            <p class="mb-0! mt-[-0.05rem]! text-base text-gray-11">
+              {format(blogPost.data.publishedOn, 'MMM yyyy')}
+            </p>
+          </a>
+        </li>
+      )
+    })}
   </ul>
 </Layout>

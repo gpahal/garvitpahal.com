@@ -1,7 +1,9 @@
 import { bitOf, isSingleBit } from './bitset'
 import type { Domains, PropagationResult, Propagator } from './domains'
 
-/** Removes a decided variable's value from every variable sharing a group with it. */
+/**
+Removes a decided variable's value from every variable sharing a group with it.
+*/
 function eliminateFromPeers(domains: Domains, peers: Uint16Array, mask: number): PropagationResult {
   let result: PropagationResult = 'stable'
   for (const peer of peers) {
@@ -18,7 +20,9 @@ function eliminateFromPeers(domains: Domains, peers: Uint16Array, mask: number):
   return result
 }
 
-/** Naked singles: a variable with one value left forbids it everywhere it is a peer. */
+/**
+Naked singles: a variable with one value left forbids it everywhere it is a peer.
+*/
 function propagateNakedSingles(domains: Domains, peers: Array<Uint16Array>): PropagationResult {
   let result: PropagationResult = 'stable'
   for (const [variable, mask] of domains.entries()) {
@@ -39,7 +43,9 @@ function propagateNakedSingles(domains: Domains, peers: Array<Uint16Array>): Pro
   return result
 }
 
-/** How many variables in a group could still hold `bit`, and the last one seen. */
+/**
+How many variables in a group could still hold `bit`, and the last one seen.
+*/
 function countHomes(
   domains: Domains,
   group: Uint16Array,
@@ -80,7 +86,9 @@ function propagateHiddenSinglesInGroup(
   return result
 }
 
-/** Hidden singles: a value with only one possible home in a group belongs there. */
+/**
+Hidden singles: a value with only one possible home in a group belongs there.
+*/
 function propagateHiddenSingles(
   domains: Domains,
   groups: Array<Uint16Array>,

@@ -7,7 +7,9 @@ import { cageAnchor, cageCellCount, cageCells, type Cage, type KenKenGrid } from
 
 export type CageIssue = 'split' | 'unset' | 'arity' | 'out_of_range'
 
-/** Why a cage is wrong, in the order the message should prefer. `undefined` means it is fine. */
+/**
+Why a cage is wrong, in the order the message should prefer. `undefined` means it is fine.
+*/
 export function cageIssue(grid: KenKenGrid, cageId: number): CageIssue | undefined {
   const cage: Cage | undefined = grid.cages[cageId]
   if (!cage) {
@@ -36,10 +38,14 @@ export function cageIssue(grid: KenKenGrid, cageId: number): CageIssue | undefin
   return undefined
 }
 
-/** An issue the grid marks with a `!`. `unset` is not one of them - see `findCageIssues`. */
+/**
+An issue the grid marks with a `!`. `unset` is not one of them - see `findCageIssues`.
+*/
 export type MarkedCageIssue = Exclude<CageIssue, 'unset'>
 
-/** Lower-cased, so it reads both on its own and appended to a cell's `aria-label`. */
+/**
+Lower-cased, so it reads both on its own and appended to a cell's `aria-label`.
+*/
 export function describeCageIssue(issue: MarkedCageIssue): string {
   switch (issue) {
     case 'split': {

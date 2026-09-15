@@ -44,7 +44,9 @@ export type PuzzleDefinition<TPuzzle, TSolution> = {
   id: string
   name: string
   blurb: string
-  /** Longest edge, in px, that captured images are downscaled to before upload. */
+  /**
+  Longest edge, in px, that captured images are downscaled to before upload.
+  */
   maxImageEdge: number
   extract: (image: Blob) => Promise<ExtractResponse<TPuzzle>>
   solve: (puzzle: TPuzzle, options: SolveOptions) => SolveResult<TSolution>

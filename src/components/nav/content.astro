@@ -92,79 +92,71 @@ const isPrivatePage = pathname === '/x' || pathname.startsWith('/x/')
 <div class="relative z-30 mx-auto px-4 py-6 lg:mx-0 lg:min-h-full lg:flex-auto lg:px-6">
   <section class="text-center lg:text-left">
     <div class="text-xl font-semibold">
-      <a href="/" class="unstyled">Garvit Pahal</a>
+      <a href="/" class="unstyled">
+        Garvit Pahal
+      </a>
     </div>
     <div class="mt-2 font-medium">
       Software engineer interested in technology, football and movies.
     </div>
     <ul class="unstyled -mx-2 mt-3 flex justify-center gap-2 lg:justify-start lg:gap-1">
-      {
-        socials.map(({ href, label, Icon }) => (
-          <li class="unstyled">
-            <a
-              href={href}
-              class="unstyled inline-block p-2 text-gray-10 hocus:text-gray-12"
-              aria-label={label}
-            >
-              <Icon class="size-4.5 shrink-0 lg:size-[1.15rem]" />
-            </a>
-          </li>
-        ))
-      }
+      {socials.map(({ href, label, Icon }) => (
+        <li class="unstyled">
+          <a
+            href={href}
+            class="unstyled inline-block p-2 text-gray-10 hocus:text-gray-12"
+            aria-label={label}
+          >
+            <Icon class="size-4.5 shrink-0 lg:size-[1.15rem]" />
+          </a>
+        </li>
+      ))}
     </ul>
   </section>
   <section class="mt-2 lg:mt-10">
     <div class="mb-4 h-px bg-linear-to-r from-gray-1 via-gray-5 to-gray-1 lg:mb-0 lg:hidden"></div>
-    <nav
-      class="mt-1 flex flex-wrap justify-center gap-x-8 gap-y-2.5 text-sm font-medium lg:flex-col lg:gap-x-0 lg:gap-y-[0.15rem] lg:text-[0.9375rem]"
-    >
-      {
-        links.map(({ path, label, Icon }) => (
-          <div class="-mx-2">
-            <a
-              href={path}
-              class="unstyled group flex w-full items-center justify-start rounded-sm px-2 py-1.5 hocus:bg-gray-4"
-              aria-label={label}
-            >
-              <Icon class="size-4.5 shrink-0 text-gray-10 group-hover:text-gray-11 lg:size-[1.15rem]" />
-              <span class="ml-2.5 block grow lg:ml-3">{label}</span>
-            </a>
-          </div>
-        ))
-      }
-      {
-        isPrivatePage && (
-          <>
-            {/*
+    <nav class="mt-1 flex flex-wrap justify-center gap-x-8 gap-y-2.5 text-sm font-medium lg:flex-col lg:gap-x-0 lg:gap-y-[0.15rem] lg:text-[0.9375rem]">
+      {links.map(({ path, label, Icon }) => (
+        <div class="-mx-2">
+          <a
+            href={path}
+            class="unstyled group flex w-full items-center justify-start rounded-sm px-2 py-1.5 hocus:bg-gray-4"
+            aria-label={label}
+          >
+            <Icon class="size-4.5 shrink-0 text-gray-10 group-hover:text-gray-11 lg:size-[1.15rem]" />
+            <span class="ml-2.5 block grow lg:ml-3">{label}</span>
+          </a>
+        </div>
+      ))}
+      {isPrivatePage && (
+        <>
+          {/*
               Solid, not the drawer's gradient: that fades to `gray-1`, lighter than the sidebar's
               own background. `basis-full` breaks the wrapped mobile row; the desktop column would
               apply flex-basis to the height instead.
             */}
-            <div class="my-2 h-px w-full basis-full bg-gray-6 lg:basis-auto" />
-            {privateLinks.map(({ path, label, Icon }) => (
-              <div class="-mx-2">
-                <a
-                  href={path}
-                  class="unstyled group flex w-full items-center justify-start rounded-sm px-2 py-1.5 hocus:bg-gray-4"
-                  aria-label={label}
-                >
-                  <Icon class="size-4.5 shrink-0 text-gray-10 group-hover:text-gray-11 lg:size-[1.15rem]" />
-                  <span class="ml-2.5 block grow lg:ml-3">{label}</span>
-                </a>
-              </div>
-            ))}
-          </>
-        )
-      }
+          <div class="my-2 h-px w-full basis-full bg-gray-6 lg:basis-auto" />
+          {privateLinks.map(({ path, label, Icon }) => (
+            <div class="-mx-2">
+              <a
+                href={path}
+                class="unstyled group flex w-full items-center justify-start rounded-sm px-2 py-1.5 hocus:bg-gray-4"
+                aria-label={label}
+              >
+                <Icon class="size-4.5 shrink-0 text-gray-10 group-hover:text-gray-11 lg:size-[1.15rem]" />
+                <span class="ml-2.5 block grow lg:ml-3">{label}</span>
+              </a>
+            </div>
+          ))}
+        </>
+      )}
     </nav>
   </section>
-  {
-    !isFullPage && (
-      <section class="mt-8 flex items-center justify-center lg:hidden">
-        <button data-drawer-close class="w-full max-w-lg rounded-sm border py-2">
-          Close Menu
-        </button>
-      </section>
-    )
-  }
+  {!isFullPage && (
+    <section class="mt-8 flex items-center justify-center lg:hidden">
+      <button data-drawer-close class="w-full max-w-lg rounded-sm border py-2">
+        Close Menu
+      </button>
+    </section>
+  )}
 </div>

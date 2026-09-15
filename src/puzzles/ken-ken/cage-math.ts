@@ -9,7 +9,9 @@ import type { Cage, CageOp } from './model'
 const MAX_CAGE_TUPLES = 20_000
 const MAX_CAGE_NODES = 200_000
 
-/** How often to consult the clock, matching the search. Checking every node is measurably slower. */
+/**
+How often to consult the clock, matching the search. Checking every node is measurably slower.
+*/
 const DEADLINE_CHECK_INTERVAL = 2048
 
 /**
@@ -31,10 +33,14 @@ export function isCageArityValid(op: CageOp, cellCount: number): boolean {
   }
 }
 
-/** A cage's values, however the caller happens to be holding them. */
+/**
+A cage's values, however the caller happens to be holding them.
+*/
 type CageValues = Iterable<number> & { readonly length: number }
 
-/** Whether a complete assignment satisfies the clue. Order-independent, as the puzzle requires. */
+/**
+Whether a complete assignment satisfies the clue. Order-independent, as the puzzle requires.
+*/
 export function isClueSatisfied(values: CageValues, cage: Cage): boolean {
   if (!isCageArityValid(cage.op, values.length)) {
     return false
@@ -90,12 +96,16 @@ function buildConflicts(n: number, cells: Uint16Array): Array<Array<number>> {
   })
 }
 
-/** Can `sum` still reach the target with `remaining` cells of 1..n left to place? */
+/**
+Can `sum` still reach the target with `remaining` cells of 1..n left to place?
+*/
 function canReachSum(sum: number, remaining: number, n: number, target: number): boolean {
   return sum + remaining <= target && sum + remaining * n >= target
 }
 
-/** A product can only grow, and every factor is an integer, so it must divide the target. */
+/**
+A product can only grow, and every factor is an integer, so it must divide the target.
+*/
 function canReachProduct(product: number, target: number): boolean {
   return product <= target && target % product === 0
 }

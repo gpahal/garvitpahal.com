@@ -35,11 +35,15 @@ const PRIMARY_ACTION = `${ACTION_BUTTON} border-gray-12 bg-gray-12 text-gray-1 h
 
 const SECONDARY_ACTION = `${ACTION_BUTTON} border-gray-6 text-gray-12 hocus-visible:bg-gray-4`
 
-/** How a cell reads and looks, which is the one thing the two modes disagree about. */
+/**
+How a cell reads and looks, which is the one thing the two modes disagree about.
+*/
 type CellState = {
   label: string
   fill: string
-  /** Membership in the draft. Left unset outside cage-edit mode, where nothing is selectable. */
+  /**
+  Membership in the draft. Left unset outside cage-edit mode, where nothing is selectable.
+  */
   isInDraft?: boolean
   isBlocked?: boolean
 }

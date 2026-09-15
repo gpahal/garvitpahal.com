@@ -3,7 +3,9 @@ import type { Domains, PropagationResult, Propagator } from './domains'
 
 export type TableConstraint = {
   variables: Uint16Array
-  /** Every allowed assignment, each aligned with `variables`. */
+  /**
+  Every allowed assignment, each aligned with `variables`.
+  */
   tuples: Array<Uint8Array>
 }
 
@@ -16,7 +18,9 @@ function isTupleSupported(domains: Domains, variables: Uint16Array, tuple: Uint8
   return true
 }
 
-/** Values still backed by at least one supported tuple, one mask per position. */
+/**
+Values still backed by at least one supported tuple, one mask per position.
+*/
 function collectSupport(domains: Domains, constraint: TableConstraint): Uint32Array | undefined {
   const { variables, tuples } = constraint
   const support = new Uint32Array(variables.length)

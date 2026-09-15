@@ -1,4 +1,6 @@
-/** Sizes we accept. Anything else is a misread rather than an exotic puzzle. */
+/**
+Sizes we accept. Anything else is a misread rather than an exotic puzzle.
+*/
 export const KEN_KEN_SIZES = [4, 5, 6, 7, 8] as const
 
 export type KenKenSize = (typeof KEN_KEN_SIZES)[number]
@@ -15,7 +17,9 @@ export const CAGE_OPS = ['+', '-', '*', '/', '='] as const
 
 export type CageOp = (typeof CAGE_OPS)[number]
 
-/** `target: 0` means unset - a cage still to be filled in, not one totalling zero. */
+/**
+`target: 0` means unset - a cage still to be filled in, not one totalling zero.
+*/
 export type Cage = {
   op: CageOp
   target: number
@@ -30,13 +34,17 @@ export type Cage = {
  */
 export type KenKenGrid = {
   n: number
-  /** Length `n * n`, row-major. An index into `cages`. */
+  /**
+  Length `n * n`, row-major. An index into `cages`.
+  */
   cageOf: Uint8Array
   cages: Array<Cage>
 }
 
 export type KenKenSolution = {
-  /** Length `n * n`, row-major, every entry 1..n. */
+  /**
+  Length `n * n`, row-major, every entry 1..n.
+  */
   values: Uint8Array
 }
 
@@ -46,7 +54,9 @@ export type KenKenSolution = {
  */
 export type KenKenPuzzle = {
   grid: KenKenGrid
-  /** Cage ids the model flagged, or the parser found inconsistent. Cleared as the user edits them. */
+  /**
+  Cage ids the model flagged, or the parser found inconsistent. Cleared as the user edits them.
+  */
   unreviewedCages: Array<number>
 }
 
@@ -112,7 +122,9 @@ export function cageAnchor(grid: KenKenGrid, cageId: number): number | undefined
   return undefined
 }
 
-/** Every cell its own unset single-cell cage: all walls up, ready to be knocked down. */
+/**
+Every cell its own unset single-cell cage: all walls up, ready to be knocked down.
+*/
 export function createGrid(n: number): KenKenGrid {
   const cageOf = new Uint8Array(n * n)
   const cages: Array<Cage> = []

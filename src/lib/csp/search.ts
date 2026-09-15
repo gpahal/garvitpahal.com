@@ -1,7 +1,9 @@
 import { bitOf, lowestBitValue, popCount } from './bitset'
 import { propagateToFixedPoint, type Domains, type Propagator } from './domains'
 
-/** How often to consult the clock. Checking every node is measurably slower. */
+/**
+How often to consult the clock. Checking every node is measurably slower.
+*/
 const TIMEOUT_CHECK_INTERVAL = 2048
 
 export type SearchConfig = {
@@ -32,7 +34,9 @@ type SearchState = {
   solutions: Array<Uint8Array>
 }
 
-/** Every domain is a single bit at this point, so the lowest bit is the decided value. */
+/**
+Every domain is a single bit at this point, so the lowest bit is the decided value.
+*/
 function toValues(domains: Domains): Uint8Array {
   const values = new Uint8Array(domains.length)
   for (const [variable, mask] of domains.entries()) {

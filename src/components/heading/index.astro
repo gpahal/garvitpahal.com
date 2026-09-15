@@ -11,12 +11,10 @@ const Tag = `h${level}`
 ---
 
 <Tag class:list={['relative', className]} {...otherProps}>
-  {
-    !!id && (
-      <a href={`#${id}`} class="heading-anchor" aria-label="Link to this heading">
-        #
-      </a>
-    )
-  }
+  {!!id && (
+    <a href={`#${id}`} class="heading-anchor" aria-label="Link to this heading">
+      #
+    </a>
+  )}
   <slot />
 </Tag>

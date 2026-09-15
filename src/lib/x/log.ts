@@ -13,7 +13,9 @@ export function logErrorEvent(event: string, fields: Fields): void {
   console.error(JSON.stringify({ event, ...fields }))
 }
 
-/** `cf-ray` ties the lines to Cloudflare's own request record; it is absent under `pnpm dev`. */
+/**
+`cf-ray` ties the lines to Cloudflare's own request record; it is absent under `pnpm dev`.
+*/
 export function getRequestId(request: Request): string {
   return request.headers.get('cf-ray') ?? crypto.randomUUID()
 }

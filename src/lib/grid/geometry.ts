@@ -28,7 +28,9 @@ export function isInside(n: number, row: number, col: number): boolean {
   return row >= 0 && row < n && col >= 0 && col < n
 }
 
-/** The up-to-four cells sharing an edge with `cell`. */
+/**
+The up-to-four cells sharing an edge with `cell`.
+*/
 export function orthogonalNeighbours(n: number, cell: number): Array<number> {
   const row = rowOf(n, cell)
   const col = colOf(n, cell)
@@ -83,7 +85,9 @@ export function parseCellName(n: number, name: string): number | undefined {
   return isInside(n, row, col) ? indexOf(n, row, col) : undefined
 }
 
-/** Every cell name of an `n` by `n` grid, row-major. */
+/**
+Every cell name of an `n` by `n` grid, row-major.
+*/
 export function cellNames(n: number): Array<string> {
   return Array.from({ length: n * n }, (_, cell) => cellName(n, cell))
 }

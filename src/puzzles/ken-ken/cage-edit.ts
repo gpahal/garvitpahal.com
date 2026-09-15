@@ -15,11 +15,17 @@ import {
  * to `applyDraft`; nothing here touches the puzzle until then, so backing out is dropping the draft.
  */
 export type CageDraft = {
-  /** Cells the cage will hold. Never empty, always orthogonally connected. */
+  /**
+  Cells the cage will hold. Never empty, always orthogonally connected.
+  */
   cells: ReadonlySet<number>
-  /** Edited in the same flow. The clue belongs to the cage, so it follows the draft, not a cell. */
+  /**
+  Edited in the same flow. The clue belongs to the cage, so it follows the draft, not a cell.
+  */
   cage: Cage
-  /** The cage this started from, retired on commit even if not one of its cells survived. */
+  /**
+  The cage this started from, retired on commit even if not one of its cells survived.
+  */
   originCageId: number
 }
 
@@ -32,7 +38,9 @@ export function startDraft(grid: KenKenGrid, cell: number): CageDraft {
   }
 }
 
-/** Why a cell cannot be clicked while drafting. `undefined` means it can. */
+/**
+Why a cell cannot be clicked while drafting. `undefined` means it can.
+*/
 export type DraftIssue = 'not_adjacent' | 'would_split' | 'last_cell'
 
 /**
@@ -73,7 +81,9 @@ export function describeDraftIssue(issue: DraftIssue): string {
   }
 }
 
-/** The new cell set, or `undefined` when the click is one `draftIssue` rejects. */
+/**
+The new cell set, or `undefined` when the click is one `draftIssue` rejects.
+*/
 export function toggleDraftCell(
   n: number,
   cells: ReadonlySet<number>,
@@ -183,7 +193,9 @@ function retire(unreviewedCages: Array<number>, ...cageIds: Array<number>): Arra
   return unreviewedCages.filter((id) => !cageIds.includes(id))
 }
 
-/** Setting a clue is the user reviewing that cage, so it stops being flagged. */
+/**
+Setting a clue is the user reviewing that cage, so it stops being flagged.
+*/
 export function setCageClue(puzzle: KenKenPuzzle, cageId: number, cage: Cage): KenKenPuzzle {
   const grid = cloneGrid(puzzle.grid)
   grid.cages[cageId] = { ...cage }

@@ -18,7 +18,9 @@ import {
  */
 const cellRefSchema = z.object({ row: z.int(), col: z.int() })
 
-/** 0 for an empty cell, otherwise the printed value 1..n. */
+/**
+0 for an empty cell, otherwise the printed value 1..n.
+*/
 const cellRowSchema = z.array(z.int())
 
 export const sudokuRawSchema = z.object({

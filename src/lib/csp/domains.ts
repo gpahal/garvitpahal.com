@@ -4,7 +4,9 @@
  */
 export type Domains = Uint32Array
 
-/** A union rather than a boolean, so `contradiction` reads explicitly at every call site. */
+/**
+A union rather than a boolean, so `contradiction` reads explicitly at every call site.
+*/
 export type PropagationResult = 'changed' | 'stable' | 'contradiction'
 
 /**

@@ -7,7 +7,9 @@ import { solveKenKen } from '@/puzzles/ken-ken/solve'
 // eslint-disable-next-line unicorn/consistent-boolean-name
 export const prerender = false
 
-/** Only decides whether a read looks trustworthy, so it is tighter than a user-initiated solve. */
+/**
+Only decides whether a read looks trustworthy, so it is tighter than a user-initiated solve.
+*/
 const VERIFY_TIMEOUT_MS = 1000
 
 export const POST = createExtractHandler<KenKenRaw, KenKenPuzzleWire>({

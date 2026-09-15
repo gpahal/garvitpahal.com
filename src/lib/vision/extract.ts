@@ -5,7 +5,9 @@ import type { VisionModel } from '@/lib/vision/model'
 import { getOpenAiApiKey } from '@/lib/x/env'
 import { elapsedMs, logErrorEvent, logEvent } from '@/lib/x/log'
 
-/** Caps reasoning *plus* the response: a budget sized for the reply alone returns `incomplete`. */
+/**
+Caps reasoning *plus* the response: a budget sized for the reply alone returns `incomplete`.
+*/
 const MAX_TOKENS = 32_000
 
 /**
@@ -15,7 +17,9 @@ const MAX_TOKENS = 32_000
  */
 const REQUEST_TIMEOUT_MS = 120_000
 
-/** The SDK retries 408/409/429/5xx. One retry is worth the added latency; the default two is not. */
+/**
+The SDK retries 408/409/429/5xx. One retry is worth the added latency; the default two is not.
+*/
 const MAX_RETRIES = 1
 
 /**
@@ -24,23 +28,33 @@ const MAX_RETRIES = 1
  */
 const IMAGE_DETAIL = 'high'
 
-/** Names the schema for the provider's logs; not shown to the model. */
+/**
+Names the schema for the provider's logs; not shown to the model.
+*/
 const SCHEMA_NAME = 'puzzle_extraction'
 
 export type ExtractStructuredOptions<T> = {
   image: {
     mediaType: string
-    /** Base64, without a data-URL prefix. */
+    /**
+    Base64, without a data-URL prefix.
+    */
     data: string
   }
-  /** JSON Schema handed to the model, constraining what it may produce. */
+  /**
+  JSON Schema handed to the model, constraining what it may produce.
+  */
   schema: Record<string, unknown>
-  /** Zod schema the reply is parsed with. The model is constrained, not trusted. */
+  /**
+  Zod schema the reply is parsed with. The model is constrained, not trusted.
+  */
   responseSchema: z.ZodType<T>
   prompt: string
   model: VisionModel
   maxTokens?: number
-  /** Ties every log line for this call back to the browser request that caused it. */
+  /**
+  Ties every log line for this call back to the browser request that caused it.
+  */
   requestId: string
 }
 
@@ -246,7 +260,9 @@ function hasRefusal(response: { output: Array<unknown> }): boolean {
   return false
 }
 
-/** The model is constrained by the schema, not trusted to have obeyed it. */
+/**
+The model is constrained by the schema, not trusted to have obeyed it.
+*/
 function parseResponse<T>(
   schema: z.ZodType<T>,
   text: string,

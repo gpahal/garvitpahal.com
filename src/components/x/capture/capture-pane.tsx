@@ -13,12 +13,16 @@ function unsubscribe(): void {
   // no-op
 }
 
-/** Camera support never changes at runtime, so there is nothing to subscribe to. */
+/**
+Camera support never changes at runtime, so there is nothing to subscribe to.
+*/
 function subscribeToNothing(): () => void {
   return unsubscribe
 }
 
-/** Server snapshot: `navigator` does not exist there, so the camera button is not rendered. */
+/**
+Server snapshot: `navigator` does not exist there, so the camera button is not rendered.
+*/
 function isCameraSupportedOnServer(): boolean {
   return false
 }

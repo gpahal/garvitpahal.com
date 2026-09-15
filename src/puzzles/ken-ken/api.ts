@@ -4,7 +4,9 @@ import type { Cage, KenKenPuzzle } from './model'
 
 export const KEN_KEN_EXTRACT_PATH = '/api/x/puzzle-solvers/ken-ken'
 
-/** Upload ceiling, checked before the base64 is decoded. */
+/**
+Upload ceiling, checked before the base64 is decoded.
+*/
 export const KEN_KEN_MAX_IMAGE_BYTES = 6 * 1024 * 1024
 
 export const KEN_KEN_MAX_IMAGE_EDGE = 1600

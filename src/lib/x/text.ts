@@ -16,7 +16,9 @@ export function pluralize(count: number, singular: string, plural = `${singular}
   return `${String(count)} ${count === 1 ? singular : plural}`
 }
 
-/** First character upper-cased, for a fragment written lowercase so it can also be read mid-sentence. */
+/**
+First character upper-cased, for a fragment written lowercase so it can also be read mid-sentence.
+*/
 export function capitalize(s: string): string {
   return s.length === 0 ? s : `${s[0]!.toUpperCase()}${s.slice(1)}`
 }

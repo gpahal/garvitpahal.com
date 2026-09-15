@@ -1,13 +1,17 @@
 import { indexOf, type CellRef } from '@/lib/grid/geometry'
 
-/** Sizes we accept. Anything else is a misread rather than an exotic puzzle. */
+/**
+Sizes we accept. Anything else is a misread rather than an exotic puzzle.
+*/
 export const SUDOKU_SIZES = [4, 6, 8, 9, 12, 16] as const
 
 export type SudokuSize = (typeof SUDOKU_SIZES)[number]
 
 export const MAX_SUDOKU_SIZE = 16
 
-/** Empty cell marker in both the wire format and the model. */
+/**
+Empty cell marker in both the wire format and the model.
+*/
 export const EMPTY = 0
 
 /**
@@ -19,14 +23,20 @@ export type SudokuGrid = {
   n: number
   boxWidth: number
   boxHeight: number
-  /** Length `n * n`, row-major. `EMPTY` or 1..n. */
+  /**
+  Length `n * n`, row-major. `EMPTY` or 1..n.
+  */
   values: Uint8Array
-  /** Length `n * n`, row-major. Region id in 0..n-1. */
+  /**
+  Length `n * n`, row-major. Region id in 0..n-1.
+  */
   regions: Uint8Array
 }
 
 export type SudokuSolution = {
-  /** Length `n * n`, row-major, every entry 1..n. */
+  /**
+  Length `n * n`, row-major, every entry 1..n.
+  */
   values: Uint8Array
 }
 
@@ -51,7 +61,9 @@ export function isValidSize(n: number): n is SudokuSize {
   return (SUDOKU_SIZES as ReadonlyArray<number>).includes(n)
 }
 
-/** Box geometry is only coherent when the boxes tile the grid exactly. */
+/**
+Box geometry is only coherent when the boxes tile the grid exactly.
+*/
 export function isValidBoxGeometry(n: number, boxWidth: number, boxHeight: number): boolean {
   return (
     boxWidth > 0 &&
@@ -62,7 +74,9 @@ export function isValidBoxGeometry(n: number, boxWidth: number, boxHeight: numbe
   )
 }
 
-/** Region map for regular (rectangular-box) sudoku. */
+/**
+Region map for regular (rectangular-box) sudoku.
+*/
 export function buildBoxRegions(n: number, boxWidth: number, boxHeight: number): Uint8Array {
   const regions = new Uint8Array(n * n)
   const boxesPerRow = n / boxWidth
@@ -75,7 +89,9 @@ export function buildBoxRegions(n: number, boxWidth: number, boxHeight: number):
   return regions
 }
 
-/** Default box geometry for a size, used when the model does not report one. */
+/**
+Default box geometry for a size, used when the model does not report one.
+*/
 export function defaultBoxGeometry(n: number): { boxWidth: number; boxHeight: number } {
   switch (n) {
     case 4: {
@@ -141,7 +157,9 @@ export function cloneGrid(grid: SudokuGrid): SudokuGrid {
   }
 }
 
-/** Values render as their number; `EMPTY` renders as nothing. */
+/**
+Values render as their number; `EMPTY` renders as nothing.
+*/
 export function formatValue(value: number): string {
   return value === EMPTY ? '' : String(value)
 }
@@ -158,14 +176,18 @@ export function parseKeyboardValue(key: string, n: number): number {
   return value >= 1 && value <= n ? value : EMPTY
 }
 
-/** Clamps a value from an untrusted source to `EMPTY` or 1..n. */
+/**
+Clamps a value from an untrusted source to `EMPTY` or 1..n.
+*/
 export function normalizeValue(value: unknown, n: number): number {
   return Number.isSafeInteger(value) && (value as number) >= 1 && (value as number) <= n
     ? (value as number)
     : EMPTY
 }
 
-/** Cells that conflict with another given in the same row, column, or region. */
+/**
+Cells that conflict with another given in the same row, column, or region.
+*/
 export function findConflicts(grid: SudokuGrid): Array<number> {
   const conflicts = new Set<number>()
   const { n } = grid

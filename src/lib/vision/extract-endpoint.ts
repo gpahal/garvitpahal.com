@@ -12,7 +12,9 @@ import { elapsedMs, getRequestId, logEvent } from '@/lib/x/log'
 import { extractErrorResponse, jsonResponse } from '@/lib/x/response'
 import type { ExtractErrorCode } from '@/puzzles/types'
 
-/** Size is checked separately below: it is the one failure with its own status code. */
+/**
+Size is checked separately below: it is the one failure with its own status code.
+*/
 const extractRequestSchema = z.strictObject({
   mediaType: z.enum(['image/jpeg', 'image/png', 'image/webp', 'image/gif']),
   data: z.string().min(1),
@@ -22,7 +24,9 @@ const extractRequestSchema = z.strictObject({
 export type Interpretation<TResult> =
   | {
       ok: true
-      /** The payload returned to the browser. */
+      /**
+      The payload returned to the browser.
+      */
       result: TResult
       /**
        * `suspect` escalates to the next model. How a puzzle decides its own read looks wrong is its
@@ -34,13 +38,19 @@ export type Interpretation<TResult> =
   | { ok: false; message: string }
 
 export type ExtractHandlerConfig<TRaw, TResult> = {
-  /** Prefixes every log event: `<puzzleId>.request`, `.escalated`, `.read`, `.done`. */
+  /**
+  Prefixes every log event: `<puzzleId>.request`, `.escalated`, `.read`, `.done`.
+  */
   puzzleId: string
   maxImageBytes: number
-  /** JSON Schema handed to the model. */
+  /**
+  JSON Schema handed to the model.
+  */
   schema: Record<string, unknown>
   prompt: string
-  /** The model is constrained by `schema`, not trusted: its reply is parsed with this. */
+  /**
+  The model is constrained by `schema`, not trusted: its reply is parsed with this.
+  */
   responseSchema: z.ZodType<TRaw>
   interpret: (raw: TRaw) => Interpretation<TResult>
 }
@@ -54,7 +64,9 @@ type ReadResult<TResult> =
     }
   | { kind: 'error'; outcome: string; code: ExtractErrorCode; status: number; message: string }
 
-/** Bad model output rather than a bad request: a stronger model gets another go at all of these. */
+/**
+Bad model output rather than a bad request: a stronger model gets another go at all of these.
+*/
 const RETRYABLE_OUTCOMES = new Set([
   'extraction_truncated',
   'extraction_empty',
@@ -159,7 +171,9 @@ export function createExtractHandler<TRaw, TResult>(
     const requestId = getRequestId(context.request)
     const startedAt = Date.now()
 
-    /** Every exit goes through here: `outcome` says which branch ended it, the status cannot. */
+    /**
+    Every exit goes through here: `outcome` says which branch ended it, the status cannot.
+    */
     function done(outcome: string, response: Response, fields?: Record<string, unknown>): Response {
       logEvent(`${puzzleId}.done`, {
         requestId,
@@ -171,7 +185,9 @@ export function createExtractHandler<TRaw, TResult>(
       return response
     }
 
-    /** The one refusal with its own status code, reached from both the header and the payload. */
+    /**
+    The one refusal with its own status code, reached from both the header and the payload.
+    */
     function tooLarge(bytes: number): Response {
       return done(
         'image_too_large',

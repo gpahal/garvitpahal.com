@@ -2,10 +2,14 @@ import { blobToBase64 } from '@/lib/capture/base64'
 import type { VisionModels } from '@/lib/vision/model'
 import type { ExtractResponse } from '@/puzzles/types'
 
-/** What every extraction endpoint accepts. `extractRequestSchema` is the server's own copy. */
+/**
+What every extraction endpoint accepts. `extractRequestSchema` is the server's own copy.
+*/
 export type ExtractRequest = {
   mediaType: string
-  /** Base64, without a data-URL prefix. */
+  /**
+  Base64, without a data-URL prefix.
+  */
   data: string
   models: VisionModels
 }

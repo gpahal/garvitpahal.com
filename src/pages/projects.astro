@@ -65,20 +65,18 @@ const projects = [
   </header>
 
   <ul class="unstyled space-y-1.5">
-    {
-      projects.map((project) => {
-        return (
-          <li class="unstyled">
-            <a
-              href={project.href}
-              class="unstyled group -mx-2 block rounded-md px-2 py-1 hocus:bg-gray-3"
-            >
-              <H3 class="my-0! font-medium!">{project.name}</H3>
-              <p class="mb-0! mt-[-0.05rem]! text-base text-gray-11">{project.description}</p>
-            </a>
-          </li>
-        )
-      })
-    }
+    {projects.map((project) => {
+      return (
+        <li class="unstyled">
+          <a
+            href={project.href}
+            class="unstyled group -mx-2 block rounded-md px-2 py-1 hocus:bg-gray-3"
+          >
+            <H3 class="my-0! font-medium!">{project.name}</H3>
+            <p class="mb-0! mt-[-0.05rem]! text-base text-gray-11">{project.description}</p>
+          </a>
+        </li>
+      )
+    })}
   </ul>
 </Layout>

@@ -22,7 +22,9 @@ import {
 const PAD_BUTTON =
   'unstyled border-gray-6 hocus-visible:bg-gray-4 focus-visible:ring-anchor inline-flex h-9 items-center justify-center rounded-md border text-sm font-medium focus-visible:ring-2 focus-visible:outline-none'
 
-/** Values 10-16 render as two digits, so larger grids need smaller type to avoid overflow. */
+/**
+Values 10-16 render as two digits, so larger grids need smaller type to avoid overflow.
+*/
 export function cellTextClass(n: number): string {
   return n > 9 ? 'text-[clamp(0.5rem,2.2vw,0.8rem)]' : 'text-[clamp(0.7rem,3.5vw,1.15rem)]'
 }

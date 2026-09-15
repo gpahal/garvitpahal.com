@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 
-/** Tenths, so the readout visibly moves. Whole seconds look frozen on a fast extraction. */
+/**
+Tenths, so the readout visibly moves. Whole seconds look frozen on a fast extraction.
+*/
 const TIMER_TICK_MS = 100
 
 /**

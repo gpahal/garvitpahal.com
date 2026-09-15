@@ -7,24 +7,34 @@ import { z } from 'zod'
  */
 export const VISION_MODEL_IDS = ['gpt-5.6-sol', 'gpt-5.6-terra', 'gpt-5.6-luna'] as const
 
-/** How much the model may reason before answering. `none` disables it entirely. */
+/**
+How much the model may reason before answering. `none` disables it entirely.
+*/
 export const VISION_EFFORTS = ['none', 'low', 'medium', 'high', 'xhigh', 'max'] as const
 
-/** Each retry is another model call, so the chain is bounded rather than open-ended. */
+/**
+Each retry is another model call, so the chain is bounded rather than open-ended.
+*/
 const MAX_FALLBACKS = 3
 
 export const visionModelSchema = z.strictObject({
   id: z.enum(VISION_MODEL_IDS),
-  /** Omitted means the provider's default for that model. */
+  /**
+  Omitted means the provider's default for that model.
+  */
   effort: z.enum(VISION_EFFORTS).optional(),
 })
 
 export type VisionModel = z.infer<typeof visionModelSchema>
 
-/** Models arrive over the wire, so the allowlist is what stops a request naming an arbitrary one. */
+/**
+Models arrive over the wire, so the allowlist is what stops a request naming an arbitrary one.
+*/
 export const visionModelsSchema = z.strictObject({
   primary: visionModelSchema,
-  /** Tried in order, each only if the previous read looked wrong. Empty means no retry. */
+  /**
+  Tried in order, each only if the previous read looked wrong. Empty means no retry.
+  */
   fallbacks: z.array(visionModelSchema).max(MAX_FALLBACKS),
 })
 

@@ -15,7 +15,9 @@ export function jsonResponse<TBody>(body: TBody, status: number): Response {
   })
 }
 
-/** Failure arm of an extraction response. Shape matches every puzzle's `*ExtractResponse`. */
+/**
+Failure arm of an extraction response. Shape matches every puzzle's `*ExtractResponse`.
+*/
 export function extractErrorResponse(error: ExtractError, status: number): Response {
   return jsonResponse({ ok: false, error }, status)
 }

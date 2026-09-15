@@ -40,7 +40,9 @@ export function FlipToggles({
   )
 }
 
-/** `aria-pressed`, because "the preview is mirrored" is otherwise a purely visual fact. */
+/**
+`aria-pressed`, because "the preview is mirrored" is otherwise a purely visual fact.
+*/
 function FlipToggle({
   isPressed,
   onClick,
