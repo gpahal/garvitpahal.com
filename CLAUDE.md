@@ -149,5 +149,7 @@ why without knowing what a cage or a cell is.
   Reach for `gray-*` first - `white` and `black` are for scrims and marks over video, which must not
   follow the theme.
 
-- **`imageService: 'custom'`** in `astro.config.ts` is deliberate. `'compile'` filters sharp out by
-  name and forces the workerd encoder, producing \~47% larger images.
+- **`imageService: 'compile'` needs `prerenderEnvironment: 'node'`.** The adapter filters the sharp
+  entrypoint out by name, and only the Node prerenderer falls back to real sharp; in workerd it uses
+  the workerd encoder, producing \~47% larger images. `'custom'` also works but ships sharp in the
+  worker, where `/_image` then 500s.

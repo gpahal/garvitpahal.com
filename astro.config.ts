@@ -47,11 +47,12 @@ function assertApiRoutesAreOnDemand(): AstroIntegration {
 export default defineConfig({
   site: 'https://garvitpahal.com',
   adapter: cloudflare({
-    // 'custom' is the only mode that passes `image.service` through untouched. 'compile' filters
-    // sharp out by name (see the adapter's `hasUserImageService`) and forces the workerd encoder,
-    // which produced ~47% larger files. Safe here because every image is on a prerendered route and
-    // `prerenderEnvironment: 'node'` means sharp runs in Node, never in workerd.
-    imageService: 'custom',
+    // 'compile' optimizes at build time and serves `/_image` through the passthrough endpoint at
+    // runtime, so sharp never ships in the worker. `hasUserImageService` still filters the sharp
+    // entrypoint by name, but with `prerenderEnvironment: 'node'` the adapter falls back to real
+    // sharp in Node (adapter >= 14.2) - output is byte-identical to 'custom'. Do not drop the Node
+    // prerender: in workerd the fallback is the workerd encoder, ~47% larger files.
+    imageService: 'compile',
     prerenderEnvironment: 'node',
   }),
   image: {
