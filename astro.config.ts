@@ -60,12 +60,7 @@ export default defineConfig({
       entrypoint: 'astro/assets/services/sharp',
     },
   },
-  // We never use `Astro.session`, so opt out of the adapter's default KV wiring.
-  session: {
-    driver: {
-      entrypoint: 'unstorage/drivers/null',
-    },
-  },
+  session: false,
   env: {
     schema: {
       // Optional so builds succeed without secrets present - `astro:env/server` throws at module
