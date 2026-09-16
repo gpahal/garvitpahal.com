@@ -58,6 +58,13 @@ export type KenKenPuzzle = {
   Cage ids the model flagged, or the parser found inconsistent. Cleared as the user edits them.
   */
   unreviewedCages: Array<number>
+  /**
+   * The subset of `unreviewedCages` the parser found inconsistent with itself - a count that
+   * disagrees with the layout, a clue nailed to the wrong cell. Kept apart from the model's own
+   * hedging because only these veto trusting a read: a model that flags a cage it got right is
+   * being careful, but a layout that contradicts its own clue list was misread somewhere.
+   */
+  contradictions: Array<number>
 }
 
 export function isValidSize(n: number): n is KenKenSize {

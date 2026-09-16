@@ -1,5 +1,7 @@
-import { cellNames } from '@/lib/grid/geometry'
+import { cellName, cellNames, orthogonalNeighbours, parseCellName } from '@/lib/grid/geometry'
+import { connectedComponents } from '@/lib/grid/regions'
 
+import type { KenKenHints } from './hints'
 import { CAGE_OPS, KEN_KEN_SIZES, MAX_KEN_KEN_SIZE } from './model'
 
 /**
@@ -84,15 +86,110 @@ export const KEN_KEN_EXTRACTION_SCHEMA = {
 } as const
 
 /**
+ * The cage layout the measured heavy edges imply, as groups of cells. Cells whose borders could
+ * not be measured are left out, and any group touching one of them is reported as possibly
+ * extending into it: the group as listed is right, but it may not be the whole cage.
+ */
+function describeLayout(n: number, hints: KenKenHints): Array<string> {
+  if (hints.heavyEdges === undefined) {
+    return []
+  }
+  const unread = new Set<number>()
+  const unreadNames = hints.unreadCells ?? []
+  for (const name of unreadNames) {
+    const cell = parseCellName(n, name)
+    if (cell !== undefined) {
+      unread.add(cell)
+    }
+  }
+  const heavy = new Set<string>()
+  for (const edge of hints.heavyEdges) {
+    const a = parseCellName(n, edge.a)
+    const b = parseCellName(n, edge.b)
+    if (a !== undefined && b !== undefined) {
+      heavy.add(`${String(Math.min(a, b))}-${String(Math.max(a, b))}`)
+    }
+  }
+  const readable: Array<number> = []
+  for (let cell = 0; cell < n * n; cell++) {
+    if (!unread.has(cell)) {
+      readable.push(cell)
+    }
+  }
+  const groups = connectedComponents(
+    n,
+    readable,
+    (a, b) => !heavy.has(`${String(Math.min(a, b))}-${String(Math.max(a, b))}`),
+  )
+
+  const lines: Array<string> = []
+  const complete: Array<string> = []
+  for (const group of groups) {
+    const names = group.map((cell) => cellName(n, cell)).join(', ')
+    const touching = new Set<number>()
+    for (const cell of group) {
+      for (const neighbour of orthogonalNeighbours(n, cell)) {
+        if (unread.has(neighbour)) {
+          touching.add(neighbour)
+        }
+      }
+    }
+    if (touching.size === 0) {
+      complete.push(`{${names}}`)
+    } else {
+      lines.push(
+        `Cells ${names} are in one cage, which may also include ${[...touching]
+          .map((cell) => cellName(n, cell))
+          .join(', ')}.`,
+      )
+    }
+  }
+  if (complete.length > 0) {
+    lines.unshift(`The heavy borders enclose these cages: ${complete.join(' ')}.`)
+  }
+  if (unread.size > 0) {
+    lines.push(
+      `The borders of ${[...unread].map((cell) => cellName(n, cell)).join(', ')} could not be ` +
+        'measured, so trace that part of the grid from the picture.',
+    )
+  }
+  return lines
+}
+
+/**
+ * What the browser measured, phrased as observations to check rather than facts to assume: a
+ * wrong hint is worse than none, so the gate on the browser side is strict and the wording here
+ * leaves the model free to disagree with the picture in front of it.
+ */
+function describeHints(hints: KenKenHints): string {
+  const lines: Array<string> = []
+  if (hints.n !== undefined) {
+    lines.push(
+      `The grid is ${String(hints.n)}x${String(hints.n)}.`,
+      ...describeLayout(hints.n, hints),
+    )
+  }
+  if (lines.length === 0) {
+    return ''
+  }
+  return (
+    'Measured from the picture before it was sent, so check each against the image and trust ' +
+    `the image if they disagree:\n\n${lines.map((line) => `- ${line}`).join('\n')}\n\n`
+  )
+}
+
+/**
  * Targets the failure modes documented for reading irregular regions out of a picture: inventing
  * cage labels and then losing track of them, assuming cages are rectangles, and dropping or
- * double-claiming cells at a border.
+ * double-claiming cells at a border. Rules 6 and 7 name the two misreads the bench saw most: a
+ * vertical run cut one cell short, and a single-cell cage swallowed by the cell below it.
  *
  * The layout is asked for as cell names rather than as invented labels because the clue cell is
  * something the model has to find anyway in order to read the clue - so the label is an observation
  * about the image rather than bookkeeping it has to maintain, and it cannot run out of them.
  */
-export const KEN_KEN_EXTRACTION_PROMPT = `Read the Ken Ken (Calcudoku, Mathdoku) grid in this image and return it as structured data.
+export function kenKenExtractionPrompt(hints: KenKenHints): string {
+  return `Read the Ken Ken (Calcudoku, Mathdoku) grid in this image and return it as structured data.
 
 A Ken Ken grid is divided into cages: groups of cells joined edge to edge and enclosed by a heavy
 border. Exactly one cell in each cage - always its top-left cell - carries the clue: a target number
@@ -102,7 +199,7 @@ Cells are named like spreadsheet cells: the column letter counting from the left
 number counting from 1 at the top. A1 is the top-left cell of the grid, B1 is the cell to its right,
 A2 is the cell below it.
 
-Rules, in order of importance:
+${describeHints(hints)}Rules, in order of importance:
 
 1. Determine the grid size n by counting cells along one edge. It is 4, 5, 6, 7 or 8.
 2. Fill "cellCages" with the cage layout. Work along row 1 from the left, then row 2, and so on. For
@@ -120,15 +217,21 @@ Rules, in order of importance:
    "×20" and "20×" mean exactly the same cage. Put the bare number in "target" and never include the
    operator in it.
 6. A cell showing a bare number and no operator at all is a cage of one cell: op "=", target that
-   number, and it names itself in "cellCages". That number is the value of that single cell, so it
-   is always between 1 and n - if you have read something larger than n, you have either misread the
-   digit or missed an operator printed next to it, so look at that cell again. These single-cell
-   cages are the puzzle's given values; a grid may have several, or none at all.
-7. Subtraction and division are only ever printed on a cage of exactly two cells. If you have written
+   number, and it names itself in "cellCages". Such a cell is enclosed by heavy lines on all four
+   sides - if the line below it is thin, it is not a single-cell cage and the number is a clue for
+   the cells beneath. That number is the value of that single cell, so it is always between 1 and
+   n - if you have read something larger than n, you have either misread the digit or missed an
+   operator printed next to it, so look at that cell again. These single-cell cages are the puzzle's
+   given values; a grid may have several, or none at all.
+7. When a cage runs down a column, keep going past each cell until the line below the last cell you
+   have counted is a heavy one; a thin line means the cage continues. Stopping one cell short is the
+   most common mistake, so check the line at the bottom of every vertical run before moving on.
+8. Subtraction and division are only ever printed on a cage of exactly two cells. If you have written
    "-" or "/" on a cage with any other number of cells, you have mis-traced its border - go back and
    read that part of the picture again.
-8. List the clue cell of any cage you are less than fully confident about in "uncertain" - an unclear
+9. List the clue cell of any cage you are less than fully confident about in "uncertain" - an unclear
    border, a digit you had to guess, an operator you could not make out. It is much better to flag a
    cage than to guess silently. Return an empty array only if you are confident about every cage.
 
 Do not solve the puzzle. Report only what is printed.`
+}

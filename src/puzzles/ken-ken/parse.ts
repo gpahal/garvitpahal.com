@@ -87,11 +87,12 @@ function groupCells(cageOf: Uint8Array, cageCount: number): Array<Array<number>>
 /**
  * Validates model output into a puzzle.
  *
- * Structurally impossible readings are fatal, because a retry with a stronger model is the right
- * answer and it never reaches the user. Everything else - a cage that disagrees with its own cell
- * count, a clue nailed to the wrong cell, one name used for two separate regions - is kept as read
- * and flagged, because guessing which side of the disagreement is right is exactly how a
- * plausible-but-wrong puzzle gets past the review step.
+ * Structurally impossible readings are fatal, because another read is the right answer and this
+ * one never reaches the user. Everything else - a cage that disagrees with its own cell count, a
+ * clue nailed to the wrong cell, one name used for two separate regions - is kept as read and
+ * flagged as a contradiction, because guessing which side of the disagreement is right is exactly
+ * how a plausible-but-wrong puzzle gets past the review step. The model's own `uncertain` list is
+ * flagged for review too, but separately: it is a hedge, not evidence of a misread.
  */
 export function parseKenKen(raw: KenKenRaw): ParseResult {
   const { n } = raw
@@ -131,9 +132,13 @@ export function parseKenKen(raw: KenKenRaw): ParseResult {
   const cells = groupCells(cageOf, anchors.length)
   const cages: Array<Cage> = []
   const unreviewedCages: Array<number> = []
+  const contradictions: Array<number> = []
   const flagged = new Set<number>()
 
-  const flag = (cageId: number): void => {
+  const flag = (cageId: number, isContradiction: boolean): void => {
+    if (isContradiction && !contradictions.includes(cageId)) {
+      contradictions.push(cageId)
+    }
     if (flagged.has(cageId)) {
       return
     }
@@ -147,30 +152,30 @@ export function parseKenKen(raw: KenKenRaw): ParseResult {
     cages.push({ op: clue.op, target: clue.target })
 
     if (duplicated.has(anchor)) {
-      flag(cageId)
+      flag(cageId, true)
     }
     // The clue is printed in the cage's top-left cell, so the name it was given must be that cell.
     // Cells are row-major, so that is the smallest index in the group.
     if (group[0] !== anchor) {
-      flag(cageId)
+      flag(cageId, true)
     }
     // A count the model derived from its own layout disagreeing with the layout means one of the
     // two was mis-transcribed, and there is no way to tell which.
     if (clue.cellCount !== group.length) {
-      flag(cageId)
+      flag(cageId, true)
     }
     // One name used for two regions that do not touch: the layout merged two different cages.
     if (connectedComponents(n, group).length > 1) {
-      flag(cageId)
+      flag(cageId, true)
     }
     if (!isCageArityValid(clue.op, group.length)) {
-      flag(cageId)
+      flag(cageId, true)
     }
     // A bare number is that cell's own value, so it has to be a value this grid actually holds -
     // reading `8` off a 6x6 means the digit was misread. Every other clue is a positive total, so
     // zero or below is always a misread rather than an unusual puzzle.
     if (clue.op === '=' ? clue.target < 1 || clue.target > n : clue.target < 1) {
-      flag(cageId)
+      flag(cageId, true)
     }
   }
 
@@ -178,10 +183,10 @@ export function parseKenKen(raw: KenKenRaw): ParseResult {
     const anchor = parseCellName(n, name)
     const cageId = anchor === undefined ? undefined : anchors.indexOf(anchor)
     if (cageId !== undefined && cageId >= 0) {
-      flag(cageId)
+      flag(cageId, false)
     }
   }
 
   const grid: KenKenGrid = { n, cageOf, cages }
-  return { ok: true, puzzle: { grid, unreviewedCages } }
+  return { ok: true, puzzle: { grid, unreviewedCages, contradictions } }
 }

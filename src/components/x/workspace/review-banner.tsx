@@ -40,6 +40,8 @@ function describeWarning(result: SolveResult<unknown> | undefined): string | und
 export function ReviewBanner({
   unreviewedCount,
   isBlocked,
+  isVerifying,
+  elapsedMs,
   result,
 }: {
   unreviewedCount: number
@@ -48,6 +50,14 @@ export function ReviewBanner({
    * is puzzle-specific and is already shown, once, next to the button it is about.
    */
   isBlocked: boolean
+  /**
+  Whether a better read may still replace what is on screen.
+  */
+  isVerifying: boolean
+  /**
+  Since the picture was taken, so the wait shown is the whole wait.
+  */
+  elapsedMs: number
   result: SolveResult<unknown> | undefined
 }): ReactNode {
   const warning = describeWarning(result)
@@ -55,7 +65,8 @@ export function ReviewBanner({
   // instead. Once a solve has run, only a warning is worth a line.
   //
   // The nudge is dropped while Solve is blocked: "then solve" above a button that refuses to would
-  // be the screen contradicting itself, and the blocker below already says what to do first. A
+  // be the screen contradicting itself, and the blocker below already says what to do first. It is
+  // dropped while a read is still being checked too, since what is on screen may yet change. A
   // count of unreviewed parts still stands - that is a different job from the one blocking Solve.
   const message =
     warning ??
@@ -63,22 +74,36 @@ export function ReviewBanner({
       ? undefined
       : unreviewedCount > 0
         ? `Check ${pluralize(unreviewedCount, 'highlighted part')} before solving`
-        : isBlocked
+        : isBlocked || isVerifying
           ? undefined
           : 'Check this matches your puzzle, then solve')
 
-  if (!message) {
+  if (!message && !isVerifying) {
     return undefined
   }
 
   return (
-    <p
-      role={warning ? 'alert' : undefined}
-      className={`unstyled my-0! rounded-md px-3 py-2 text-sm ${
-        warning ? 'bg-gray-4 text-gray-12' : 'bg-gray-3 text-gray-11'
-      }`}
-    >
-      {message}
-    </p>
+    <div className="flex flex-col gap-2">
+      {isVerifying ? (
+        <p className="unstyled my-0! rounded-md bg-gray-3 px-3 py-2 text-sm text-gray-11">
+          {/* Only the sentence is a live region: announcing the timer would never stop. */}
+          <span role="status">Checking this read, it may still change...</span>{' '}
+          <span aria-hidden="true" className="tabular-nums">
+            {(elapsedMs / 1000).toFixed(1)}s
+          </span>
+        </p>
+      ) : undefined}
+      {message ? (
+        <p
+          // A replacement read swaps the message, and a status region announces the new one.
+          role={warning ? 'alert' : 'status'}
+          className={`unstyled my-0! rounded-md px-3 py-2 text-sm ${
+            warning ? 'bg-gray-4 text-gray-12' : 'bg-gray-3 text-gray-11'
+          }`}
+        >
+          {message}
+        </p>
+      ) : undefined}
+    </div>
   )
 }

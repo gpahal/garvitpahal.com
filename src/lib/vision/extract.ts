@@ -1,4 +1,4 @@
-import OpenAI, { APIError } from 'openai'
+import OpenAI, { APIError, APIUserAbortError } from 'openai'
 import { z } from 'zod'
 
 import type { VisionModel } from '@/lib/vision/model'
@@ -11,16 +11,17 @@ Caps reasoning *plus* the response: a budget sized for the reply alone returns `
 const MAX_TOKENS = 32_000
 
 /**
- * Fail rather than hang. Worst-case wall clock is this times `MAX_RETRIES + 1`. The slowest single
- * read measured across the current chain was ~75s, on the hardest grid at the highest effort, so
- * this leaves headroom without letting a stalled call sit open for minutes.
+ * A safety net only. The endpoint's own deadline is what bounds a read, and it aborts this call
+ * through `signal` well before this fires; this exists so a call the endpoint lost track of cannot
+ * sit open forever.
  */
-const REQUEST_TIMEOUT_MS = 120_000
+const REQUEST_TIMEOUT_MS = 180_000
 
 /**
-The SDK retries 408/409/429/5xx. One retry is worth the added latency; the default two is not.
-*/
-const MAX_RETRIES = 1
+ * No SDK retries: the hedge is the retry. A retried call would also silently take a second slot of
+ * the Worker's outbound connection cap while the original was still counted against it.
+ */
+const MAX_RETRIES = 0
 
 /**
  * Grid borders are thin and easily lost to resampling, and a mis-traced border is the failure this
@@ -56,10 +57,15 @@ export type ExtractStructuredOptions<T> = {
   Ties every log line for this call back to the browser request that caused it.
   */
   requestId: string
+  /**
+  Cancels the call. A hedge that lost the race is cut off here rather than left to finish.
+  */
+  signal?: AbortSignal
 }
 
 export class VisionExtractionError extends Error {
-  readonly reason: 'not_configured' | 'refusal' | 'truncated' | 'empty' | 'unparseable' | 'upstream'
+  readonly reason:
+    'not_configured' | 'refusal' | 'truncated' | 'empty' | 'unparseable' | 'upstream' | 'aborted'
 
   constructor(reason: VisionExtractionError['reason'], message: string) {
     super(message)
@@ -68,31 +74,45 @@ export class VisionExtractionError extends Error {
   }
 }
 
-export async function extractStructured<T>(options: ExtractStructuredOptions<T>): Promise<T> {
-  const { model, requestId } = options
+/**
+At most one entry: the key it was built for, so a rotated secret is picked up.
+*/
+const clients = new Map<string, OpenAI>()
 
+/**
+ * One client per isolate, keyed by the secret so a rotated key is picked up. Throws
+ * `not_configured` so the endpoint can answer 503 before it has committed to a stream.
+ */
+export function getVisionClient(): OpenAI {
   // A missing secret would otherwise surface as "could not read that image".
   let apiKey: string
   try {
     apiKey = getOpenAiApiKey()
   } catch {
-    logErrorEvent('vision.not_configured', { requestId })
     throw new VisionExtractionError(
       'not_configured',
       'The puzzle solver is not configured on this server',
     )
   }
+  let instance = clients.get(apiKey)
+  if (!instance) {
+    clients.clear()
+    // `process.env` is not available in workerd, so the key is passed explicitly.
+    instance = new OpenAI({
+      apiKey,
+      timeout: REQUEST_TIMEOUT_MS,
+      maxRetries: MAX_RETRIES,
+      logLevel: 'warn',
+      logger: console,
+    })
+    clients.set(apiKey, instance)
+  }
+  return instance
+}
 
-  // `process.env` is not available in workerd, so the key is passed explicitly.
-  const client = new OpenAI({
-    apiKey,
-    timeout: REQUEST_TIMEOUT_MS,
-    maxRetries: MAX_RETRIES,
-    // Without the SDK's own warnings, a retried request looks like one slow request.
-    logLevel: 'warn',
-    logger: console,
-  })
-
+export async function extractStructured<T>(options: ExtractStructuredOptions<T>): Promise<T> {
+  const { model, requestId, signal } = options
+  const openai = getVisionClient()
   const maxTokens = options.maxTokens ?? MAX_TOKENS
   const startedAt = Date.now()
 
@@ -100,43 +120,50 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
     requestId,
     model: model.id,
     effort: model.effort ?? null,
+    tier: model.tier ?? null,
     maxTokens,
-    timeoutMs: REQUEST_TIMEOUT_MS,
-    maxRetries: MAX_RETRIES,
     mediaType: options.image.mediaType,
     imageBytes: approximateDecodedBytes(options.image.data.length),
   })
 
   // Streaming, not `responses.create`: at this token budget a single non-streaming request can sit
   // open for minutes, and the event stream gives a time-to-first-token.
-  const stream = client.responses.stream({
-    model: model.id,
-    max_output_tokens: maxTokens,
-    ...(model.effort && { reasoning: { effort: model.effort } }),
-    text: {
-      format: {
-        type: 'json_schema',
-        name: SCHEMA_NAME,
-        // Rejects any reply that leaves the schema, rather than letting the parser find out later.
-        strict: true,
-        schema: options.schema,
+  const stream = openai.responses.stream(
+    {
+      model: model.id,
+      max_output_tokens: maxTokens,
+      ...(model.effort && { reasoning: { effort: model.effort } }),
+      ...(model.tier && { service_tier: model.tier }),
+      // Nothing here is worth keeping on the provider's side, and a read is never continued.
+      store: false,
+      text: {
+        format: {
+          type: 'json_schema',
+          name: SCHEMA_NAME,
+          // Rejects any reply that leaves the schema, rather than letting the parser find out later.
+          strict: true,
+          schema: options.schema,
+        },
+        // Only the JSON is wanted; there is no prose for this to shorten, but it says so.
+        verbosity: 'low',
       },
+      input: [
+        {
+          role: 'user',
+          content: [
+            // Image before text: the model reads the instructions against an image it has seen.
+            {
+              type: 'input_image',
+              image_url: `data:${options.image.mediaType};base64,${options.image.data}`,
+              detail: IMAGE_DETAIL,
+            },
+            { type: 'input_text', text: options.prompt },
+          ],
+        },
+      ],
     },
-    input: [
-      {
-        role: 'user',
-        content: [
-          // Image before text: the model reads the instructions against an image it has seen.
-          {
-            type: 'input_image',
-            image_url: `data:${options.image.mediaType};base64,${options.image.data}`,
-            detail: IMAGE_DETAIL,
-          },
-          { type: 'input_text', text: options.prompt },
-        ],
-      },
-    ],
-  })
+    { signal },
+  )
 
   let firstEventMs: number | undefined
   stream.on('event', () => {
@@ -147,6 +174,18 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
   try {
     response = await stream.finalResponse()
   } catch (error) {
+    // The endpoint cuts a hedge off once it has what it needs; that is the plan working, not a
+    // failure, so it is logged at info and reported as its own reason.
+    if (error instanceof APIUserAbortError || signal?.aborted) {
+      logEvent('vision.aborted', {
+        requestId,
+        model: model.id,
+        effort: model.effort ?? null,
+        ms: elapsedMs(startedAt),
+        firstEventMs: firstEventMs ?? null,
+      })
+      throw new VisionExtractionError('aborted', 'The read was cancelled')
+    }
     logErrorEvent('vision.upstream_failed', {
       requestId,
       model: model.id,
@@ -167,13 +206,17 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
   logEvent('vision.model_response', {
     requestId,
     model: model.id,
+    effort: model.effort ?? null,
     responseId: response.id,
     ms: elapsedMs(startedAt),
     firstEventMs: firstEventMs ?? null,
     status: response.status ?? null,
     incompleteReason: response.incomplete_details?.reason ?? null,
+    // What the provider actually served, which is not always what was asked for.
+    serviceTier: response.service_tier ?? null,
     maxTokens,
     inputTokens: usage?.input_tokens ?? null,
+    cachedTokens: usage?.input_tokens_details?.cached_tokens ?? null,
     outputTokens: usage?.output_tokens ?? null,
     reasoningTokens: usage?.output_tokens_details?.reasoning_tokens ?? null,
   })
@@ -237,6 +280,7 @@ export async function extractStructured<T>(options: ExtractStructuredOptions<T>)
   logEvent('vision.ok', {
     requestId,
     model: model.id,
+    effort: model.effort ?? null,
     ms: elapsedMs(startedAt),
     textChars: text.length,
   })

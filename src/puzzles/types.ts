@@ -1,3 +1,6 @@
+import type { Capture } from '@/lib/capture/rectify'
+import type { VisionModel } from '@/lib/vision/model'
+
 export type ExtractErrorCode =
   | 'invalid_request'
   | 'image_too_large'
@@ -11,8 +14,59 @@ export type ExtractError = {
   message: string
 }
 
-export type ExtractResponse<TPuzzle> =
-  { ok: true; puzzle: TPuzzle } | { ok: false; error: ExtractError }
+/**
+ * One line of the extraction stream. Shared by the endpoint that writes it and the client that
+ * reads it, so the compiler checks a single contract. `read` carries every read that parsed, in
+ * arrival order, with no verdict: the server does not solve, so the browser ranks and judges.
+ */
+export type ExtractEvent<TPuzzle> =
+  | { type: 'started' }
+  | {
+      type: 'read'
+      puzzle: TPuzzle
+      model: VisionModel
+      /**
+      Position in the puzzle's chain, hedges then fallbacks. Higher outranks lower.
+      */
+      rank: number
+      ms: number
+    }
+  | { type: 'error'; error: ExtractError }
+  | { type: 'done'; ms: number }
+
+/**
+How the stream ended. Reads were delivered along the way, so success carries nothing.
+*/
+export type ExtractOutcome = { ok: true } | { ok: false; error: ExtractError }
+
+export type ExtractReadMeta = {
+  model: VisionModel
+  rank: number
+}
+
+export type ExtractOptions<TPuzzle> = {
+  /**
+  Aborting cancels the request, and the server cuts off every model call behind it.
+  */
+  signal: AbortSignal
+  onRead: (puzzle: TPuzzle, meta: ExtractReadMeta) => void
+}
+
+/**
+ * The browser's verdict on one read. `trusted` is shown as final; `suspect` is shown while a
+ * better read is awaited; `misread` is proven wrong and only ever shown as a last resort.
+ */
+export type ReadConfidence = 'trusted' | 'suspect' | 'misread'
+
+export type ReadAssessment = {
+  confidence: ReadConfidence
+  /**
+   * Identity of what was read, for consensus: two `suspect` reads from different models with the
+   * same fingerprint are as good as a trusted one. Left out when the read must never be trusted
+   * that way, such as one whose parts contradict each other.
+   */
+  fingerprint?: string
+}
 
 /**
  * `unsolvable` and `multiple` are the oracle that makes extraction from a picture trustworthy without any
@@ -37,18 +91,20 @@ export type SolveOptions = {
  * module is safe to import from both the browser island and a server endpoint - and free of any
  * shape at all, so the next puzzle is not obliged to be a grid.
  *
- * `solve` is pure and isomorphic - it runs in the browser, so re-solving after a user edit costs
- * nothing. `extract` posts to that puzzle's own endpoint and returns its concrete response type.
+ * `prepare` turns the capture - the frame and where the grid is in it - into whatever the puzzle
+ * wants to send: the crop or the whole picture, encoded, plus any facts it measured. `extract`
+ * consumes exactly that, so `TPrepared` is the puzzle's own business and the workspace only
+ * passes it through. `assess` is the oracle: it runs
+ * in the browser, where the solver has a real clock and already runs for user-initiated solves.
+ * `solve` is pure and isomorphic, so re-solving after a user edit costs nothing.
  */
-export type PuzzleDefinition<TPuzzle, TSolution> = {
+export type PuzzleDefinition<TPuzzle, TSolution, TPrepared> = {
   id: string
   name: string
   blurb: string
-  /**
-  Longest edge, in px, that captured images are downscaled to before upload.
-  */
-  maxImageEdge: number
-  extract: (image: Blob) => Promise<ExtractResponse<TPuzzle>>
+  prepare: (capture: Capture) => Promise<TPrepared>
+  extract: (prepared: TPrepared, options: ExtractOptions<TPuzzle>) => Promise<ExtractOutcome>
+  assess: (puzzle: TPuzzle) => ReadAssessment
   solve: (puzzle: TPuzzle, options: SolveOptions) => SolveResult<TSolution>
   blank: () => TPuzzle
   /**

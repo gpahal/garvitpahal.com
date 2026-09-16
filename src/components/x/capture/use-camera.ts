@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { canvasToJpeg } from '@/lib/capture/downscale'
+import { videoToPixels } from '@/lib/capture/encode'
+import type { PixelImage } from '@/lib/capture/pixels'
 
 export type CameraErrorKind = 'denied' | 'not-found' | 'unavailable' | 'unknown'
 
@@ -57,7 +58,7 @@ export type UseCameraResult = {
   error: CameraError | undefined
   canSwitchCamera: boolean
   switchCamera: () => void
-  capture: () => Promise<Blob>
+  capture: () => PixelImage
 }
 
 /**
@@ -145,21 +146,14 @@ export function useCamera(): UseCameraResult {
     setFacingMode((current) => (current === 'environment' ? 'user' : 'environment'))
   }, [])
 
-  const capture = useCallback(async (): Promise<Blob> => {
+  // Straight to pixels: the frame is rectified next, so a JPEG here would be decoded again at once.
+  // Deliberately not ImageCapture.takePhoto(): better quality in theory, poor Safari support.
+  const capture = useCallback((): PixelImage => {
     const video = videoRef.current
     if (!video || video.videoWidth === 0) {
       throw new Error('The camera is not ready yet')
     }
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    const context = canvas.getContext('2d')
-    if (!context) {
-      throw new Error('Could not get a 2D canvas context')
-    }
-    context.drawImage(video, 0, 0, canvas.width, canvas.height)
-    // Deliberately not ImageCapture.takePhoto(): better quality in theory, poor Safari support.
-    return canvasToJpeg(canvas)
+    return videoToPixels(video)
   }, [])
 
   return { videoRef, status, error, canSwitchCamera, switchCamera, capture }

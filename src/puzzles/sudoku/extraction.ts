@@ -1,9 +1,13 @@
+import { cellName } from '@/lib/grid/geometry'
+
+import type { SudokuHints } from './hints'
 import { EMPTY, MAX_SUDOKU_SIZE, SUDOKU_SIZES } from './model'
 
 /**
  * Every legal cell value: `EMPTY` (0) plus 1..16. Expressed as an enum because the structured-output
  * subset has no `minimum`/`maximum`, and because an integer domain removes the blank-symbol drift
- * that a string encoding invites.
+ * that a string encoding invites - the bench tried string rows and the cheapest model could not
+ * keep them to `n` characters, while the integer rows cost no measurable wall clock.
  */
 const CELL_VALUES = Array.from({ length: MAX_SUDOKU_SIZE + 1 }, (_, value) => value + EMPTY)
 
@@ -64,26 +68,68 @@ export const SUDOKU_EXTRACTION_SCHEMA = {
 } as const
 
 /**
+ * What the browser measured, phrased as observations to check rather than facts to assume: a
+ * wrong hint is worse than none, so the gate on the browser side is strict and the wording here
+ * leaves the model free to disagree with the picture in front of it.
+ */
+function describeHints(hints: SudokuHints): string {
+  const lines: Array<string> = []
+  if (hints.n !== undefined) {
+    const boxes =
+      hints.boxWidth !== undefined && hints.boxHeight !== undefined
+        ? ` with boxes ${String(hints.boxWidth)} cells wide and ${String(hints.boxHeight)} cells tall`
+        : ''
+    lines.push(`The grid is ${String(hints.n)}x${String(hints.n)}${boxes}.`)
+  }
+  if (hints.n !== undefined && hints.empty !== undefined) {
+    const { n } = hints
+    const empty = new Set(hints.empty.map((cell) => cell.row * n + cell.col))
+    const filled: Array<string> = []
+    for (let cell = 0; cell < n * n; cell++) {
+      if (!empty.has(cell)) {
+        filled.push(cellName(n, cell))
+      }
+    }
+    lines.push(
+      filled.length === 0
+        ? 'No cell appears to hold a printed digit.'
+        : `Only these cells appear to hold a printed digit: ${filled.join(', ')}. Every other cell ` +
+            'appears empty.',
+    )
+  }
+  if (lines.length === 0) {
+    return ''
+  }
+  return (
+    'Measured from the picture before it was sent, so check each against the image and trust ' +
+    `the image if they disagree:\n\n${lines.map((line) => `- ${line}`).join('\n')}\n\n`
+  )
+}
+
+/**
  * Targets the failure modes documented for grid extraction: drifting to a different blank symbol,
  * assuming box geometry instead of reading it, and off-by-one row alignment.
  */
-export const SUDOKU_EXTRACTION_PROMPT = `Read the Sudoku grid in this image and return it as structured data.
+export function sudokuExtractionPrompt(hints: SudokuHints): string {
+  return `Read the Sudoku grid in this image and return it as structured data.
 
-Rules, in order of importance:
+${describeHints(hints)}Rules, in order of importance:
 
 1. Every cell is an integer. Use 0 for an empty cell and the printed value (1 to n) for a filled
    one. Never use a string, null, or any placeholder character.
 2. Determine the grid size n by counting cells along one edge. Common sizes are 4, 6, 8, 9, 12 and 16.
 3. Determine box geometry by looking at the THICK dividing lines, not by assuming. A 6x6 grid may
-   have boxes that are 3 wide and 2 tall, or 2 wide and 3 tall — these are different puzzles, so
+   have boxes that are 3 wide and 2 tall, or 2 wide and 3 tall - these are different puzzles, so
    read the lines carefully. boxWidth * boxHeight must equal n.
 4. Output "cells" as exactly n rows, each with exactly n entries, top-to-bottom and left-to-right.
    Work one row at a time and re-check the row index against the image before moving on; an
-   off-by-one row shift silently corrupts the whole grid.
+   off-by-one row shift silently corrupts the whole grid. Small pencil marks in a corner of a cell
+   are notes, not the cell's value: such a cell is empty.
 5. Grids larger than 9 often print values above 9 as letters. Convert them to integers: A is 10,
    B is 11, and so on up to G for 16. Return the integer, never the letter.
-6. List any cell you are less than fully confident about in "uncertain" — a smudged digit, a glare
+6. List any cell you are less than fully confident about in "uncertain" - a smudged digit, a glare
    spot, an ambiguous 1 vs 7, or anything you had to guess. It is much better to flag a cell than to
    guess silently. Return an empty array only if you are confident about every cell.
 
 Do not solve the puzzle. Report only what is printed.`
+}

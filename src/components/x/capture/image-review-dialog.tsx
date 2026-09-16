@@ -1,18 +1,12 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-  type RefObject,
-} from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
-import { flipImage, flipTransform, NO_FLIP, type Flip } from '@/lib/capture/flip'
-import { Dialog, DialogBody, DialogContent, DialogFooter } from '@/components/x/ui/dialog'
+import { blobToPixels } from '@/lib/capture/encode'
+import type { PixelImage } from '@/lib/capture/pixels'
+import type { Capture } from '@/lib/capture/rectify'
+import { Dialog, DialogBody, DialogContent } from '@/components/x/ui/dialog'
 import { ErrorPanel } from '@/components/x/ui/error-panel'
 
-import { CAPTURE_BUTTON, FlipToggles } from './controls'
+import { CaptureReview } from './capture-review'
 
 type ImageReviewDialogProps = {
   /**
@@ -20,7 +14,7 @@ type ImageReviewDialogProps = {
   */
   image: Blob | undefined
   onCancel: () => void
-  onConfirm: (image: Blob) => void
+  onConfirm: (capture: Capture) => void
 }
 
 /**
@@ -44,9 +38,9 @@ export function ImageReviewDialog({
       }}
     >
       <DialogContent title="Use this picture?" initialFocus={confirmRef}>
-        {/* Only mounted while open, so the flip resets and the object URL is revoked per upload. */}
+        {/* Only mounted while open, so the flip and the quad reset per upload. */}
         {image ? (
-          <ImageReviewView
+          <UploadReview
             image={image}
             confirmRef={confirmRef}
             onCancel={onCancel}
@@ -58,79 +52,65 @@ export function ImageReviewDialog({
   )
 }
 
-function ImageReviewView({
+function UploadReview({
   image,
   confirmRef,
   onCancel,
   onConfirm,
 }: {
   image: Blob
-  confirmRef: RefObject<HTMLButtonElement | null>
+  confirmRef: React.RefObject<HTMLButtonElement | null>
   onCancel: () => void
-  onConfirm: (image: Blob) => void
+  onConfirm: (capture: Capture) => void
 }): ReactNode {
-  const [flip, setFlip] = useState<Flip>(NO_FLIP)
-  const [isSaving, setIsSaving] = useState(false)
+  const [pixels, setPixels] = useState<PixelImage | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
 
-  const url = useMemo(() => URL.createObjectURL(image), [image])
-  // Object URLs are not reclaimed automatically.
-  useEffect(
-    () => () => {
-      URL.revokeObjectURL(url)
-    },
-    [url],
-  )
-
-  const onUsePicture = useCallback(async () => {
-    setIsSaving(true)
-    try {
-      onConfirm(await flipImage(image, flip))
-    } catch {
-      setError('Could not prepare that picture. Try again')
-      setIsSaving(false)
+  useEffect(() => {
+    let isCancelled = false
+    const load = async (): Promise<void> => {
+      try {
+        const decoded = await blobToPixels(image)
+        if (!isCancelled) {
+          setPixels(decoded)
+        }
+      } catch {
+        if (!isCancelled) {
+          setError('Could not read that file. Try a different picture')
+        }
+      }
     }
-  }, [flip, image, onConfirm])
+    void load()
+    return () => {
+      isCancelled = true
+    }
+  }, [image])
 
-  return (
-    <>
+  if (error) {
+    return (
+      <DialogBody className="p-5">
+        <ErrorPanel message={error} />
+      </DialogBody>
+    )
+  }
+  if (!pixels) {
+    return (
       <DialogBody className="bg-gray-2">
-        <div className="relative aspect-3/4 w-full sm:aspect-video">
-          <img
-            src={url}
-            alt="Preview of the file you chose"
-            style={{ transform: flipTransform(flip) }}
-            className="size-full object-contain"
-          />
+        <div className="flex aspect-3/4 w-full items-center justify-center sm:aspect-video">
+          <p role="status" className="unstyled my-0! text-sm text-gray-11">
+            Loading picture...
+          </p>
         </div>
       </DialogBody>
-
-      <DialogFooter>
-        {error ? <ErrorPanel message={error} className="mb-3" /> : undefined}
-
-        <div className="mb-3">
-          <FlipToggles flip={flip} onChange={setFlip} />
-        </div>
-
-        <div className="flex items-center justify-end gap-2">
-          <button
-            type="button"
-            onClick={onCancel}
-            className={`${CAPTURE_BUTTON} border border-gray-6 text-gray-12 hocus-visible:bg-gray-4`}
-          >
-            Cancel
-          </button>
-          <button
-            ref={confirmRef}
-            type="button"
-            onClick={() => void onUsePicture()}
-            disabled={isSaving}
-            className={`${CAPTURE_BUTTON} bg-gray-12 text-gray-1 disabled:opacity-50 hocus-visible:bg-gray-12-hover`}
-          >
-            Use picture
-          </button>
-        </div>
-      </DialogFooter>
-    </>
+    )
+  }
+  return (
+    <CaptureReview
+      image={pixels}
+      confirmRef={confirmRef}
+      onConfirm={onConfirm}
+      secondaryLabel="Cancel"
+      onSecondary={onCancel}
+    />
   )
 }

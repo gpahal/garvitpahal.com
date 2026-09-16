@@ -1,11 +1,13 @@
 import { useCallback, useId, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 
+import type { Capture } from '@/lib/capture/rectify'
+
 import { CameraModal } from './camera-modal'
 import { ImageReviewDialog } from './image-review-dialog'
 import { isCameraSupported } from './use-camera'
 
 type CapturePaneProps = {
-  onImage: (image: Blob) => void
+  onImage: (capture: Capture) => void
   disabled?: boolean
 }
 
@@ -42,8 +44,8 @@ export function CapturePane({ onImage, disabled = false }: CapturePaneProps): Re
     isCameraSupportedOnServer,
   )
 
-  // Uploads go through the same review step as the camera, so a picture that needs flipping can be
-  // fixed before it is sent rather than after the model has misread it.
+  // Uploads go through the same review step as the camera, so the grid is cropped and a picture
+  // that needs flipping is fixed before it is sent rather than after the model has misread it.
   const onFiles = useCallback((files: FileList | null) => {
     const file = files?.[0]
     if (file?.type.startsWith('image/')) {

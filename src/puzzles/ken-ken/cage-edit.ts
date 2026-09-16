@@ -101,12 +101,18 @@ export function toggleDraftCell(
 }
 
 /**
- * Renumbers cages to a gapless range and drops any left empty, carrying `cages` and
- * `unreviewedCages` across so both still point at what they did before.
+ * Renumbers cages to a gapless range and drops any left empty, carrying `cages` and the two flag
+ * lists across so all still point at what they did before.
  */
-function compactCages(grid: KenKenGrid, unreviewedCages: Array<number>): KenKenPuzzle {
+function compactCages(
+  grid: KenKenGrid,
+  unreviewedCages: Array<number>,
+  contradictions: Array<number>,
+): KenKenPuzzle {
   const { labels, order } = compactLabels(grid.cageOf)
   const toNew = new Map(order.map((old, next) => [old, next]))
+  const renumber = (cageIds: Array<number>): Array<number> =>
+    cageIds.map((cageId) => toNew.get(cageId)).filter((cageId) => cageId !== undefined)
 
   return {
     grid: {
@@ -114,9 +120,8 @@ function compactCages(grid: KenKenGrid, unreviewedCages: Array<number>): KenKenP
       cageOf: labels,
       cages: order.map((old) => ({ ...grid.cages[old]! })),
     },
-    unreviewedCages: unreviewedCages
-      .map((cageId) => toNew.get(cageId))
-      .filter((cageId) => cageId !== undefined),
+    unreviewedCages: renumber(unreviewedCages),
+    contradictions: renumber(contradictions),
   }
 }
 
@@ -181,7 +186,11 @@ export function applyDraft(puzzle: KenKenPuzzle, draft: CageDraft): KenKenPuzzle
     recomponent(grid, donor, donor === draft.originCageId ? undefined : puzzle.grid.cages[donor])
   }
 
-  return compactCages(grid, retire(puzzle.unreviewedCages, ...donors))
+  return compactCages(
+    grid,
+    retire(puzzle.unreviewedCages, ...donors),
+    retire(puzzle.contradictions, ...donors),
+  )
 }
 
 /**
@@ -199,5 +208,9 @@ Setting a clue is the user reviewing that cage, so it stops being flagged.
 export function setCageClue(puzzle: KenKenPuzzle, cageId: number, cage: Cage): KenKenPuzzle {
   const grid = cloneGrid(puzzle.grid)
   grid.cages[cageId] = { ...cage }
-  return { grid, unreviewedCages: retire(puzzle.unreviewedCages, cageId) }
+  return {
+    grid,
+    unreviewedCages: retire(puzzle.unreviewedCages, cageId),
+    contradictions: retire(puzzle.contradictions, cageId),
+  }
 }

@@ -19,7 +19,7 @@ type PuzzleWorkspaceProps = {
  * rather than at every use, and `key` remounts if the id ever changes so no state crosses puzzles.
  */
 export function PuzzleWorkspace({ puzzleId }: PuzzleWorkspaceProps): ReactNode {
-  const definition = PUZZLES[puzzleId] as unknown as PuzzleDefinition<unknown, unknown>
+  const definition = PUZZLES[puzzleId] as unknown as PuzzleDefinition<unknown, unknown, unknown>
   const ui = PUZZLE_UI[puzzleId] as unknown as PuzzleUi<unknown, unknown>
 
   return <Workspace key={puzzleId} definition={definition} ui={ui} />

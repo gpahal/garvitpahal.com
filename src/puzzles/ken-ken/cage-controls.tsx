@@ -48,7 +48,7 @@ export function SizePad({
             aria-pressed={size === n}
             onClick={() => {
               if (size !== n) {
-                onChange({ grid: createGrid(size), unreviewedCages: [] })
+                onChange({ grid: createGrid(size), unreviewedCages: [], contradictions: [] })
               }
             }}
             className={`${PAD_BUTTON} px-2.5 ${

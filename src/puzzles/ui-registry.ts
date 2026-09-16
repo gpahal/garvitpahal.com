@@ -13,10 +13,12 @@ export type PuzzleUi<TPuzzle, TSolution> = {
 }
 
 type PuzzleOf<TId extends PuzzleId> =
-  (typeof PUZZLES)[TId] extends PuzzleDefinition<infer TPuzzle, infer _TSolution> ? TPuzzle : never
+  (typeof PUZZLES)[TId] extends PuzzleDefinition<infer TPuzzle, infer _TSolution, infer _TPrepared>
+    ? TPuzzle
+    : never
 
 type SolutionOf<TId extends PuzzleId> =
-  (typeof PUZZLES)[TId] extends PuzzleDefinition<infer _TPuzzle, infer TSolution>
+  (typeof PUZZLES)[TId] extends PuzzleDefinition<infer _TPuzzle, infer TSolution, infer _TPrepared>
     ? TSolution
     : never
 

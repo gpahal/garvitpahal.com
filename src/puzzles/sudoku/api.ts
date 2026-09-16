@@ -10,14 +10,24 @@ Upload ceiling, checked before the base64 is decoded.
 */
 export const SUDOKU_MAX_IMAGE_BYTES = 6 * 1024 * 1024
 
-export const SUDOKU_MAX_IMAGE_EDGE = 1600
+/**
+Long edge of the rectified crop: 114px per cell on a 9x9, 64px on a 16x16.
+*/
+export const SUDOKU_MAX_IMAGE_EDGE = 1024
 
+/**
+ * Every tier read every bench grid with reasoning off, so the hedges are the two fastest of those
+ * plus one at low effort for the sizes the bench did not cover. Terra rides the fast lane: at this
+ * price it is free, and the first read to land is the one on screen. Two hedges agreeing is as
+ * good as a unique solve; Sol only runs if none of the three could be trusted.
+ */
 export const SUDOKU_VISION_MODELS: VisionModels = {
-  primary: { id: 'gpt-5.6-terra', effort: 'low' },
-  fallbacks: [
-    { id: 'gpt-5.6-sol', effort: 'medium' },
-    { id: 'gpt-5.6-sol', effort: 'high' },
+  hedges: [
+    { id: 'gpt-5.6-luna', effort: 'none' },
+    { id: 'gpt-5.6-terra', effort: 'none', tier: 'fast' },
+    { id: 'gpt-5.6-terra', effort: 'low' },
   ],
+  fallbacks: [{ id: 'gpt-5.6-sol', effort: 'medium', tier: 'fast' }],
 }
 
 /**
@@ -25,7 +35,7 @@ export const SUDOKU_VISION_MODELS: VisionModels = {
  * out: it is derivable from the box geometry, so sending it would be a second source of truth.
  *
  * Only ever produced by this app's own endpoint, so it is mapped rather than re-validated - the
- * untrusted direction is the image going out, which `extractRequestSchema` checks.
+ * untrusted direction is the image going out, which the endpoint's request schema checks.
  */
 export type SudokuPuzzleWire = {
   n: number
