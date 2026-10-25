@@ -1,0 +1,25 @@
+# Static asset headers; on-demand responses use `src/lib/server/api-gate.ts`.
+# The build adds the CSP, with its script hashes, after rendering pages. HSTS is zone-owned.
+# Resources are intended for same-origin use; social scrapers fetch the Open Graph image directly.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Permissions-Policy: camera=(self), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+
+# Cover private assets as well as the pages' own noindex tags, and prevent shared caching.
+# The splat does not match /x itself, so both rules are required.
+/x
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: private, no-cache
+
+/x/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: private, no-cache
+
+# Fingerprinted build output, including module Workers.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

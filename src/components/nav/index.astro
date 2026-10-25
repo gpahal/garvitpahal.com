@@ -1,0 +1,158 @@
+---
+import { Menu, X } from 'lucide-react'
+
+import { SITE_NAME } from '@/lib/site'
+import { ButtonLink } from '@/components/shared/button-link'
+import { FOCUS_OUTLINE } from '@/components/shared/focus-outline'
+import { Button } from '@/components/ui/button'
+
+import NavContent from './content.astro'
+
+type Props = {
+  isFullPage?: boolean
+}
+
+const { isFullPage } = Astro.props
+
+/**
+ * On `/nav` the navigation is the page's main content, and the layout renders no `main` of its own.
+ */
+const ContentWrapper = isFullPage ? 'main' : 'div'
+
+/**
+ * Not a `header` on `/nav`, where it holds the page's `main`, which may not sit inside one.
+ */
+const Container = isFullPage ? 'div' : 'header'
+---
+
+{/* `max-h-dvh` with a scroll: fixed does not extend the page, so `/nav` would otherwise clip. */}
+<Container
+  class:list={[
+    'fixed inset-x-0 bottom-0 z-10 max-h-dvh overflow-y-auto border-t border-sidebar-border bg-sidebar text-sidebar-foreground lg:top-0 lg:right-auto lg:w-70 lg:border-t-0 lg:border-r',
+    // A page prints in the narrow layout, where the bar would repeat over every sheet.
+    !isFullPage && 'print:hidden',
+  ]}
+>
+  <ContentWrapper class={isFullPage ? undefined : 'hidden lg:block'}>
+    <NavContent isFullPage={isFullPage} />
+  </ContentWrapper>
+  {!isFullPage && (
+    <div class="flex items-center justify-between px-6 py-3 lg:hidden">
+      <a href="/" class:list={[FOCUS_OUTLINE, 'text-xl font-medium']}>
+        {SITE_NAME}
+      </a>
+      {/*
+       * A real link, so `/nav` loads without the script. Not prefetched: focus returns here when
+       * the menu closes, which would fetch a page never shown.
+       */}
+      <ButtonLink
+        href="/nav"
+        variant="ghost"
+        size="icon"
+        aria-label="Open menu"
+        data-mobile-nav-trigger
+        data-astro-prefetch="false"
+      >
+        <Menu />
+      </ButtonLink>
+    </div>
+  )}
+</Container>
+{/*
+ * Never `lg:hidden`: an open modal that is not displayed still leaves the page inert, so the
+ * script closes it at `lg`. The dialog has no padding, so only the backdrop targets it on a click.
+ */}
+{!isFullPage && (
+  <dialog
+    data-mobile-nav
+    aria-label="Navigation"
+    class="fixed inset-x-0 top-auto bottom-0 m-0 max-h-dvh w-full max-w-none overflow-hidden border-t border-sidebar-border bg-sidebar p-0 text-sm text-sidebar-foreground shadow-lg backdrop:bg-black/10 supports-backdrop-filter:backdrop:backdrop-blur-xs"
+  >
+    <div class="relative max-h-dvh overflow-y-auto overscroll-contain pb-6">
+      {/* First in the DOM, so focus order matches its place at the top. */}
+      <form method="dialog" class="absolute top-3 right-3">
+        <Button type="submit" variant="ghost" size="icon-sm">
+          <X />
+          <span class="sr-only">Close</span>
+        </Button>
+      </form>
+      <NavContent />
+      <form method="dialog" class="px-4">
+        <Button type="submit" variant="outline" className="w-full">
+          Close menu
+        </Button>
+      </form>
+    </div>
+  </dialog>
+)}
+
+{/* eslint-disable-next-line unicorn/relative-url-style -- Astro imports it, which needs the ./ */}
+<script src="./mobile-menu.ts"></script>
+
+<style>
+  /*
+   * Here because `global.css` is CLI output.
+   */
+  :global(html:has(dialog[data-mobile-nav][open])) {
+    overflow: hidden;
+  }
+
+  /*
+   * Below `lg` the fixed bar covers the bottom 57px, so focus scrolled into view would land under
+   * it.
+   */
+  @media (width < 64rem) {
+    :global(html) {
+      scroll-padding-bottom: 5rem;
+    }
+  }
+
+  /*
+   * `overlay` and `display` keep the dialog in the top layer until the exit ends. Without
+   * `allow-discrete` or `@starting-style`, a browser opens and closes at once.
+   */
+  dialog,
+  dialog::backdrop {
+    transition-timing-function: ease-in-out;
+    transition-duration: 200ms;
+    transition-property: opacity, translate, overlay, display;
+    /* stylelint-disable-next-line plugin/use-baseline -- Without it, open and close are instant */
+    transition-behavior: allow-discrete;
+  }
+
+  dialog {
+    opacity: 0;
+    translate: 0 2.5rem;
+  }
+
+  dialog::backdrop {
+    opacity: 0;
+  }
+
+  dialog[open] {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  dialog[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    dialog[open] {
+      opacity: 0;
+      translate: 0 2.5rem;
+    }
+
+    dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    dialog,
+    dialog::backdrop {
+      transition: none;
+    }
+  }
+</style>

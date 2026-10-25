@@ -1,0 +1,12 @@
+# Keep the SHA-pinned actions current; Dependabot rewrites each SHA and its version comment
+# together. npm updates are manual (docs/deployment.md, GitHub step 4).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    # Like `minimumReleaseAge` in pnpm-workspace.yaml for npm: a release waits before it is
+    # proposed, so a compromised one is usually caught and pulled first.
+    cooldown:
+      default-days: 7

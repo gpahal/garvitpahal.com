@@ -1,0 +1,18 @@
+---
+import { listPuzzles } from '@/lib/x/puzzle-solvers/puzzles/registry'
+import Layout from '@/layouts/layout.astro'
+import { LinkItemGroup } from '@/components/shared/link-item-group'
+import PageHeader from '@/components/shared/page-header.astro'
+
+const puzzles = listPuzzles().map((puzzle) => ({
+  href: `/x/puzzle-solvers/${puzzle.id}`,
+  title: puzzle.name,
+  subtitle: puzzle.blurb,
+}))
+---
+
+<Layout title="Puzzle solvers">
+  <PageHeader title="Puzzle solvers" />
+
+  <LinkItemGroup items={puzzles} />
+</Layout>

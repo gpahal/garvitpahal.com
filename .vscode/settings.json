@@ -1,0 +1,25 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "[markdown]": {
+    "editor.wordWrap": "on"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "astro",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml",
+    "toml",
+    "github-actions-workflow"
+  ],
+  "stylelint.validate": ["css", "postcss", "astro", "html", "markdown"]
+}

@@ -1,0 +1,21 @@
+---
+import Layout from '@/layouts/layout.astro'
+import { ButtonLink } from '@/components/shared/button-link'
+import PageHeader from '@/components/shared/page-header.astro'
+import { P } from '@/components/shared/typography'
+
+/**
+ * Served by the asset layer with `public/_headers`, and under `/api/x` by the adapter through
+ * `ASSETS`.
+ */
+---
+
+<Layout title="Page not found" description="This page does not exist on garvitpahal.com">
+  <PageHeader title="Page not found" />
+
+  <P>This page does not exist, or it has moved</P>
+
+  <ButtonLink href="/" variant="outline" className="mt-6">
+    Go to the home page
+  </ButtonLink>
+</Layout>

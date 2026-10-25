@@ -1,0 +1,12 @@
+---
+import { PRIVATE_TOOLS } from '@/lib/site'
+import Layout from '@/layouts/layout.astro'
+import { LinkItemGroup } from '@/components/shared/link-item-group'
+import PageHeader from '@/components/shared/page-header.astro'
+---
+
+<Layout title="Private">
+  <PageHeader title="Private" />
+
+  <LinkItemGroup items={PRIVATE_TOOLS} />
+</Layout>

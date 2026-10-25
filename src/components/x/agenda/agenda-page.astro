@@ -1,0 +1,28 @@
+---
+import Layout from '@/layouts/layout.astro'
+import { Loading } from '@/components/shared/loading'
+import NeedsJavaScript from '@/components/shared/needs-javascript.astro'
+import PageHeader from '@/components/shared/page-header.astro'
+
+import { AgendaRoot } from './agenda-root'
+import type { AgendaView } from './agenda-root'
+
+type Props = { title: string; view: AgendaView }
+
+const { title, view } = Astro.props
+---
+
+<Layout title={title}>
+  <PageHeader title={title} />
+
+  <NeedsJavaScript />
+
+  {/*
+   * Browser-only: Convex auth needs a token only the browser's Access session can fetch, and
+   * `useNow` throws on the server rather than bake in the build's minute. No
+   * `transition:persist-props`, since `view` must update on navigation.
+   */}
+  <AgendaRoot view={view} client:only="react" transition:persist="agenda">
+    <Loading slot="fallback" />
+  </AgendaRoot>
+</Layout>

@@ -1,0 +1,33 @@
+---
+import { listPuzzles } from '@/lib/x/puzzle-solvers/puzzles/registry'
+import type { PuzzleId } from '@/lib/x/puzzle-solvers/puzzles/registry'
+import Layout from '@/layouts/layout.astro'
+import NeedsJavaScript from '@/components/shared/needs-javascript.astro'
+import PageHeader from '@/components/shared/page-header.astro'
+import { PuzzleWorkspace } from '@/components/x/puzzle-solvers/puzzle-workspace'
+
+export async function getStaticPaths() {
+  return listPuzzles().map((puzzle) => ({
+    params: { puzzle: puzzle.id },
+    props: { id: puzzle.id, name: puzzle.name, blurb: puzzle.blurb },
+  }))
+}
+
+type Props = {
+  id: PuzzleId
+  name: string
+  blurb: string
+}
+
+const { id, name, blurb } = Astro.props
+
+const title = `${name} solver`
+---
+
+<Layout title={title}>
+  <PageHeader title={title} subtitle={blurb} />
+
+  <NeedsJavaScript />
+
+  <PuzzleWorkspace puzzleId={id} client:load />
+</Layout>

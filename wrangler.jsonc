@@ -1,0 +1,62 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "garvitpahal-com",
+  "compatibility_date": "2026-09-18",
+  // `enable_request_signal` lets the extract handler skip or cut off a paid model call for a browser
+  // that has left.
+  "compatibility_flags": ["nodejs_compat", "enable_request_signal"],
+  // Neither workers.dev nor preview URLs are behind Access, which covers only `garvitpahal.com`
+  // (docs/deployment.md, Setup). Routes live in the dashboard.
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    // Links have no trailing slash (`trailingSlash` in `astro.config.ts`); the default would
+    // redirect `/blog` to `/blog/`.
+    "html_handling": "drop-trailing-slash",
+    // Unknown paths get `404.html` without invoking the Worker, so made-up paths cost no Workers
+    // Free requests. `run_worker_first` names the on-demand routes rather than all of `/api` for the
+    // same reason; `/api/x/*` does not match `/api/x`. A route under `src/pages/api/` outside these
+    // needs its own entry, or it is served the 404 page.
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/x", "/api/x/*"]
+  },
+  "observability": {
+    "enabled": true
+  },
+  // The secrets `pnpm dev` reads. Wrangler binds only listed names from `process.env`, where
+  // `infisical run` puts Infisical's `dev` environment; without the list it reads none of them.
+  "secrets": {
+    "required": ["OPENAI_API_KEY", "CONVEX_JWT_PRIVATE_KEY", "OWNER_EMAIL"]
+  },
+  "env": {
+    // Deploy uses this rather than the build's `dist/server/wrangler.json`, which comes from a job
+    // that runs dependency code: `wrangler deploy` would run its `build.command` with the deploy
+    // credentials in reach. `rules` is here because the Vite plugin warns about it at the top
+    // level. `checks/wrangler-config.test.ts` keeps this in step with the top level.
+    "deploy": {
+      // Otherwise Wrangler deploys the Worker as `garvitpahal-com-deploy`.
+      "name": "garvitpahal-com",
+      // Every secret the Worker reads, which Deploy uploads from Infisical's `prod` environment
+      // (`scripts/deploy-worker.ts`). Wrangler refuses a deploy that leaves one unset.
+      "secrets": {
+        "required": [
+          "OPENAI_API_KEY",
+          "CONVEX_JWT_PRIVATE_KEY",
+          "ACCESS_TEAM_DOMAIN",
+          "ACCESS_AUD",
+          "OWNER_EMAIL"
+        ]
+      },
+      // With `--no-bundle`, Wrangler uploads only the files these match: the server chunks, not
+      // Expressive Code's `_astro/ec.*.js` beside them.
+      "rules": [{ "type": "ESModule", "globs": ["**/*.mjs"] }],
+      // Replaces the top-level `assets` rather than merging with it.
+      "assets": {
+        "html_handling": "drop-trailing-slash",
+        "not_found_handling": "404-page",
+        "run_worker_first": ["/api/x", "/api/x/*"],
+        "binding": "ASSETS"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "extends": "@gpahal/tsconfig/base.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["./**/*"],
+  "exclude": ["./_generated"]
+}

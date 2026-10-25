@@ -1,0 +1,58 @@
+# Build output
+dist
+.astro
+*.tsbuildinfo
+
+# Temporary files
+tmp
+.tmp
+.cache
+
+# Node
+node_modules
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*
+!.env.local.example
+.dev.vars
+.dev.vars.*
+
+# Cloudflare
+.wrangler
+
+# The local Convex deployment's database, storage and config
+.convex
+
+# AI tools
+.claude/settings.local.json
+.claude/worktrees
+.scratch
+
+# Editors
+
+## VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.history
+*.code-workspace
+
+## JetBrains
+.idea
+.idea_modules
+*.iml
+*.ipr
+*.iws
+
+# OS
+
+## Linux
+*~
+.Trash-*
+
+## MacOS
+.DS_Store
+._*

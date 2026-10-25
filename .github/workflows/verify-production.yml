@@ -1,0 +1,78 @@
+# Probe dashboard-dependent protections from a signed-out client. Deploy calls this after every
+# deploy; run it manually after account changes; the monthly run is a backstop. Setup and coverage
+# limits are in docs/deployment.md.
+name: Verify production
+
+on:
+  workflow_dispatch:
+    inputs:
+      origin:
+        description: Origin to check
+        required: false
+        default: https://garvitpahal.com
+  # Called runs, like scheduled ones, pass no origin and so check production.
+  workflow_call:
+    secrets:
+      ACCESS_TEAM_DOMAIN:
+        required: true
+  schedule:
+    # 09:00 UTC on the first of each month.
+    - cron: '0 9 1 * *'
+
+permissions:
+  contents: read
+
+env:
+  ORIGIN: ${{ inputs.origin || 'https://garvitpahal.com' }}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          check-latest: true
+
+      - name: Access still covers /x and /api/x
+        env:
+          # Require the site's own Access tenant, not any cloudflareaccess.com login. A repository
+          # secret, so the logs mask it.
+          ACCESS_TEAM_DOMAIN: ${{ secrets.ACCESS_TEAM_DOMAIN }}
+        run: node scripts/verify-access.ts
+
+      # Check served headers as well as the build artifact; HSTS is configured only on the zone.
+      - name: A page ships the security headers this repo wrote
+        env:
+          PUBLIC_CONVEX_URL: ${{ vars.PUBLIC_CONVEX_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PUBLIC_CONVEX_URL:-}" ]; then
+            echo "::error::PUBLIC_CONVEX_URL is unset. Set it as a repository variable to the production Convex deployment URL."
+            exit 1
+          fi
+          headers=$(curl -sS -D - -o /dev/null --max-time 20 "$ORIGIN/" | tr -d '\r' | tr 'A-Z' 'a-z')
+          printf '%s\n' "$headers" | grep -E '^(http/|content-security-policy:|strict-transport-security:)' || true
+          failed=0
+          if ! printf '%s\n' "$headers" | grep -qE '^http/[0-9.]+ 200'; then
+            echo "::error::$ORIGIN/ did not answer 200, so its headers say nothing about the site."
+            exit 1
+          fi
+          # The socket of this deployment, not any: a build without the URL allows none.
+          socket=$(printf '%s' "${PUBLIC_CONVEX_URL%/}" | sed 's|^http|ws|' | tr 'A-Z' 'a-z')
+          if ! printf '%s\n' "$headers" | grep '^content-security-policy:' | grep -qF "$socket"; then
+            echo "::error::The Content-Security-Policy is missing or does not name $socket, so Agenda's socket is blocked."
+            failed=1
+          fi
+          # max-age=0 turns HSTS off with the header still present.
+          max_age=$(printf '%s\n' "$headers" | sed -n 's/^strict-transport-security:.*max-age=\([0-9]*\).*/\1/p')
+          if [ "${max_age:-0}" -eq 0 ]; then
+            echo "::error::Strict-Transport-Security is missing or has max-age=0. Set it in Cloudflare (SSL/TLS -> Edge Certificates -> HSTS)."
+            failed=1
+          fi
+          exit "$failed"

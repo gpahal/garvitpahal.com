@@ -1,0 +1,170 @@
+---
+import {
+  AtSign,
+  BriefcaseBusiness,
+  CalendarCheck,
+  FolderKanban,
+  Grid3x3,
+  Hammer,
+  House,
+  NotebookText,
+  UserRound,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+
+import { isAtOrUnder, isPrivatePath, PRIVATE_TOOLS, SITE_NAME, SITE_TAGLINE } from '@/lib/site'
+import { ButtonLink } from '@/components/shared/button-link'
+import { FOCUS_OUTLINE } from '@/components/shared/focus-outline'
+import { Separator } from '@/components/ui/separator'
+
+import { Github, Linkedin, XLogo } from './brand-icons'
+
+const socials = [
+  {
+    href: 'mailto:g10pahal@gmail.com',
+    label: 'Email',
+    Icon: AtSign,
+  },
+  {
+    href: 'https://x.com/g10pahal',
+    label: 'X (Twitter)',
+    Icon: XLogo,
+  },
+  {
+    href: 'https://github.com/gpahal',
+    label: 'GitHub',
+    Icon: Github,
+  },
+  {
+    href: 'https://www.linkedin.com/in/gpahal/',
+    label: 'LinkedIn',
+    Icon: Linkedin,
+  },
+] as const
+
+const links = [
+  {
+    path: '/',
+    label: 'About',
+    Icon: House,
+  },
+  {
+    path: '/projects',
+    label: 'Projects',
+    Icon: FolderKanban,
+  },
+  {
+    path: '/work',
+    label: 'Work',
+    Icon: BriefcaseBusiness,
+  },
+  {
+    path: '/blog',
+    label: 'Blog',
+    Icon: NotebookText,
+  },
+  {
+    path: '/uses',
+    label: 'Uses',
+    Icon: Hammer,
+  },
+] as const
+
+/**
+ * Keyed by the tool, so a new one cannot be listed without an icon.
+ */
+const TOOL_ICONS: Record<(typeof PRIVATE_TOOLS)[number]['href'], LucideIcon> = {
+  '/x/agenda': CalendarCheck,
+  '/x/puzzle-solvers': Grid3x3,
+}
+
+/**
+ * Only rendered inside `/x`. The gate is Access, never a missing link.
+ */
+const privateLinks = [
+  { path: '/x', label: 'Private', Icon: UserRound },
+  ...PRIVATE_TOOLS.map(({ href, title }) => ({ path: href, label: title, Icon: TOOL_ICONS[href] })),
+]
+
+type Props = {
+  isFullPage?: boolean
+}
+
+const { isFullPage } = Astro.props
+
+const Brand = isFullPage ? 'h1' : 'div'
+
+const pathname = Astro.url.pathname
+const linkGroups = isPrivatePath(pathname) ? [links, privateLinks] : [links]
+/**
+ * Sidebar hover tokens, as shadcn's `SidebarMenuButton` uses, since the ghost `Button`'s `muted`
+ * barely shows on the sidebar in dark mode.
+ */
+const linkClass =
+  'w-full justify-start gap-3 font-normal hover:bg-sidebar-accent hover:text-sidebar-accent-foreground dark:hover:bg-sidebar-accent aria-[current]:bg-sidebar-border aria-[current]:font-medium aria-[current]:text-sidebar-accent-foreground'
+
+/**
+ * The longest match, so `/blog/<id>` marks Blog and `/x/agenda` marks Agenda rather than `/x`.
+ */
+const currentLinkPath = linkGroups
+  .flat()
+  .map(({ path }) => path)
+  .filter((path) => (path === '/' ? pathname === '/' : isAtOrUnder(pathname, path)))
+  .toSorted((a, b) => b.length - a.length)[0]
+---
+
+<div class="px-4 py-6 lg:px-6">
+  <div class="text-center lg:text-left">
+    <Brand class="text-xl font-medium">
+      <a href="/" class={FOCUS_OUTLINE}>
+        {SITE_NAME}
+      </a>
+    </Brand>
+    <div class="mt-2">{SITE_TAGLINE}</div>
+    {/* The negative margin lines the first glyph up with the tagline. */}
+    {/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- WebKit drops a list role under list-style: none */}
+    <ul role="list" class="mt-4 flex justify-center gap-3 lg:-ml-1.25 lg:justify-start">
+      {socials.map(({ href, label, Icon }) => (
+        <li>
+          <ButtonLink
+            href={href}
+            variant="ghost"
+            size="icon-sm"
+            className="text-muted-foreground"
+            aria-label={label}
+          >
+            <Icon strokeWidth={1.5} className="size-4.5" />
+          </ButtonLink>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <Separator className="my-4 lg:hidden" />
+  <nav class="flex flex-col gap-0.5 lg:-mx-2.5 lg:mt-10">
+    {linkGroups.map((group, i) => (
+      <>
+        {i > 0 && <Separator className="my-2" />}
+        <ul class="flex flex-col gap-0.5">
+          {group.map(({ path, label, Icon }) => (
+            <li class="flex">
+              <ButtonLink
+                href={path}
+                variant="ghost"
+                className={linkClass}
+                aria-current={
+                  path === currentLinkPath ? (path === pathname ? 'page' : 'true') : undefined
+                }
+              >
+                <Icon
+                  strokeWidth={1.5}
+                  className="size-4.5 text-muted-foreground group-hover/button:text-foreground group-aria-[current]/button:text-foreground"
+                />
+                {label}
+              </ButtonLink>
+            </li>
+          ))}
+        </ul>
+      </>
+    ))}
+  </nav>
+</div>

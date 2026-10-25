@@ -1,0 +1,31 @@
+---
+import { H1, Muted } from '@/components/shared/typography'
+
+/**
+ * Every page's heading but `/nav`'s, and the one place that decides the gap under it. Put a
+ * button beside the title with `<Fragment slot="action">`.
+ */
+type Props = {
+  title: string
+  subtitle?: string
+}
+
+const { title, subtitle } = Astro.props
+---
+
+{/*
+ * A margin, not padding: it collapses with the top margin of whatever prose follows instead of
+ * adding to it.
+ */}
+<header class="mb-6">
+  <div class="flex items-center justify-between gap-4">
+    {/*
+     * So a notice that disappears with focus in it can hand focus here.
+     */}
+    <H1 tabIndex={-1} className="outline-none">
+      {title}
+    </H1>
+    <slot name="action" />
+  </div>
+  {subtitle !== undefined && <Muted className="mt-1">{subtitle}</Muted>}
+</header>

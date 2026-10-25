@@ -1,0 +1,30 @@
+---
+import { Rss } from 'lucide-react'
+
+import { listBlogPosts } from '@/lib/blog'
+import { formatMonthYear } from '@/lib/dates'
+import { BLOG_DESCRIPTION } from '@/lib/site'
+import Layout from '@/layouts/layout.astro'
+import { ButtonLink } from '@/components/shared/button-link'
+import { LinkItemGroup } from '@/components/shared/link-item-group'
+import PageHeader from '@/components/shared/page-header.astro'
+
+const posts = (await listBlogPosts()).map((blogPost) => ({
+  href: `/blog/${blogPost.id}`,
+  title: blogPost.data.title,
+  aside: formatMonthYear(blogPost.data.publishedOn),
+}))
+---
+
+<Layout title="Blog" description={BLOG_DESCRIPTION}>
+  <PageHeader title="Blog">
+    <Fragment slot="action">
+      <ButtonLink variant="outline" size="sm" href="/blog.rss.xml" isFile>
+        <Rss strokeWidth={1.5} />
+        RSS feed
+      </ButtonLink>
+    </Fragment>
+  </PageHeader>
+
+  <LinkItemGroup items={posts} />
+</Layout>

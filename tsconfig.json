@@ -1,0 +1,18 @@
+{
+  "extends": "@gpahal/tsconfig/astro-app.json",
+  "compilerOptions": {
+    // The preset's browser lib stops at ES2024; the site uses ES2025's iterator and Set methods.
+    "lib": ["es2025", "dom"],
+    "types": ["node"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@convex/*": ["./convex/*"]
+    }
+  },
+  "include": [".astro/types.d.ts", "src", "checks", "scripts", "*.config.ts"],
+  // The preset leaves the root config files to a Node-typed project of their own; here they share
+  // the app's, which lists Node's types.
+  "exclude": []
+}

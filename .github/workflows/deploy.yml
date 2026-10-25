@@ -1,0 +1,136 @@
+# Deploy production: the Convex backend, then the Cloudflare Worker, with the Worker's secrets from
+# Infisical's prod environment. Setup is in docs/deployment.md.
+name: Deploy
+
+# The 'Use workflow from' picker cannot be hidden, so `main-only` fails a run on any other ref, the
+# deploy job skips it and the `production` environment refuses it its secrets regardless.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Queue rather than cancel: a deploy stopped between the Convex push and the Worker upload leaves
+# the site on the previous Worker against the new backend. Keyed by ref, since GitHub keeps one
+# pending run per group, so a run on another ref never displaces a queued deploy of main.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  main-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Refuse any ref but main
+        run: |
+          if [ "$GITHUB_REF" != refs/heads/main ]; then
+            echo "::error::Deploy ships only main, not $GITHUB_REF. Run it with 'gh workflow run deploy.yml --ref main'."
+            exit 1
+          fi
+
+  # No secrets here, so install scripts may run.
+  check:
+    needs: main-only
+    uses: ./.github/workflows/check.yml
+    with:
+      upload-build: true
+
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    # `id-token: write` lets the job sign in to Infisical with a token GitHub mints for this run, so
+    # no Infisical credential is stored here. The identity accepts only jobs in the `production`
+    # environment, which only main may use (docs/deployment.md, Infisical).
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      # No pnpm cache: the store it restores is shared with `check`, whose install scripts could
+      # have poisoned it.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          check-latest: true
+
+      # No install scripts beside deploy credentials: one could tamper with the `convex` or
+      # `wrangler` CLI, which both work without them.
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # Before the Convex push, so a missing secret stops the deploy before either half ships. It
+      # masks each value and writes them to a file in RUNNER_TEMP, out of later steps' environment.
+      - name: Fetch the Worker's secrets from Infisical
+        env:
+          INFISICAL_PROJECT_ID: ${{ vars.INFISICAL_PROJECT_ID }}
+          INFISICAL_IDENTITY_ID: ${{ vars.INFISICAL_IDENTITY_ID }}
+        run: node scripts/deploy-worker.ts fetch-secrets
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist
+
+      # The subject comes from git, not an expression, so commit text never becomes script.
+      - name: Describe this deploy
+        run: |
+          set -euo pipefail
+          sha=$(git rev-parse --short=12 HEAD)
+          subject=$(git log -1 --format=%s)
+          if [ "$GITHUB_RUN_ATTEMPT" -gt 1 ]; then
+            trigger="re-run by $GITHUB_TRIGGERING_ACTOR"
+          elif [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; then
+            trigger="manual by $GITHUB_ACTOR"
+          else
+            trigger=push
+          fi
+          message="$GITHUB_REF_NAME@$sha ($trigger): $subject"
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          {
+            echo "DEPLOY_TAG=$sha"
+            # Cloudflare's version message is short; Convex's audit log also gets the run link.
+            echo "WORKER_MESSAGE=${message:0:100}"
+            echo "CONVEX_MESSAGE=$message $run_url"
+          } >> "$GITHUB_ENV"
+
+      # The backend goes first so new pages never call missing functions. `--cmd` runs before the
+      # push: it stops a key for another deployment than the build's CSP allows, then sets Convex's
+      # `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from the Worker's secrets, which `convex/auth.config.ts`
+      # refuses the push without. `check` already ran `tsc -p convex`.
+      - name: Deploy Convex
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          PUBLIC_CONVEX_URL: ${{ vars.PUBLIC_CONVEX_URL }}
+        run: |
+          pnpm exec convex deploy --typecheck disable --message "$CONVEX_MESSAGE" --cmd-url-env-var-name DEPLOY_KEY_CONVEX_URL --cmd '
+            if [ "${DEPLOY_KEY_CONVEX_URL%/}" != "${PUBLIC_CONVEX_URL%/}" ]; then
+              echo "::error::CONVEX_DEPLOY_KEY is for $DEPLOY_KEY_CONVEX_URL, but the site was built for PUBLIC_CONVEX_URL $PUBLIC_CONVEX_URL."
+              exit 1
+            fi
+            node scripts/deploy-worker.ts convex-env'
+
+      - name: Deploy the Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/deploy-worker.ts deploy
+
+      # A Worker upload usually goes live within seconds.
+      - name: Let the Worker settle
+        run: sleep 60
+
+  verify:
+    needs: deploy
+    uses: ./.github/workflows/verify-production.yml
+    secrets:
+      ACCESS_TEAM_DOMAIN: ${{ secrets.ACCESS_TEAM_DOMAIN }}

@@ -1,0 +1,134 @@
+---
+import { ClientRouter } from 'astro:transitions'
+
+import { dateOnlyToUtc } from '@/lib/dates'
+import type { DateOnly } from '@/lib/dates'
+import { BLOG_FEED_TITLE, isPrivatePath, isUnlistedPath, SITE_NAME, SITE_TAGLINE } from '@/lib/site'
+import Nav from '@/components/nav/index.astro'
+import IslandFailure from '@/components/shared/island-failure.astro'
+import satoshi from '@/assets/fonts/satoshi/variable.woff2?url'
+
+import '@/styles/global.css'
+
+type Props = {
+  title?: string
+  description?: string
+  isFullPage?: boolean
+  article?: {
+    headline: string
+    publishedTime: DateOnly
+    tags?: Array<string>
+  }
+}
+
+const { title: titleProp, description: descriptionProp, isFullPage, article } = Astro.props
+const url = new URL(Astro.url.pathname, Astro.site)
+const imageUrl = new URL('/images/self/self-320x320.jpg', Astro.site)
+
+const title = titleProp === undefined ? SITE_NAME : `${titleProp} | ${SITE_NAME}`
+const description = descriptionProp ?? SITE_TAGLINE
+const isUnlisted = isUnlistedPath(Astro.url.pathname)
+/**
+ * `/nav` and `/404` are unlisted but not private: their links are the site's own.
+ */
+const robots = isPrivatePath(Astro.url.pathname)
+  ? 'noindex, nofollow'
+  : isUnlisted
+    ? 'noindex, follow'
+    : 'index, follow'
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* A dark OS gets a dark canvas before the stylesheet arrives, so it never sees a white flash. */}
+    <meta name="color-scheme" content="light dark" />
+    {/*
+     * `--background` in `global.css` resolved to sRGB, so the browser's bar meets the page with no
+     * seam. The manifest takes one colour, so it carries the light one.
+     */}
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0c0a09" />
+    {/* Otherwise found only once the stylesheet is parsed, and the first paint swaps fonts. */}
+    <link rel="preload" as="font" type="font/woff2" href={satoshi} crossorigin />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    {/*
+     * Unlisted pages get no canonical or `og:url`: `/404` is served at every missing path.
+     */}
+    {!isUnlisted && <link rel="canonical" href={url} />}
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE_NAME} />
+    <link rel="author" href={Astro.site} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:title" content={article?.headline ?? titleProp ?? SITE_NAME} />
+    <meta property="og:description" content={description} />
+    {!isUnlisted && <meta property="og:url" content={url} />}
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="320" />
+    <meta property="og:image:height" content="320" />
+    <meta property="og:image:alt" content={`Photo of ${SITE_NAME}`} />
+    {article && (
+      <>
+        <meta property="article:author" content={Astro.site} />
+        <meta
+          property="article:published_time"
+          content={dateOnlyToUtc(article.publishedTime).toISOString()}
+        />
+        {article.tags?.map((tag) => (
+          <meta property="article:tag" content={tag} />
+        ))}
+      </>
+    )}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@g10pahal" />
+
+    <meta name="robots" content={robots} />
+
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={BLOG_FEED_TITLE} href="/blog.rss.xml" />
+
+    {/*
+     * Site-wide so every navigation animates, and so Agenda's `transition:persist` root survives.
+     */}
+    <ClientRouter />
+  </head>
+  <body>
+    <IslandFailure />
+    {!isFullPage && (
+      <a
+        href="#main"
+        class="sr-only rounded-lg bg-background px-4 py-2 font-medium text-foreground outline-2 outline-offset-2 outline-muted-foreground focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-20"
+      >
+        Skip to content
+      </a>
+    )}
+    <Nav isFullPage={isFullPage} />
+    {!isFullPage && (
+      <div class="lg:ml-70 lg:px-20 xl:px-44">
+        {/*
+         * `tabindex="-1"`: without it the fragment moves the scroll but not the focus.
+         */}
+        <main
+          id="main"
+          tabindex="-1"
+          class="mx-auto w-full max-w-xl px-6 pt-6 pb-24 outline-none lg:mx-0 lg:pb-6 print:pb-0"
+        >
+          <slot />
+        </main>
+      </div>
+    )}
+  </body>
+</html>

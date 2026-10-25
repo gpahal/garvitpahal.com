@@ -1,0 +1,66 @@
+---
+import Layout from '@/layouts/layout.astro'
+import { LinkItemGroup } from '@/components/shared/link-item-group'
+import PageHeader from '@/components/shared/page-header.astro'
+
+const projects = [
+  {
+    href: 'https://github.com/gpahal/pdf-rag-embed-bench',
+    title: 'pdf-rag-embed-bench',
+    subtitle:
+      'Benchmark for PDF RAG embedding systems, from text to multimodal to multi-vector and combinations of them',
+  },
+  {
+    href: 'https://github.com/gpahal/microgpt',
+    title: 'microgpt',
+    subtitle: 'Micro GPT implementation and training pipeline in PyTorch',
+  },
+  {
+    href: 'https://github.com/gpahal/durable-execution',
+    title: 'durable-execution',
+    subtitle:
+      'Durable execution engine for running functions and workflows resiliently, ideal for AI workflows',
+  },
+  {
+    href: 'https://superstream.finance/',
+    title: 'superstream',
+    subtitle: 'Solana-based protocol for real-time streaming payments',
+  },
+  {
+    href: 'https://github.com/gpahal/solana-fellowship',
+    title: 'solana-fellowship',
+    subtitle: 'Stuff I worked on as part of my Solana Fellowship',
+  },
+  {
+    href: 'https://github.com/gpahal/jslib',
+    title: 'jslib',
+    subtitle: 'JS/TS libraries and configs I use in my projects',
+  },
+  {
+    href: 'https://github.com/gpahal/hgraph',
+    title: 'hgraph',
+    subtitle: 'Toy graph datastore implemented in Haskell',
+  },
+  {
+    href: 'https://github.com/gpahal/head',
+    title: 'head',
+    subtitle: 'Go library for parsing information in an HTML head tag',
+  },
+  {
+    href: 'https://github.com/gpahal/kvs',
+    title: 'kvs',
+    subtitle: 'Go interface for kv stores with an in-memory implementation',
+  },
+  {
+    href: 'https://github.com/gpahal/golib',
+    title: 'golib',
+    subtitle: 'Go libraries that I use in my projects',
+  },
+] as const
+---
+
+<Layout title="Projects" description="Side projects and open-source work by Garvit Pahal">
+  <PageHeader title="Projects" />
+
+  <LinkItemGroup items={projects} />
+</Layout>

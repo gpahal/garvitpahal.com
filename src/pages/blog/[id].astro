@@ -1,0 +1,38 @@
+---
+import { render } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+
+import { listBlogPosts } from '@/lib/blog'
+import { formatMonthYear } from '@/lib/dates'
+import Layout from '@/layouts/layout.astro'
+import { mdxComponents } from '@/components/shared/mdx-components'
+import PageHeader from '@/components/shared/page-header.astro'
+
+export async function getStaticPaths() {
+  return (await listBlogPosts()).map((blogPost) => ({
+    params: { id: blogPost.id },
+    props: { blogPost },
+  }))
+}
+
+type Props = {
+  blogPost: CollectionEntry<'blog'>
+}
+
+const { blogPost } = Astro.props
+const { Content } = await render(blogPost)
+---
+
+<Layout
+  title={`${blogPost.data.title} | Blog`}
+  description={blogPost.data.description}
+  article={{
+    headline: blogPost.data.title,
+    publishedTime: blogPost.data.publishedOn,
+    tags: blogPost.data.tags,
+  }}
+>
+  <PageHeader title={blogPost.data.title} subtitle={formatMonthYear(blogPost.data.publishedOn)} />
+
+  <Content components={mdxComponents} />
+</Layout>

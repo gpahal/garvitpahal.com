@@ -1,0 +1,42 @@
+---
+import { cn } from 'cn'
+
+import { NoticeAlert } from '@/components/shared/notice-alert'
+import { buttonVariants } from '@/components/ui/button-variants'
+
+/**
+ * Replaces an island whose code failed to load, which would otherwise stay on its fallback or on
+ * controls that do nothing. Static HTML and a plain script, since React may be what failed. A
+ * `transition:persist` island keeps the notice, as it never starts again. A bundled script runs
+ * once per full load, so `<ClientRouter />` never adds the listener twice.
+ */
+---
+
+<template data-island-failure>
+  <div class="space-y-3">
+    <NoticeAlert message="This page could not load. Reload the page to try again" />
+    <div class="flex flex-wrap gap-2">
+      <button type="button" class={cn(buttonVariants({ variant: 'outline' }))}>
+        Reload
+      </button>
+    </div>
+  </div>
+</template>
+<script>
+  document.addEventListener('astro:hydration-error', (event) => {
+    const template = document.querySelector('template[data-island-failure]')
+    if (!(event.target instanceof Element) || !(template instanceof HTMLTemplateElement)) {
+      return
+    }
+    // Removing a focused control drops focus to the page, so Reload takes it instead.
+    const hadFocus = event.target.contains(document.activeElement)
+    event.target.replaceChildren(template.content.cloneNode(true))
+    const reload = event.target.querySelector('button')
+    reload?.addEventListener('click', () => {
+      globalThis.location.reload()
+    })
+    if (hadFocus) {
+      reload?.focus()
+    }
+  })
+</script>
