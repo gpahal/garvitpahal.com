@@ -178,7 +178,7 @@ A secret the Worker reads needs all of these. [`wrangler-config.test.ts`](../che
 2. Its name in `WORKER_SECRETS` ([`deploy-worker.ts`](../scripts/deploy-worker.ts)) and in `env.deploy.secrets.required` in [`wrangler.jsonc`](../wrangler.jsonc). If `pnpm dev` reads it, also in `env.dev.secrets.required` and in `DEV_SECRETS` in the check.
 3. A value in Infisical's `prod` environment, and in `dev` if `pnpm dev` reads it. Then re-run Deploy.
 
-A setting Convex reads comes from a Worker secret through `convexEnvFile` in [`convex-env.ts`](../scripts/convex-env.ts). A `PUBLIC_*` value takes an `envField` with `context: 'client'` and `access: 'public'`, a [`.env.local.example`](../.env.local.example) line and a GitHub variable passed to the build step in [`check.yml`](../.github/workflows/check.yml). A Worker setting that is not secret goes in `vars` in `wrangler.jsonc`, under `env.dev` for `pnpm dev` and `env.deploy` for production.
+A setting Convex reads comes from a Worker secret through `convexEnvFile` in [`convex-env.ts`](../scripts/convex-env.ts). A `PUBLIC_*` value takes an `envField` with `context: 'client'` and `access: 'public'`, a [`.env.development`](../.env.development) line for the dev deployment and a GitHub variable passed to the build step in [`check.yml`](../.github/workflows/check.yml). A Worker setting that is not secret goes in `vars` in `wrangler.jsonc`, under `env.dev` for `pnpm dev` and `env.deploy` for production.
 
 ## Rotating the Convex token key
 

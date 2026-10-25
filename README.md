@@ -51,13 +51,12 @@ Everything under `/x` sits behind Cloudflare Access, so only I can sign in.
 
 They need the Infisical CLI signed in ([Getting started](#getting-started)). Once:
 
-1. Copy [`.env.local.example`](.env.local.example) to `.env.local`, unless it exists. It holds what the Convex CLI manages and never a secret: `pnpm convex-dev` fills in `PUBLIC_CONVEX_URL`.
-2. In Infisical's `dev` environment, at the root path `/`, add these secrets:
+1. In Infisical's `dev` environment, at the root path `/`, add these secrets:
    - `OWNER_EMAIL`: your email.
    - `CONVEX_JWT_PRIVATE_KEY`: the JSON line `pnpm convex-jwt-key` prints, a development key separate from production's.
    - For the puzzle solvers, `OPENAI_API_KEY`: a key from a separate OpenAI project with a low hard limit.
-3. Run `pnpm convex-dev` and choose a **local** deployment (if you're logged in to Convex, run `pnpm exec convex deployment select local` first).
-4. In a second terminal, run `pnpm convex-dev-set-env`, which sets the local deployment's `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from those secrets. Until then `pnpm convex-dev` fails to push; restart it if it doesn't retry.
+2. Run `pnpm convex-dev`, signing in to Convex if asked. It uses the cloud dev deployment that the committed [`.env.development`](.env.development) names, as do `pnpm dev` and `pnpm dev:public`.
+3. In a second terminal, run `pnpm convex-dev-set-env`, which sets the dev deployment's `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from those secrets. Until then `pnpm convex-dev` fails to push; restart it if it doesn't retry.
 
 After that, keep `pnpm convex-dev` and `pnpm dev` running side by side. After changing a secret in Infisical, restart `pnpm dev`; after changing `OWNER_EMAIL` or the key, or if Agenda says its sign-in keys don't match, also run `pnpm convex-dev-set-env` again.
 

@@ -1,7 +1,7 @@
 /**
  * Sets a Convex deployment's `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from the Worker's `OWNER_EMAIL`
  * and `CONVEX_JWT_PRIVATE_KEY`, so the two sides cannot disagree. `pnpm convex-dev-set-env` runs it
- * with Infisical's `dev` environment against `.env.local`'s deployment, refusing a deploy key;
+ * with Infisical's `dev` environment against `.env.development`'s deployment, refusing a deploy key;
  * Deploy calls `setConvexEnv` with `prod`. It imports only Node's built-ins and a module that
  * imports nothing, as `scripts/deploy-worker.ts` must.
  */
@@ -96,9 +96,9 @@ function convexEnvSet(file: string): void {
 }
 
 /**
- * Targets the deployment `CONVEX_DEPLOY_KEY` names, or else the one `CONVEX_DEPLOYMENT` in
- * `.env.local` selects, which is all `pnpm convex-dev-set-env` allows. The values go over stdin,
- * never into an argument list.
+ * Targets the deployment `CONVEX_DEPLOY_KEY` names, or else the one `CONVEX_DEPLOYMENT` selects,
+ * which `pnpm convex-dev-set-env` loads from `.env.development` and Node's `--env-file` lets the
+ * environment override. The values go over stdin, never into an argument list.
  */
 export function setConvexEnv(source: ConvexEnvSource): void {
   convexEnvSet(convexEnvFile(source))

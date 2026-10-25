@@ -50,7 +50,7 @@ Cloudflare Access gates `/x` and `/api/x`.
 
 ## Gotchas
 
-- **Secrets live only in Infisical**, never in a file: `dev` for `pnpm dev`, which needs the Infisical CLI signed in, and `prod` for Deploy. `pnpm dev:public` runs without it, and the private tools then refuse to sign in. `.env.local` holds what the Convex CLI manages and is user-owned: never delete or overwrite it.
+- **Secrets live only in Infisical**, never in a file: `dev` for `pnpm dev`, which needs the Infisical CLI signed in, and `prod` for Deploy. `pnpm dev:public` runs without it, and the private tools then refuse to sign in. The committed `.env.development` names the Convex dev deployment; `.env.local` is the Convex CLI's own copy and is user-owned: never delete or overwrite it.
 - Refresh the Convex guidelines with `pnpm convex-guidelines`. Never run `convex ai-files install`, `update` or `enable`: they rewrite `AGENTS.md` and `CLAUDE.md`.
 - The CSP exists only in built output: allow a new origin in [`content-security-policy.ts`](src/lib/server/content-security-policy.ts) and verify it under `pnpm build` and `pnpm preview`.
 - Inject dev-only UI with an integration, as `fontTesterInDev` in [`astro.config.ts`](astro.config.ts) does.

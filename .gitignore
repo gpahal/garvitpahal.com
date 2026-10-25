@@ -16,7 +16,7 @@ pnpm-debug.log*
 # Environment variables
 .env
 .env.*
-!.env.local.example
+!.env.development
 .dev.vars
 .dev.vars.*
 
