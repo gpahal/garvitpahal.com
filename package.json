@@ -10,7 +10,7 @@
     "convex-dev-set-env": "infisical run --env=dev --silent -- node scripts/convex-env.ts",
     "convex-guidelines": "node scripts/convex-guidelines.ts",
     "convex-jwt-key": "node scripts/convex-jwt-key.ts",
-    "dev": "infisical run --env=dev --silent -- astro dev",
+    "dev": "CLOUDFLARE_ENV=dev infisical run --env=dev --silent -- astro dev",
     "dev:public": "astro dev",
     "fmt": "prettier . --write",
     "fmt-check": "prettier . --check",

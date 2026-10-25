@@ -175,10 +175,10 @@ Unless the push in [GitHub step 7](#github) already deployed, run **Deploy** wit
 A secret the Worker reads needs all of these. [`wrangler-config.test.ts`](../checks/wrangler-config.test.ts) holds the `envField`s, `WORKER_SECRETS` and `wrangler.jsonc` to one list, and Deploy fails until `prod` holds exactly that list.
 
 1. An `envField` in [`astro.config.ts`](../astro.config.ts) with `context: 'server'`, `access: 'secret'` and `optional: true`, since prerendering runs without it. Check it per request.
-2. Its name in `WORKER_SECRETS` ([`deploy-worker.ts`](../scripts/deploy-worker.ts)) and in `env.deploy.secrets.required` in [`wrangler.jsonc`](../wrangler.jsonc). If `pnpm dev` reads it, also in the top-level `secrets.required` and in `DEV_SECRETS` in the check.
+2. Its name in `WORKER_SECRETS` ([`deploy-worker.ts`](../scripts/deploy-worker.ts)) and in `env.deploy.secrets.required` in [`wrangler.jsonc`](../wrangler.jsonc). If `pnpm dev` reads it, also in `env.dev.secrets.required` and in `DEV_SECRETS` in the check.
 3. A value in Infisical's `prod` environment, and in `dev` if `pnpm dev` reads it. Then re-run Deploy.
 
-A setting Convex reads comes from a Worker secret through `convexEnvFile` in [`convex-env.ts`](../scripts/convex-env.ts). A `PUBLIC_*` value takes an `envField` with `context: 'client'` and `access: 'public'`, a [`.env.local.example`](../.env.local.example) line and a GitHub variable passed to the build step in [`check.yml`](../.github/workflows/check.yml). A Worker setting that is not secret goes in `vars` in `wrangler.jsonc`, at the top level for `pnpm dev` and under `env.deploy` for production.
+A setting Convex reads comes from a Worker secret through `convexEnvFile` in [`convex-env.ts`](../scripts/convex-env.ts). A `PUBLIC_*` value takes an `envField` with `context: 'client'` and `access: 'public'`, a [`.env.local.example`](../.env.local.example) line and a GitHub variable passed to the build step in [`check.yml`](../.github/workflows/check.yml). A Worker setting that is not secret goes in `vars` in `wrangler.jsonc`, under `env.dev` for `pnpm dev` and `env.deploy` for production.
 
 ## Rotating the Convex token key
 

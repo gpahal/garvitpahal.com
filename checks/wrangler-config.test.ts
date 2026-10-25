@@ -8,8 +8,8 @@ import astroConfig from '../astro.config'
 import { WORKER_SECRETS } from '../scripts/deploy-worker'
 
 /**
- * Deploy uses `env.deploy` while the build and dev server read the top level, so a key an
- * environment does not inherit, or restates differently, shows up as a difference.
+ * Deploy uses `env.deploy`, `pnpm dev` uses `env.dev` and the build reads the top level, so a key
+ * an environment does not inherit, or restates differently, shows up as a difference.
  */
 
 const ROOT = path.join(import.meta.dirname, '..')
@@ -46,11 +46,12 @@ function resolvedConfig(env?: string): ResolvedConfig {
 
 const topLevel = resolvedConfig()
 const deploy = resolvedConfig('deploy')
+const dev = resolvedConfig('dev')
 
 /**
  * `rules`, which the Vite plugin warns about at the top level, `targetEnvironment`, which Wrangler
- * sets on any config resolved for an environment, and `secrets`, since the dev server reads fewer
- * than the Worker.
+ * sets on any config resolved for an environment, and `secrets`, which each environment lists for
+ * itself.
  */
 const DEPLOY_ONLY = ['rules', 'targetEnvironment', 'secrets'] as const
 
@@ -69,17 +70,19 @@ function withoutDeployOnly(config: ResolvedConfig): Record<string, unknown> {
 }
 
 describe('wrangler.jsonc', () => {
-  it('resolves env.deploy to the top level plus the deploy-only keys', () => {
+  it('resolves env.deploy and env.dev to the top level plus their own keys', () => {
     expect(deploy.name).toBe('garvitpahal-com')
     expect(withoutDeployOnly(deploy)).toStrictEqual(withoutDeployOnly(topLevel))
+    expect(withoutDeployOnly(dev)).toStrictEqual(withoutDeployOnly(topLevel))
   })
 
-  it('requires every server secret astro.config.ts declares at deploy, and the dev ones locally', () => {
+  it('requires every server secret astro.config.ts declares at deploy, and the dev ones in dev only', () => {
     const declared = Object.entries(astroConfig.env?.schema ?? {})
       .filter(([, field]) => field.context === 'server' && field.access === 'secret')
       .map(([name]) => name)
     expect(new Set(WORKER_SECRETS)).toStrictEqual(new Set(declared))
     expect(new Set(deploy.secrets?.required)).toStrictEqual(new Set(WORKER_SECRETS))
-    expect(new Set(topLevel.secrets?.required)).toStrictEqual(new Set(DEV_SECRETS))
+    expect(new Set(dev.secrets?.required)).toStrictEqual(new Set(DEV_SECRETS))
+    expect(topLevel.secrets).toBeUndefined()
   })
 })

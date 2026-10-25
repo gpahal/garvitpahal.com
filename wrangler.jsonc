@@ -23,12 +23,17 @@
   "observability": {
     "enabled": true
   },
-  // The secrets `pnpm dev` reads. Wrangler binds only listed names from `process.env`, where
-  // `infisical run` puts Infisical's `dev` environment; without the list it reads none of them.
-  "secrets": {
-    "required": ["OPENAI_API_KEY", "CONVEX_JWT_PRIVATE_KEY", "OWNER_EMAIL"]
-  },
   "env": {
+    // `pnpm dev` selects this with `CLOUDFLARE_ENV=dev`. Wrangler binds only listed names from
+    // `process.env`, where `infisical run` puts Infisical's `dev` environment; without the list it
+    // reads none of them. Here rather than at the top level, which builds read, so a build without
+    // secrets does not warn that they are missing.
+    "dev": {
+      "name": "garvitpahal-com",
+      "secrets": {
+        "required": ["OPENAI_API_KEY", "CONVEX_JWT_PRIVATE_KEY", "OWNER_EMAIL"]
+      }
+    },
     // Deploy uses this rather than the build's `dist/server/wrangler.json`, which comes from a job
     // that runs dependency code: `wrangler deploy` would run its `build.command` with the deploy
     // credentials in reach. `rules` is here because the Vite plugin warns about it at the top
