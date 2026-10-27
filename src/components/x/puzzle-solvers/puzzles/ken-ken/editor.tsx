@@ -41,26 +41,26 @@ import { ClueEditor } from './clue-editor'
 import { cageBorderClasses, cellTextClass, clueTextClass } from './grid-classes'
 import { CageClue } from './grid-view'
 
-type CellState = {
-  label: string
-  fill: string
-  /**
-   * Unset outside cage-edit mode.
-   */
-  isInDraft?: boolean
-  isBlocked?: boolean
-  /**
-   * Both unset while drafting, or a flagged cage would outshout the shape in hand.
-   */
-  issue?: MarkedCageIssue
-  isFlagged?: boolean
-}
-
 export function KenKenEditor({
   puzzle,
   onChange,
   onBlockerChange,
 }: PuzzleEditorProps<KenKenPuzzle>): ReactNode {
+  type CellState = {
+    label: string
+    fill: string
+    /**
+     * Unset outside cage-edit mode.
+     */
+    isInDraft?: boolean
+    isBlocked?: boolean
+    /**
+     * Both unset while drafting, or a flagged cage would outshout the shape in hand.
+     */
+    issue?: MarkedCageIssue
+    isFlagged?: boolean
+  }
+
   const { n } = puzzle.grid
   const issueId = useId()
   const [draft, setDraft] = useState<CageDraft>()

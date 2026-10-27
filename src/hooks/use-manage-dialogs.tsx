@@ -4,9 +4,6 @@ import { useDialogTarget } from '@/hooks/use-dialog-target'
 import { AddButton } from '@/components/shared/add-button'
 import { LiveSubjectContent } from '@/components/shared/live-subject-content'
 
-type ManageTarget<Subject> =
-  { kind: 'create' } | { kind: 'open'; subject: Subject } | { kind: 'edit'; subject: Subject }
-
 type ManageDialogsOptions<Subject> = {
   useLive: (opened: Subject) => Subject | null | undefined | Error
   goneNotice?: (live: Subject) => string | undefined
@@ -28,7 +25,9 @@ export function useManageDialogs<Subject extends { name: string }>({
   renderActions,
   renderForm,
 }: ManageDialogsOptions<Subject>): ManageDialogs<Subject> {
-  const dialog = useDialogTarget<ManageTarget<Subject>>()
+  type ManageTarget =
+    { kind: 'create' } | { kind: 'open'; subject: Subject } | { kind: 'edit'; subject: Subject }
+  const dialog = useDialogTarget<ManageTarget>()
   const { target, show, close, render } = dialog
 
   return {

@@ -156,15 +156,14 @@ const settle = async (): Promise<void> =>
     setTimeout(resolve, 0)
   })
 
-type RetryCase = [
-  label: string,
-  failures: Array<Response | Error>,
-  wokenFromSleeps: Array<number>,
-  delays: Array<number>,
-  problems: Array<unknown>,
-]
-
 describe('createAccessTokenFetcher', () => {
+  type RetryCase = [
+    label: string,
+    failures: Array<Response | Error>,
+    wokenFromSleeps: Array<number>,
+    delays: Array<number>,
+    problems: Array<unknown>,
+  ]
   it.each<RetryCase>([
     [
       'an unreachable server, shown once the quick retries run out',

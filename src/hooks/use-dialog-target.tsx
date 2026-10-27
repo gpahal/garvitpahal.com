@@ -18,12 +18,6 @@ import type { Question } from '@/hooks/use-discard-confirmation'
 import { useStandIn } from '@/hooks/use-stand-in'
 import { Dialog } from '@/components/ui/dialog'
 
-/**
- * `target` outlives `isOpen` so closing content stays mounted for its animation. `opening` keys the
- * content, so drafts never leak across subjects, and tells a late save which opening it belongs to.
- */
-type DialogState<Target> = { target: Target | undefined; isOpen: boolean; opening: number }
-
 type DialogTarget<Target> = {
   target: Target | undefined
   show: (next: Target) => void
@@ -55,7 +49,10 @@ const DISCARD_CHANGES: Question = {
  * its failure shows in the form that made it.
  */
 export function useDialogTarget<Target>(): DialogTarget<Target> {
-  const [state, setState] = useState<DialogState<Target>>({
+  // `target` outlives `isOpen` so closing content stays mounted for its animation. `opening` keys the
+  // content, so drafts never leak across subjects, and tells a late save which opening it belongs to.
+  type DialogState = { target: Target | undefined; isOpen: boolean; opening: number }
+  const [state, setState] = useState<DialogState>({
     target: undefined,
     isOpen: false,
     opening: 0,

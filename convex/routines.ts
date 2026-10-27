@@ -16,8 +16,6 @@ import { MAX_ROUTINES, MINUTE_MS, ROUTINES_FULL_ISSUE } from './shared/limits'
 export const routineValidator = schema.doc('routines')
 const routineFieldsValidator = routineValidator.pick('name', 'description', 'goal')
 
-type RoutineFields = typeof routineFieldsValidator.type
-
 function checkedGoal(goal: Goal): Goal {
   const issue = goalIssue(goal)
   if (issue !== undefined) {
@@ -77,6 +75,7 @@ export const update = ownerMutation({
   args: { id: v.id('routines'), ...routineFieldsValidator.partial().fields },
   returns: v.null(),
   handler: async (ctx, { id, name, description, goal }) => {
+    type RoutineFields = typeof routineFieldsValidator.type
     await requireDoc(ctx, 'routines', id)
     const changes: Partial<RoutineFields> = {}
     if (description !== undefined) {

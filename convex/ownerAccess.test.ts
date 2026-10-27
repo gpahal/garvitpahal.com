@@ -55,9 +55,8 @@ const ARGS: Record<string, (ids: Ids) => Record<string, unknown>> = {
   'rateLimits:consumePuzzleRead': () => ({ cost: 1 }),
 }
 
-type Registered = { isPublic?: boolean; isQuery?: boolean }
-
 function publicFunctions(): Array<{ name: string; isQuery: boolean }> {
+  type Registered = { isPublic?: boolean; isQuery?: boolean }
   return Object.entries(functionModules).flatMap(([path, module]) =>
     Object.entries(module as Record<string, Registered | undefined>)
       .filter(([, fn]) => fn?.isPublic === true)
