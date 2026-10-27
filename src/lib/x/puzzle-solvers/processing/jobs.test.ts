@@ -11,9 +11,8 @@ import type { Job, WorkerMessage } from './protocol'
 const IDLE_LIMIT_MS = 60_000
 const ALLOWANCE_MS = 500
 
-type Listener = (event: MessageEvent<WorkerMessage>) => void
-
 function createTransport() {
+  type Listener = (event: MessageEvent<WorkerMessage>) => void
   const listeners = new Map<string, Array<Listener>>()
   const posted: Array<Job> = []
   let terminated = 0

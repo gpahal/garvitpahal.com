@@ -20,8 +20,6 @@ import { latestShowAt, SHOW_AT_TOO_LATE_ISSUE } from './shared/showAt'
 const taskValidator = schema.doc('tasks')
 const taskFieldsValidator = taskValidator.pick('name', 'description', 'showAt')
 
-type TaskFields = typeof taskFieldsValidator.type
-
 const taskListValidator = cappedValidator(taskValidator)
 
 /**
@@ -124,6 +122,7 @@ export const update = ownerMutation({
   args: { id: v.id('tasks'), ...taskFieldsValidator.partial().fields },
   returns: v.null(),
   handler: async (ctx, { id, name, description, showAt }) => {
+    type TaskFields = typeof taskFieldsValidator.type
     const task = await requireDoc(ctx, 'tasks', id)
     const changes: Partial<TaskFields> = {}
     if (description !== undefined) {

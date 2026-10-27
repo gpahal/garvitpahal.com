@@ -31,24 +31,6 @@ function integrationNamed(name: string): AstroIntegration {
   return found!
 }
 
-/**
- * The parts of Astro's hook signatures each integration touches; the casts are the price of calling
- * a hook outside a build.
- */
-type VitePluginLike = {
-  name: string
-  configResolved: (config: { env: Record<string, unknown> }) => void
-}
-
-type ConfigSetupHook = (options: {
-  updateConfig: (config: { vite: { plugins: Array<VitePluginLike> } }) => void
-}) => void
-
-type BuildDoneHook = (options: {
-  dir: URL
-  logger: { info: (message: string) => void; warn: (message: string) => void }
-}) => Promise<void>
-
 const CONVEX_URL = 'https://example.convex.cloud'
 
 const INLINE_SCRIPT = 'console.log("hydrate")'
@@ -73,6 +55,19 @@ async function buildOutput(): Promise<string> {
 }
 
 async function runPolicyIntegration(root: string): Promise<string> {
+  // The parts of Astro's hook signatures each integration touches; the casts are the price of calling
+  // a hook outside a build.
+  type VitePluginLike = {
+    name: string
+    configResolved: (config: { env: Record<string, unknown> }) => void
+  }
+  type BuildDoneHook = (options: {
+    dir: URL
+    logger: { info: (message: string) => void; warn: (message: string) => void }
+  }) => Promise<void>
+  type ConfigSetupHook = (options: {
+    updateConfig: (config: { vite: { plugins: Array<VitePluginLike> } }) => void
+  }) => void
   const integration = integrationNamed('content-security-policy-header')
   const plugins: Array<VitePluginLike> = []
   const setup = integration.hooks['astro:config:setup'] as unknown as ConfigSetupHook
@@ -118,13 +113,12 @@ describe('Verify production', () => {
   })
 })
 
-type DevHostHook = (options: {
-  command: 'dev' | 'build' | 'preview'
-  config: { server: { host: string | boolean } }
-}) => void
-
 describe('the exposed dev server refusal', () => {
   it('is wired into astro.config.ts and lets the dev server listen on this machine alone', () => {
+    type DevHostHook = (options: {
+      command: 'dev' | 'build' | 'preview'
+      config: { server: { host: string | boolean } }
+    }) => void
     const setup = integrationNamed('refuse-exposed-dev-server').hooks[
       'astro:config:setup'
     ] as unknown as DevHostHook

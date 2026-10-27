@@ -69,13 +69,12 @@ export function orientQuad(
     : [topLeft, topRight, bottomRight, bottomLeft]
 }
 
-type Affine = [number, number, number, number, number, number]
-
 /**
  * Applied to the pixels rather than as a CSS transform, so the grid and handles sit on the picture
  * the user sees. Returns the source itself when upright.
  */
 export function orientImage(image: PixelImage, orientation: Orientation): PixelImage {
+  type Affine = [number, number, number, number, number, number]
   const { quarterTurns, mirrored } = orientation
   if (quarterTurns === 0 && !mirrored) {
     return image

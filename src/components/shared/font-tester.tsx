@@ -212,8 +212,6 @@ type FontPickerProps = {
   onChoose: (font: TesterFont | undefined) => void
 }
 
-type PickerOption = { key: string; font: TesterFont | undefined }
-
 function FontPicker({
   searchRef,
   list,
@@ -228,6 +226,7 @@ function FontPicker({
   onCategoryChange,
   onChoose,
 }: FontPickerProps): ReactNode {
+  type PickerOption = { key: string; font: TesterFont | undefined }
   const listId = useId()
   const errorId = useId()
   const scrollRef = useRef<HTMLDivElement>(null)
