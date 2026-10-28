@@ -200,8 +200,8 @@ importers:
         specifier: ^5.28.8
         version: 5.28.8(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       '@gpahal/eslint-config':
-        specifier: ^0.0.144
-        version: 0.0.144(2849663ff5cf04d357420d327610649f)
+        specifier: ^0.0.145
+        version: 0.0.145(2849663ff5cf04d357420d327610649f)
       '@gpahal/prettier-config':
         specifier: ^0.0.48
         version: 0.0.48(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier-plugin-tailwindcss@0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.10)(supports-color@10.2.2))(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier@3.9.10))(prettier@3.9.10)(supports-color@10.2.2)
@@ -1394,8 +1394,8 @@ packages:
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
 
-  '@gpahal/eslint-config@0.0.144':
-    resolution: {integrity: sha512-62fYzld/3he27uKBinCVmI+Nad94vpD2qWkZ3YZsPOmGg+0vufmZV6E4PelemCwNyqZyPCSduVfbFBW0i4/GhQ==}
+  '@gpahal/eslint-config@0.0.145':
+    resolution: {integrity: sha512-dO1e5UGIj4Da5inAQoG4wTdStpdLBVeilY7/kWVev4MUMsBUu8cC+hbD68MhOaVRo8ZFKuWf2zI/uP6tGP1heQ==}
     engines: {node: '>=24.22.0'}
     peerDependencies:
       '@eslint-react/eslint-plugin': ^5.21
@@ -7388,7 +7388,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
-  '@gpahal/eslint-config@0.0.144(2849663ff5cf04d357420d327610649f)':
+  '@gpahal/eslint-config@0.0.145(2849663ff5cf04d357420d327610649f)':
     dependencies:
       '@e18e/eslint-plugin': 0.8.1(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))
       '@eslint-community/eslint-plugin-eslint-comments': 4.8.1(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))

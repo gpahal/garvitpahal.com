@@ -39,7 +39,7 @@
     "@convex-dev/rate-limiter": "^0.4.2",
     "@edge-runtime/vm": "^5.0.0",
     "@eslint-react/eslint-plugin": "^5.28.8",
-    "@gpahal/eslint-config": "^0.0.144",
+    "@gpahal/eslint-config": "^0.0.145",
     "@gpahal/prettier-config": "^0.0.48",
     "@gpahal/stylelint-config": "^0.0.29",
     "@gpahal/tsconfig": "^0.0.24",

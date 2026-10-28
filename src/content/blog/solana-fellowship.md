@@ -155,7 +155,7 @@ I read the documentation of [Solana economics](https://web.archive.org/web/20211
 
 This week, there was no particular theme; we just practised, built more complicated programs and started on the fellowship project.
 
-### dApps, dApps everywhere
+### dApps, dApps everywhere...
 
 There were four guided quests, all very different.
 
