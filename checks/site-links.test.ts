@@ -9,7 +9,7 @@ import { listPuzzles } from '@/lib/x/puzzle-solvers/puzzles/registry'
 import { filesUnder, routePatterns } from './routes'
 
 /**
- * Checks that root-relative links name something the build serves. It sees Markdown links in MDX
+ * Checks that root-relative links name something the build serves. It sees Markdown links in content
  * and string literals given to `href` or `path`, plus Agenda's `AGENDA_PATHS`; a link built any
  * other way goes unchecked.
  */
@@ -22,9 +22,9 @@ const ROOT = path.join(import.meta.dirname, '..')
 const PARAM_VALUES: Record<string, () => Array<string>> = {
   // Only direct children, as `src/content.config.ts` loads.
   '/blog/[id]': () =>
-    filesUnder('src/content/blog', /\.mdx$/)
+    filesUnder('src/content/blog', /\.md$/)
       .filter((file) => path.posix.dirname(file) === 'src/content/blog')
-      .map((file) => path.basename(file, '.mdx')),
+      .map((file) => path.basename(file, '.md')),
   '/x/puzzle-solvers/[puzzle]': () => listPuzzles().map((puzzle) => puzzle.id),
   '/api/x/puzzle-solvers/[puzzle]': () => listPuzzles().map((puzzle) => puzzle.id),
 }
@@ -69,7 +69,7 @@ function rootRelativeLinks(text: string, pattern: RegExp): Array<string> {
 describe('root-relative links', () => {
   it('name a route, a public file or an integration output', () => {
     const sources = [
-      ...filesUnder('src/content', /\.mdx$/).map((file) => ({ file, pattern: MARKDOWN_LINK })),
+      ...filesUnder('src/content', /\.md$/).map((file) => ({ file, pattern: MARKDOWN_LINK })),
       ...filesUnder('src', /\.(?:astro|tsx?)$/).map((file) => ({ file, pattern: HREF })),
     ]
     const links = sources.flatMap(({ file, pattern }) =>
@@ -83,7 +83,7 @@ describe('root-relative links', () => {
       link,
     }))
     // Catch a pattern that stops matching, which would pass with nothing to check.
-    for (const extension of ['.mdx', '.astro', '.ts', '.tsx']) {
+    for (const extension of ['.md', '.astro', '.ts', '.tsx']) {
       expect(
         links.some(({ file }) => file.endsWith(extension)),
         extension,

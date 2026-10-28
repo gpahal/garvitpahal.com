@@ -6,13 +6,13 @@ import { defineConfig, envField } from 'astro/config'
 
 import cloudflare from '@astrojs/cloudflare'
 import { satteri } from '@astrojs/markdown-satteri'
-import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import expressiveCode from 'astro-expressive-code'
 import { defineHastPlugin } from 'satteri'
 
+import { PROSE_CLASSES, TABLE_SCROLL_REGION } from './src/components/shared/prose-classes'
 import {
   connectSourcesOf,
   contentSecurityPolicy,
@@ -241,6 +241,43 @@ const proseImageSizes = defineHastPlugin({
   },
 })
 
+function isProseTag(tag: string): tag is keyof typeof PROSE_CLASSES {
+  return Object.hasOwn(PROSE_CLASSES, tag)
+}
+
+/**
+ * Styles rendered Markdown, which has no components to style it. The `<code>` in a `pre` is
+ * Expressive Code's.
+ */
+const proseClasses = defineHastPlugin({
+  name: 'prose-classes',
+  element: {
+    filter: Object.keys(PROSE_CLASSES),
+    visit(node, ctx) {
+      const parent = ctx.parent(node)
+      if (
+        !isProseTag(node.tagName) ||
+        (node.tagName === 'code' && parent.type === 'element' && parent.tagName === 'pre')
+      ) {
+        return
+      }
+      const existing = Array.isArray(node.properties.className) ? node.properties.className : []
+      ctx.setProperty(node, 'className', [...existing, ...PROSE_CLASSES[node.tagName].split(' ')])
+      if (node.tagName === 'table') {
+        ctx.wrapNode(node, {
+          type: 'element',
+          tagName: 'div',
+          properties: {
+            ...TABLE_SCROLL_REGION,
+            className: TABLE_SCROLL_REGION.className.split(' '),
+          },
+          children: [],
+        })
+      }
+    },
+  },
+})
+
 export default defineConfig({
   site: 'https://garvitpahal.com',
   // Change with `html_handling` in `wrangler.jsonc`.
@@ -253,10 +290,9 @@ export default defineConfig({
   image: {
     layout: 'constrained',
   },
-  // `@astrojs/mdx` inherits this processor, so `.mdx` images get the same `sizes`.
   markdown: {
     processor: satteri({
-      hastPlugins: [proseImageSizes],
+      hastPlugins: [proseImageSizes, proseClasses],
       features: { smartPunctuation: { quotes: false } },
     }),
   },
@@ -289,7 +325,6 @@ export default defineConfig({
   integrations: [
     sitemap({ filter: (page) => !isUnlistedPath(new URL(page).pathname) }),
     expressiveCode(),
-    mdx(),
     react(),
     contentSecurityPolicyHeader(),
     fontTesterInDev(),

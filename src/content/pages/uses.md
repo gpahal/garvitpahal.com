@@ -3,30 +3,21 @@ title: Uses
 description: The hardware, development tools and apps Garvit Pahal uses daily as a software engineer
 ---
 
-This is a rough list of the products I use daily as a software engineer. Check out
-[uses.tech](https://uses.tech/) for a list of other people's `/uses` pages!
+This is a rough list of the products I use daily as a software engineer. Check out [uses.tech](https://uses.tech/) for a list of other people's `/uses` pages!
 
-There was a time in my early 20s when I used to enjoy building my own desktop and OS from scratch.
-I still enjoy tinkering with new tech, but I depend on a simple setup so that I can focus more on my
-work.
+There was a time in my early 20s when I used to enjoy building my own desktop and OS from scratch. I still enjoy tinkering with new tech, but I depend on a simple setup so that I can focus more on my work.
 
 ## Hardware
 
 - Laptop: MacBook Pro M3 Max 14"
 
-- Monitor:
-  [Dell S2722QC 27-inch 4K UHD](https://www.dellstore.com/dell-27-4k-uhd-usb-c-monitor-s2722qc.html)
+- Monitor: [Dell S2722QC 27-inch 4K UHD](https://www.dellstore.com/dell-27-4k-uhd-usb-c-monitor-s2722qc.html)
 
-- Keyboard:
-  [Logitech MK850 Performance Wireless](https://www.logitech.com/en-us/shop/p/mk850-wireless-keyboard-mouse.920-008229)
+- Keyboard: [Logitech MK850 Performance Wireless](https://www.logitech.com/en-us/shop/p/mk850-wireless-keyboard-mouse.920-008229)
 
-- Mouse:
-  [Logitech MX Master 4 wireless](https://www.logitech.com/en-us/shop/p/mx-master-4)
+- Mouse: [Logitech MX Master 4 wireless](https://www.logitech.com/en-us/shop/p/mx-master-4)
 
-- Headphones:
-  [Philips SHP9500 wired headphones](https://www.amazon.com/Philips-SHP9500S-Precision-Over-ear-Headphones/dp/B00ENMK1DW)
-  and
-  [Technics EAH-AZ100 wireless earphones](https://www.technics.com/sg/products/headphones-learn/headphones/the-future-of-sound-innovation-true-wireless-earbuds-eah-az100.html)
+- Headphones: [Philips SHP9500 wired headphones](https://www.amazon.com/Philips-SHP9500S-Precision-Over-ear-Headphones/dp/B00ENMK1DW) and [Technics EAH-AZ100 wireless earphones](https://www.technics.com/sg/products/headphones-learn/headphones/the-future-of-sound-innovation-true-wireless-earbuds-eah-az100.html)
 
 ## Development tools
 
@@ -52,8 +43,7 @@ work.
 
 - Calendar: [Google Calendar](https://calendar.google.com/)
 
-- File management and backup: [Google Drive](https://drive.google.com/) and
-  [Dropbox](https://www.dropbox.com/)
+- File management and backup: [Google Drive](https://drive.google.com/) and [Dropbox](https://www.dropbox.com/)
 
 ## Design tools
 

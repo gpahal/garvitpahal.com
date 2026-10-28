@@ -22,7 +22,7 @@ const OUT_OF_ORDER = { path: ['endedOn'], message: 'endedOn must not be before s
 const blog = defineCollection({
   loader: glob({
     // A nested post's id would contain a slash, which `src/pages/blog/[id].astro` cannot serve.
-    pattern: '*.mdx',
+    pattern: '*.md',
     base: './src/content/blog',
   }),
   schema: z.strictObject({
@@ -35,7 +35,7 @@ const blog = defineCollection({
 
 const workExperiences = defineCollection({
   loader: glob({
-    pattern: '**/*.mdx',
+    pattern: '**/*.md',
     base: './src/content/work-experiences',
   }),
   schema: z
@@ -50,7 +50,7 @@ const workExperiences = defineCollection({
 
 const notablePersonalProjects = defineCollection({
   loader: glob({
-    pattern: '**/*.mdx',
+    pattern: '**/*.md',
     base: './src/content/notable-personal-projects',
   }),
   schema: z
@@ -64,7 +64,7 @@ const notablePersonalProjects = defineCollection({
 
 const pages = defineCollection({
   loader: glob({
-    pattern: '*.mdx',
+    pattern: '*.md',
     base: './src/content/pages',
   }),
   schema: z.strictObject({

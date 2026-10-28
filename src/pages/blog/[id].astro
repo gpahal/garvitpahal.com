@@ -5,7 +5,6 @@ import type { CollectionEntry } from 'astro:content'
 import { listBlogPosts } from '@/lib/blog'
 import { formatMonthYear } from '@/lib/dates'
 import Layout from '@/layouts/layout.astro'
-import { mdxComponents } from '@/components/shared/mdx-components'
 import PageHeader from '@/components/shared/page-header.astro'
 
 export async function getStaticPaths() {
@@ -34,5 +33,5 @@ const { Content } = await render(blogPost)
 >
   <PageHeader title={blogPost.data.title} subtitle={formatMonthYear(blogPost.data.publishedOn)} />
 
-  <Content components={mdxComponents} />
+  <Content />
 </Layout>
