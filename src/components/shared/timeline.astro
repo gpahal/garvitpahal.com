@@ -3,7 +3,6 @@ import { render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
 import { formatMonthRange, sortNewestFirst } from '@/lib/dates'
-import { mdxComponents } from '@/components/shared/mdx-components'
 import { H3, Muted } from '@/components/shared/typography'
 
 type Props = {
@@ -31,7 +30,7 @@ const items = await Promise.all(
         {role !== undefined ? `${role}, ` : ''}
         {formatMonthRange(entry.data.startedOn, entry.data.endedOn)}
       </Muted>
-      <Content components={mdxComponents} />
+      <Content />
     </li>
   ))}
 </ul>

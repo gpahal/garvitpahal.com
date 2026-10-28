@@ -2,7 +2,6 @@
 import { getEntry, render } from 'astro:content'
 
 import Layout from '@/layouts/layout.astro'
-import { mdxComponents } from '@/components/shared/mdx-components'
 import PageHeader from '@/components/shared/page-header.astro'
 
 type Props = {
@@ -24,5 +23,5 @@ const { Content } = await render(page)
 <Layout title={isHome ? undefined : page.data.title} description={page.data.description}>
   <PageHeader title={page.data.title} />
 
-  <Content components={mdxComponents} />
+  <Content />
 </Layout>

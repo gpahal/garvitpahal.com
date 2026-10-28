@@ -1,0 +1,10 @@
+---
+company: Giga ML
+role: Founding software engineer
+startedOn: 01/01/2025
+endedOn: 31/03/2025
+---
+
+Giga ML is an enterprise-focused AI platform that builds voice and chat AI agents designed to automate and scale customer support and operations for large companies. Customers include DoorDash and Cloudbeds.
+
+I built the voice AI infrastructure at Giga, which was primarily a text- and email-based customer support platform. The work involved solving problems such as RAG latency on the knowledge base, user interruptions and accents, adding fallbacks for our AI providers and making every part of the voice experience configurable.

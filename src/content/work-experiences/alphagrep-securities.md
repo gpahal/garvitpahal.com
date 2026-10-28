@@ -7,5 +7,4 @@ endedOn: 31/03/2019
 
 AlphaGrep is a quantitative trading and investment firm.
 
-I researched and developed high-frequency quantitative trading strategies for commodity markets in
-China, which became my team's most profitable market.
+I researched and developed high-frequency quantitative trading strategies for commodity markets in China, which became my team's most profitable market.

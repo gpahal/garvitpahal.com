@@ -11,7 +11,7 @@ export function filesUnder(dir: string, names: RegExp): Array<string> {
 }
 
 export function routePatterns(): Array<string> {
-  return filesUnder('src/pages', /\.(?:astro|mdx?|[cm]?[jt]s)$/).map(
+  return filesUnder('src/pages', /\.(?:astro|md|[cm]?[jt]s)$/).map(
     (file) =>
       `/${file
         .slice('src/pages/'.length)

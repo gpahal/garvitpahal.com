@@ -2,7 +2,7 @@
 
 The source of my personal website, [garvitpahal.com](https://garvitpahal.com): who I am, what I've worked on, a blog and a couple of private tools only I can sign in to.
 
-It's built with [Astro](https://astro.build/), MDX, React, [Tailwind CSS](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/), runs on [Cloudflare Workers](https://developers.cloudflare.com/workers/) and keeps the private tools' data in [Convex](https://www.convex.dev/) and their secrets in [Infisical](https://infisical.com/).
+It's built with [Astro](https://astro.build/), React, [Tailwind CSS](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/), runs on [Cloudflare Workers](https://developers.cloudflare.com/workers/) and keeps the private tools' data in [Convex](https://www.convex.dev/) and their secrets in [Infisical](https://infisical.com/).
 
 ## Getting started
 
