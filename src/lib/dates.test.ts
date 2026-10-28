@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest'
 
-import { contentDateSchema, dateOnlyToUtc, formatMonthRange, sortNewestFirst } from './dates'
+import {
+  arePeriodsInOrder,
+  contentDateSchema,
+  dateOnlyToUtc,
+  formatMonthRange,
+  formatPeriods,
+  formatYearRange,
+  periodsOf,
+  sortNewestFirst,
+} from './dates'
 
 describe('content calendar dates', () => {
   it('strictly validates leap days and author format', () => {
@@ -56,5 +65,36 @@ describe('content calendar dates', () => {
     expect(dateOnlyToUtc(contentDateSchema.parse('01/01/2025')).toISOString()).toBe(
       '2025-01-01T00:00:00.000Z',
     )
+  })
+
+  it('formats a year range, collapsing a single year', () => {
+    const date = (value: string) => contentDateSchema.parse(value)
+    expect(formatYearRange(date('01/07/2024'), date('31/07/2024'))).toBe('2024')
+    expect(formatYearRange(date('01/12/2024'), date('31/01/2025'))).toBe('2024 – 2025')
+    expect(formatYearRange(date('01/09/2026'), undefined)).toBe('2026 – Present')
+  })
+
+  it('lists a resumed role newest period first and accepts only non-overlapping periods', () => {
+    const date = (value: string) => contentDateSchema.parse(value)
+    const periods = periodsOf({
+      startedOn: date('01/06/2026'),
+      earlierPeriods: [{ startedOn: date('01/08/2024'), endedOn: date('30/09/2025') }],
+    })
+    expect(formatPeriods(periods)).toBe('Jun 2026 – Present, Aug 2024 – Sep 2025')
+    expect(arePeriodsInOrder(periods)).toBe(true)
+
+    const closed = { startedOn: date('01/01/2024'), endedOn: date('31/12/2024') }
+    // An open earlier period, an overlap, an end before its start and the wrong order.
+    for (const bad of [
+      [{ startedOn: date('01/01/2025') }, { startedOn: date('01/01/2024') }],
+      [{ startedOn: date('01/12/2024') }, closed],
+      [
+        { startedOn: date('01/01/2025') },
+        { startedOn: date('01/06/2024'), endedOn: date('01/01/2024') },
+      ],
+      [closed, { startedOn: date('01/01/2025') }],
+    ]) {
+      expect(arePeriodsInOrder(bad)).toBe(false)
+    }
   })
 })

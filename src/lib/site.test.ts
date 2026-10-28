@@ -7,10 +7,11 @@ test('matches a path prefix and what is below it, never a path that only starts 
   expect(isAtOrUnder('/xyz', '/x')).toBe(false)
   expect(isPrivatePath('/x/puzzle-solvers')).toBe(true)
   expect(isPrivatePath('/api/x/token')).toBe(false)
-  // The private area, /nav and the not-found page stay out of search, and only those.
+  // The private area, /nav, the not-found page and the PDF's source stay out of search, and only those.
   expect(isUnlistedPath('/nav')).toBe(true)
   expect(isUnlistedPath('/x')).toBe(true)
   expect(isUnlistedPath('/404')).toBe(true)
+  expect(isUnlistedPath('/resume-print')).toBe(true)
   expect(isUnlistedPath('/blog')).toBe(false)
   expect(isUnlistedPath('/404-notes')).toBe(false)
 })

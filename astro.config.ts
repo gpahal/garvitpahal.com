@@ -323,7 +323,11 @@ export default defineConfig({
     },
   },
   integrations: [
-    sitemap({ filter: (page) => !isUnlistedPath(new URL(page).pathname) }),
+    sitemap({
+      filter: (page) => !isUnlistedPath(new URL(page).pathname),
+      // Files in `public/` are not pages, so the resume is listed by hand for search engines to find.
+      customPages: ['https://garvitpahal.com/docs/resume.pdf'],
+    }),
     expressiveCode(),
     react(),
     contentSecurityPolicyHeader(),

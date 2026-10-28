@@ -25,6 +25,10 @@ const PARAM_VALUES: Record<string, () => Array<string>> = {
     filesUnder('src/content/blog', /\.md$/)
       .filter((file) => path.posix.dirname(file) === 'src/content/blog')
       .map((file) => path.basename(file, '.md')),
+  '/projects/[id]': () =>
+    filesUnder('src/content/project-pages', /\.md$/)
+      .filter((file) => path.posix.dirname(file) === 'src/content/project-pages')
+      .map((file) => path.basename(file, '.md')),
   '/x/puzzle-solvers/[puzzle]': () => listPuzzles().map((puzzle) => puzzle.id),
   '/api/x/puzzle-solvers/[puzzle]': () => listPuzzles().map((puzzle) => puzzle.id),
 }

@@ -2,6 +2,7 @@
 project: Programming tutoring system
 startedOn: 01/08/2014
 endedOn: 31/10/2014
+resume: Automated programming feedback with Sumit Gulwani (Microsoft Research) and Amey Karkare (IIT Kanpur), used by 400+ students
 ---
 
 This was a research project under Dr Sumit Gulwani (Principal Researcher, Microsoft Research, Redmond) and Prof. Amey Karkare (Assistant Professor, IIT Kanpur).

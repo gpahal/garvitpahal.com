@@ -14,6 +14,10 @@ type Props = {
   title?: string
   description?: string
   isFullPage?: boolean
+  /**
+   * Serialised JSON-LD for the head, escaped so it cannot close its script element.
+   */
+  jsonLd?: string
   article?: {
     headline: string
     publishedTime: DateOnly
@@ -21,7 +25,7 @@ type Props = {
   }
 }
 
-const { title: titleProp, description: descriptionProp, isFullPage, article } = Astro.props
+const { title: titleProp, description: descriptionProp, isFullPage, jsonLd, article } = Astro.props
 const url = new URL(Astro.url.pathname, Astro.site)
 const imageUrl = new URL('/images/self/self-320x320.jpg', Astro.site)
 
@@ -96,6 +100,8 @@ const robots = isPrivatePath(Astro.url.pathname)
     <meta name="twitter:creator" content="@g10pahal" />
 
     <meta name="robots" content={robots} />
+    {/* eslint-disable-next-line astro/no-set-html-directive -- JSON-LD must be raw JSON, escaped by its builder */}
+    {jsonLd !== undefined && <script type="application/ld+json" is:inline set:html={jsonLd} />}
 
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={BLOG_FEED_TITLE} href="/blog.rss.xml" />

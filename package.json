@@ -22,6 +22,7 @@
     "lint-fix:eslint": "eslint . --fix",
     "lint-fix:stylelint": "pnpm lint:stylelint --fix",
     "preview": "astro preview",
+    "resume": "astro build && node scripts/resume-pdf.ts",
     "sync": "astro sync",
     "test": "vitest run",
     "typecheck:app": "astro check --noSync",

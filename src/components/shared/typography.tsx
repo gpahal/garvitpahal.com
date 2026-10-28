@@ -25,6 +25,7 @@ export const H2 = styled('h2', PROSE_CLASSES.h2)
 export const H3 = styled('h3', PROSE_CLASSES.h3)
 export const P = styled('p', PROSE_CLASSES.p)
 export const A = styled('a', PROSE_CLASSES.a)
+export const Ul = styled('ul', PROSE_CLASSES.ul)
 
 const MUTED = 'text-sm text-muted-foreground'
 

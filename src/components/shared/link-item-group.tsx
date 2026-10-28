@@ -19,13 +19,17 @@ type LinkItem = {
 
 type LinkItemGroupProps = {
   items: ReadonlyArray<LinkItem>
+  /**
+   * One level below the heading the list sits under.
+   */
+  titleAs?: 'h2' | 'h3'
 }
 
 /**
  * In React because an `.astro` page cannot hand `Item` its anchor through `render`. Titles stay
  * headings so screen readers can jump between entries.
  */
-export function LinkItemGroup({ items }: LinkItemGroupProps): ReactNode {
+export function LinkItemGroup({ items, titleAs: Title = 'h2' }: LinkItemGroupProps): ReactNode {
   return (
     // The negative margins are `Item`'s padding plus its border, so titles line up with the page's
     // text; `w-auto` stops `ItemGroup`'s `w-full` pushing past the column.
@@ -43,7 +47,7 @@ export function LinkItemGroup({ items }: LinkItemGroupProps): ReactNode {
           >
             <ItemContent>
               <ItemTitle className="line-clamp-none text-base font-normal">
-                <h2>{item.title}</h2>
+                <Title>{item.title}</Title>
               </ItemTitle>
               {item.subtitle !== undefined && (
                 <ItemDescription className="line-clamp-none">{item.subtitle}</ItemDescription>

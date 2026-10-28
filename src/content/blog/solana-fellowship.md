@@ -5,6 +5,8 @@ publishedOn: 01/05/2022
 tags: [programming, web3, solana, rust]
 ---
 
+_A note from 2026: Solana's tooling has changed a lot since I wrote this, so check the current docs before following any of the code._
+
 I love exploring new programming languages and I have been trying to learn Rust for a good two or three months now. I learned about Solana during this time. I started diving deeper into the web3 ecosystem, bought some SOL, created a wallet, started using some Solana apps and read a lot.
 
 Looking back, I feel Solana spoiled me. I expected all blockchains to be fast and have great wallets like [Phantom](https://phantom.com/). I tried Ethereum next, and the experience was significantly worse. I was paying \$80 gas fees and waiting for transactions to complete, and MetaMask wasn't very intuitive. Solana and products in its ecosystem were the only ones I looked forward to using.
@@ -19,11 +21,9 @@ The [fellowship](https://web.archive.org/web/20220106144208/https://solana-india
 
 The fellowship aligned with my goals, so I applied. I had to fill out a few application forms and give an in-person interview. After a week, I got an email from them welcoming me to the fellowship. Yay! I was excited to dive deeper and learn from a fantastic team of mentors and supporters.
 
----
-
-If you have any questions about the fellowship, feel free to reach out to me on [email](mailto:g10pahal@gmail.com) or [X](https://x.com/g10pahal).
-
 ## Week 1: Getting started
+
+**In short:** Rust and Solana fundamentals: the ecosystem, the language and the programming model.
 
 The first week's goal was to brush up on Rust concepts, Solana's programming model and tooling.
 
@@ -46,6 +46,8 @@ The previous week, I read [Explaining Solana with The Simpsons](https://web.arch
 This week was about learning the [programming model](https://web.archive.org/web/20220408124107/https://docs.solana.com/developing/programming-model/overview), [how to deploy to Solana](https://web.archive.org/web/20231231234819/https://openquest.xyz/quest/deploying-the-program-on-to-solana) and [how to work with interfaces to Solana like the SPL Token CLI](https://web.archive.org/web/20220514154128/https://openquest.xyz/quest/create_crypto_with_solana_cli). It was a fun experience to actually use the technologies that I had read about, to experience them and to see how they worked.
 
 ## Week 2: Creating mini dApps
+
+**In short:** My first dApps, with the Solana web3.js library and an on-chain voting program.
 
 This week's goal was to start creating mini dApps on Solana. There are two parts to this: interacting with Solana using the [`@solana/web3.js`](https://web.archive.org/web/20220401091308/https://solana-labs.github.io/solana-web3.js/) library and creating on-chain programs.
 
@@ -73,6 +75,8 @@ That said, I'll be using the Anchor framework from now on. Not using it showed m
 
 ## Week 3: More dApps
 
+**In short:** Bigger programs, written with the Anchor framework.
+
 This week's goal was to continue creating dApps on Solana, not as simple as last week's.
 
 ### Anchor framework
@@ -96,6 +100,8 @@ There were many instances when I thought I was done with the program logic, only
 Some final thoughts: Anchor is awesome. The documentation and example programs are limited and error messages are sometimes unclear, so be ready to go down rabbit holes and test continuously. Join the Anchor and Solana Discords to get help.
 
 ## Week 4: NFTs
+
+**In short:** NFTs on Solana, ending with dynamic NFTs that change over time.
 
 This week was about NFTs: what they are, when they can be used and how to create some on Solana.
 
@@ -125,6 +131,8 @@ It was not the best solution, though. Right now, the dynamic nature requires the
 
 ## Week 5: DeFi
 
+**In short:** Tokens, staking and tokenomics, including my own wallet and cryptocurrency.
+
 We focused on DeFi this week: basics of tokens, staking and tokenomics.
 
 ### DAO treasuries and getting into web3
@@ -152,6 +160,8 @@ This exercise also made me think about token economics (tokenomics for short). D
 I read the documentation of [Solana economics](https://web.archive.org/web/20211227121250/https://docs.solana.com/economics_overview). It is a well-written set of articles. I would suggest everyone go through them to know why people stake and why it's beneficial for the blockchain that people distribute their stake to different validators, a problem some projects are trying to solve.
 
 ## Week 6: More complex dApps
+
+**In short:** Harder dApps, and the problem my fellowship project would solve.
 
 This week, there was no particular theme; we just practised, built more complicated programs and started on the fellowship project.
 
@@ -201,6 +211,8 @@ There are solutions in the Solana ecosystem that are trying to bring streaming p
 
 ## Week 7: Starting on my project
 
+**In short:** Designing and building the first version of the project, and naming it Superstream.
+
 This week, I designed and started implementing the project idea. I made significant progress, finalised the scope and implemented major parts of the smart contract.
 
 ### Components
@@ -241,3 +253,7 @@ It took me a month, but the project is finally ready. It's live at [superstream.
 It was a fun and productive eight weeks. I learned a lot, built a lot of things and got to know a lot of people. I'm excited to continue building on Solana. I would recommend it to anyone who wants to learn how to develop Solana apps.
 
 I'm especially pleased about this project. I plan to dedicate some time to market it and build a community around it.
+
+_Update from 2026: Superstream became a company, which I founded and ran until March 2022. More on my [work](/work) page._
+
+If you have any questions about the fellowship, feel free to reach out to me on [email](mailto:g10pahal@gmail.com) or [X](https://x.com/g10pahal).

@@ -60,3 +60,44 @@ function compareCodeUnits(a: string, b: string): number {
 export function formatMonthRange(startedOn: DateOnly, endedOn: DateOnly | undefined): string {
   return `${formatMonthYear(startedOn)} – ${endedOn ? formatMonthYear(endedOn) : 'Present'}`
 }
+
+/**
+ * For dates known only to the year: one year when it starts and ends in the same one.
+ */
+export function formatYearRange(startedOn: DateOnly, endedOn: DateOnly | undefined): string {
+  const [start, end] = [startedOn.slice(0, 4), endedOn?.slice(0, 4)]
+  return end === undefined ? `${start} – Present` : end === start ? start : `${start} – ${end}`
+}
+
+export type Period = { startedOn: DateOnly; endedOn?: DateOnly }
+
+/**
+ * An entry's latest period, then its earlier ones: `startedOn` and `endedOn` stay the latest, so
+ * sorting by `startedOn` puts a resumed role where it is current.
+ */
+export function periodsOf(
+  entry: Period & { earlierPeriods?: ReadonlyArray<Period> },
+): Array<Period> {
+  return [{ startedOn: entry.startedOn, endedOn: entry.endedOn }, ...(entry.earlierPeriods ?? [])]
+}
+
+/**
+ * Newest first: each period ends no earlier than it starts and before the newer one starts, and
+ * only the newest may be open. ISO date strings order like the dates they name.
+ */
+export function arePeriodsInOrder(periods: ReadonlyArray<Period>): boolean {
+  return periods.every((period, i) => {
+    const newer = periods[i - 1]
+    if (period.endedOn === undefined) {
+      return newer === undefined
+    }
+    return (
+      period.endedOn >= period.startedOn &&
+      (newer === undefined || period.endedOn < newer.startedOn)
+    )
+  })
+}
+
+export function formatPeriods(periods: ReadonlyArray<Period>): string {
+  return periods.map(({ startedOn, endedOn }) => formatMonthRange(startedOn, endedOn)).join(', ')
+}

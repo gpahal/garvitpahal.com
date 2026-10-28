@@ -2,65 +2,132 @@
 import Layout from '@/layouts/layout.astro'
 import { LinkItemGroup } from '@/components/shared/link-item-group'
 import PageHeader from '@/components/shared/page-header.astro'
+import { H2 } from '@/components/shared/typography'
 
-const projects = [
-  {
-    href: 'https://github.com/gpahal/pdf-rag-embed-bench',
-    title: 'pdf-rag-embed-bench',
-    subtitle:
-      'Benchmark for PDF RAG embedding systems, from text to multimodal to multi-vector and combinations of them',
-  },
-  {
-    href: 'https://github.com/gpahal/microgpt',
-    title: 'microgpt',
-    subtitle: 'Micro GPT implementation and training pipeline in PyTorch',
-  },
+const featured = [
   {
     href: 'https://github.com/gpahal/durable-execution',
     title: 'durable-execution',
     subtitle:
-      'Durable execution engine for running functions and workflows resiliently, ideal for AI workflows',
+      'Durable execution engine for TypeScript tasks and workflows, with Convex and Drizzle storage. Five packages on npm',
   },
   {
-    href: 'https://superstream.finance/',
-    title: 'superstream',
-    subtitle: 'Solana-based protocol for real-time streaming payments',
+    href: 'https://huggingface.co/docs/lerobot/so101',
+    title: 'robotics',
+    subtitle: 'Hacking on robotics, starting with the SO-101 leader-follower arm kit',
   },
+  {
+    href: 'https://github.com/gpahal/design2code-rl',
+    title: 'design2code-rl',
+    subtitle:
+      'RL environment that grades coding agents on rebuilding websites from screenshots. Claude Code scored 0.80 against a 0.98 oracle',
+  },
+  {
+    href: 'https://github.com/gpahal/pdf-rag-embed-bench',
+    title: 'pdf-rag-embed-bench',
+    subtitle:
+      'Benchmark of text, multimodal and multi-vector embedders for PDF retrieval. The best combination reached 94.0% NDCG@5',
+  },
+  {
+    href: 'https://github.com/gpahal/microgpt',
+    title: 'microgpt',
+    subtitle:
+      '124M GPT pretrained from scratch in PyTorch for about $128, beating GPT-2 on HellaSwag',
+  },
+] as const
+
+const tools = [
+  {
+    href: 'https://github.com/gpahal/jslib',
+    title: 'jslib',
+    subtitle:
+      'The @gpahal/* ESLint, Prettier, TypeScript and Stylelint presets and a standard library, with 4,000+ npm downloads a month',
+  },
+  {
+    href: 'https://github.com/gpahal/dotfiles',
+    title: 'dotfiles',
+    subtitle: 'Setup for my Mac and the always-on Ubuntu desktop I use from it over SSH',
+  },
+  {
+    href: 'https://github.com/gpahal/ci',
+    title: 'ci',
+    subtitle: 'Skips CI on main when the merged pull request already tested the same files',
+  },
+  {
+    href: 'https://github.com/gpahal/garvitpahal.com',
+    title: 'garvitpahal.com',
+    subtitle: 'This site: Astro on Cloudflare Workers, with private tools on Convex',
+  },
+] as const
+
+/**
+ * `aside` is the language and the year each started, from GitHub.
+ */
+const earlier = [
   {
     href: 'https://github.com/gpahal/solana-fellowship',
     title: 'solana-fellowship',
     subtitle: 'Stuff I worked on as part of my Solana Fellowship',
+    aside: 'TypeScript · 2022',
   },
   {
-    href: 'https://github.com/gpahal/jslib',
-    title: 'jslib',
-    subtitle: 'JS/TS libraries and configs I use in my projects',
-  },
-  {
-    href: 'https://github.com/gpahal/hgraph',
-    title: 'hgraph',
-    subtitle: 'Toy graph datastore implemented in Haskell',
-  },
-  {
-    href: 'https://github.com/gpahal/head',
-    title: 'head',
-    subtitle: 'Go library for parsing information in an HTML head tag',
-  },
-  {
-    href: 'https://github.com/gpahal/kvs',
-    title: 'kvs',
-    subtitle: 'Go interface for kv stores with an in-memory implementation',
+    href: 'https://github.com/gpahal/aoc2022',
+    title: 'aoc2022',
+    subtitle: 'Advent of Code 2022 in Rust',
+    aside: 'Rust · 2022',
   },
   {
     href: 'https://github.com/gpahal/golib',
     title: 'golib',
     subtitle: 'Go libraries that I use in my projects',
+    aside: 'Go · 2020',
   },
+  {
+    href: 'https://github.com/gpahal/head',
+    title: 'head',
+    subtitle: 'Go library for parsing information in an HTML head tag',
+    aside: 'Go · 2020',
+  },
+  {
+    href: 'https://github.com/gpahal/kvs',
+    title: 'kvs',
+    subtitle: 'Go interface for kv stores with an in-memory implementation',
+    aside: 'Go · 2020',
+  },
+  {
+    href: 'https://github.com/gpahal/go-algos',
+    title: 'go-algos',
+    subtitle: 'Common data structures, algorithms and design patterns in Go',
+    aside: 'Go · 2017',
+  },
+  {
+    href: 'https://github.com/gpahal/hgraph',
+    title: 'hgraph',
+    subtitle: 'Toy graph datastore implemented in Haskell',
+    aside: 'Haskell · 2015',
+  },
+  {
+    href: 'https://github.com/gpahal/oars',
+    title: 'oars',
+    subtitle: 'Semi-automated course allocation system',
+    aside: 'JavaScript · 2014',
+  },
+] as const
+
+const groups = [
+  { heading: 'Featured', items: featured },
+  { heading: 'Tools I maintain', items: tools },
+  { heading: 'Earlier work', items: earlier },
 ] as const
 ---
 
 <Layout title="Projects" description="Side projects and open-source work by Garvit Pahal">
   <PageHeader title="Projects" />
 
-  <LinkItemGroup items={projects} />
+  {groups.map(({ heading, items }) => (
+    <section class="not-first-of-type:mt-10">
+      <H2 className="mb-4">{heading}</H2>
+      <LinkItemGroup items={items} titleAs="h3" />
+    </section>
+  ))}
 </Layout>

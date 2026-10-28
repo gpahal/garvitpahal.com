@@ -1,0 +1,19 @@
+summary:
+  Software engineer with ten years at early-stage startups, taking products from zero to one and on
+  to enterprise customers. I build the systems products run on, from durable workflow engines to
+  voice agents and AI assistants
+skills:
+  - label: Technologies
+    text: TypeScript, Python, Go, Java, Rust, Haskell, SQL, PyTorch, React, Kubernetes
+  - label: Systems
+    text: Durable and distributed systems, agents, evals and embeddings
+education:
+  school: Indian Institute of Technology Kanpur
+  degree: B.Tech in Computer Science and Engineering
+  startedOn: 01/07/2012
+  endedOn: 31/05/2016
+  notes: CPI 9.6/10, Academic Excellence Awards 2013, 2014 and 2015
+awards:
+  - All India Rank 196 in IIT-JEE 2012 among 500,000 candidates
+  - Indian National Mathematics Olympiad qualifier, 2010 and 2011
+  - KVPY fellowship, Government of India

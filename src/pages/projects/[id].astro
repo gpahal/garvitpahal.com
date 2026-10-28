@@ -1,0 +1,34 @@
+---
+import { getCollection, render } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+
+import Layout from '@/layouts/layout.astro'
+import { ButtonLink } from '@/components/shared/button-link'
+import PageHeader from '@/components/shared/page-header.astro'
+
+export async function getStaticPaths() {
+  return (await getCollection('projectPages')).map((projectPage) => ({
+    params: { id: projectPage.id },
+    props: { projectPage },
+  }))
+}
+
+type Props = {
+  projectPage: CollectionEntry<'projectPages'>
+}
+
+const { projectPage } = Astro.props
+const { Content } = await render(projectPage)
+---
+
+<Layout title={`${projectPage.data.title} | Projects`} description={projectPage.data.description}>
+  <PageHeader title={projectPage.data.title} subtitle={projectPage.data.description}>
+    <Fragment slot="action">
+      <ButtonLink variant="outline" size="sm" href={projectPage.data.href}>
+        Source
+      </ButtonLink>
+    </Fragment>
+  </PageHeader>
+
+  <Content />
+</Layout>

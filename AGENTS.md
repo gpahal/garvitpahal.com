@@ -2,7 +2,7 @@
 
 Personal website: Astro with Markdown content and React islands, Tailwind CSS v4, a Cloudflare Worker and Convex. [README](README.md) covers running it, [docs/deployment.md](docs/deployment.md) production. Run `pnpm check` and `pnpm build` before handing off changes.
 
-Before changing an area, read its doc: [Convex](docs/convex.md) for backend functions, authentication or metering; [Agenda](docs/agenda.md); [Puzzle solvers](docs/puzzle-solvers.md); [Content](docs/content.md) for `src/content/` and dates.
+Before changing an area, read its doc: [Convex](docs/convex.md) for backend functions, authentication or metering; [Agenda](docs/agenda.md); [Puzzle solvers](docs/puzzle-solvers.md); [Content](docs/content.md) for `src/content/`, dates and the resume.
 
 ## Writing
 
@@ -37,7 +37,7 @@ A feature lives under its name in `src/pages/x/`, `src/pages/api/x/`, `src/compo
 
 - Add shadcn components with `pnpm shadcn add <name>`, then `pnpm fmt` and `pnpm lint-fix`. Edit the output like other source and keep only what something uses.
 - [`global.css`](src/styles/global.css) is CLI output plus exceptions that open with `Not CLI output` and a reason. Dark mode follows the OS; read its note before adding CLI output.
-- Prose styles live in [`prose-classes.ts`](src/components/shared/prose-classes.ts), which styles rendered Markdown and the components in [`typography.tsx`](src/components/shared/typography.tsx). Open each page except `/nav` with [`page-header.astro`](src/components/shared/page-header.astro).
+- Prose styles live in [`prose-classes.ts`](src/components/shared/prose-classes.ts), which styles rendered Markdown and the components in [`typography.tsx`](src/components/shared/typography.tsx). Open each page except `/nav` and the standalone `/resume-print` with [`page-header.astro`](src/components/shared/page-header.astro).
 - Wrap `buttonVariants(...)` in `cn()` outside `Button`, and style a link as a button with [`button-link.tsx`](src/components/shared/button-link.tsx).
 
 ## Private `/x` area
