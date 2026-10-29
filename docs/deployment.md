@@ -66,6 +66,7 @@ The account is on the Workers Free plan: 10 ms of CPU per request, which bounds 
    - Before attaching another hostname to the Worker, add the same four destinations for it.
 3. Under SSL/TLS → Edge Certificates, enable HSTS with a non-zero max age. [`public/_headers`](../public/_headers) leaves HSTS to the zone.
 4. Under My Profile → API Tokens, create a token with **Account → Workers Scripts → Edit**, restricted to this account, for GitHub's `CLOUDFLARE_API_TOKEN`. Note the account ID for `CLOUDFLARE_ACCOUNT_ID`.
+5. Under Web Analytics, add `garvitpahal.com` and, under Manage site, choose the JS snippet installation: [`layout.astro`](../src/layouts/layout.astro) embeds the beacon, and automatic injection would add a second one. Note the token in the snippet for `PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN`; without it the build embeds no beacon and the CSP allows none.
 
 ### GitHub
 
@@ -84,13 +85,14 @@ The repository is public: on a free personal account, rulesets, environment bran
        --delete-branch-on-merge --allow-update-branch
      ```
 
-2. Add the variables: the production Convex URL, the Cloudflare account ID and the Infisical project and identity IDs ([Infisical step 5](#infisical)). Then add `ACCESS_TEAM_DOMAIN`, the same value as in Infisical's `prod`, as a repository secret, so the logs mask it: only [Verify production](#verify-production) reads it, from a job without an environment.
+2. Add the variables: the production Convex URL, the Cloudflare account ID and Web Analytics token, and the Infisical project and identity IDs ([Infisical step 5](#infisical)). Then add `ACCESS_TEAM_DOMAIN`, the same value as in Infisical's `prod`, as a repository secret, so the logs mask it: only [Verify production](#verify-production) reads it, from a job without an environment.
    - In the UI, under Settings → Secrets and variables → Actions → Variables, add each variable with New repository variable; under Secrets, add `ACCESS_TEAM_DOMAIN` with New repository secret.
    - With `gh`:
 
      ```sh
      gh variable set PUBLIC_CONVEX_URL --repo "$repo" --body 'https://<deployment>.convex.cloud'
      gh variable set CLOUDFLARE_ACCOUNT_ID --repo "$repo" --body '<account-id>'
+     gh variable set PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN --repo "$repo" --body '<web-analytics-token>'
      gh variable set INFISICAL_PROJECT_ID --repo "$repo" --body '<project-id>'
      gh variable set INFISICAL_IDENTITY_ID --repo "$repo" --body '<identity-id>'
      gh secret set ACCESS_TEAM_DOMAIN --repo "$repo"

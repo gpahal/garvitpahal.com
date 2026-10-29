@@ -1,3 +1,5 @@
+import { WEB_ANALYTICS_BEACON } from '../web-analytics'
+
 /**
  * The policy every prerendered page is served under, written into `_headers` by the build
  * (`astro.config.ts`). Not Astro's `security.csp`: under `<ClientRouter />` a swapped-in page runs
@@ -38,8 +40,18 @@ export function connectSourcesOf(url: string): Array<string> {
   return [origin, origin.replace(/^http/, 'ws')]
 }
 
+/**
+ * Whether a built page embeds the beacon, so the policy allows it only when the build includes it.
+ */
+export function embedsWebAnalytics(html: string): boolean {
+  return html
+    .matchAll(INLINE_SCRIPT)
+    .some((match) => (match[1] ?? '').includes(`src="${WEB_ANALYTICS_BEACON}"`))
+}
+
 type PolicyOptions = {
   scriptHashSources: ReadonlyArray<string>
+  scriptSources?: ReadonlyArray<string>
   connectSources: ReadonlyArray<string>
 }
 
@@ -51,11 +63,12 @@ type PolicyOptions = {
  */
 export function contentSecurityPolicy({
   scriptHashSources,
+  scriptSources = [],
   connectSources,
 }: PolicyOptions): string {
   return [
     ['default-src', "'self'"],
-    ['script-src', "'self'", ...scriptHashSources],
+    ['script-src', "'self'", ...scriptSources, ...scriptHashSources],
     ['worker-src', "'self'"],
     ['style-src', "'self'", "'unsafe-inline'"],
     ['img-src', "'self'", 'data:'],

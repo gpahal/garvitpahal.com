@@ -1,7 +1,7 @@
 ---
 title: What I learnt building workflow engines twice
 description: I built the workflow engine under Harness's products and later durable-execution, an open-source durable execution engine for TypeScript, and a few lessons carried over
-publishedOn: 29/10/2026
+publishedOn: 25/08/2025
 tags: [programming, typescript, workflows]
 ---
 
@@ -19,7 +19,7 @@ While I was there, revenue grew 50x and Harness went from one product to six. It
 
 durable-execution runs tasks durably, from a single function to a multi-step workflow. Tasks survive logic failures, process crashes and network errors, which makes it a good fit for AI workflows.
 
-[TODO: why I built my own rather than using Temporal or Inngest]
+Temporal needs its own cluster and Inngest is a hosted service. I wanted a library that runs inside a TypeScript app and keeps its state in the database I already use, Convex or SQL through Drizzle.
 
 A task is a function with an id and a timeout. A parent task returns its own output and a list of children, which run in parallel. This example is from the README:
 
@@ -62,19 +62,15 @@ An in-memory storage comes with the main package for tests and simple cases.
 
 ## Lessons that carried over
 
-[TODO: confirm these are the lessons, and add a Harness example to any that needs one]
-
 **Every step can run more than once.** A task runs again when its process fails or when it is retried. So tasks have to be idempotent, and the docs say so first.
 
 **State belongs in storage, not in the process.** A running task gets an expiry of its timeout plus some leeway. If the process dies, a background job finds the expired task and marks it ready again. Several executors can share one storage, and a cancellation reaches whichever one is running the task.
 
 **A tree of tasks covers most workflows.** Parents with parallel children, plus an optional finalize step that combines their results, are the core. Sequential, looping and recursive tasks can all be built from them.
 
-**Keep storage behind one interface and test it once.** The engine talks to storage only through the `TaskExecutionsStorage` type, so a new database is one implementation of it. [durable-execution-storage-test-utils](https://github.com/gpahal/durable-execution/tree/main/durable-execution-storage-test-utils) runs the same suite against any implementation.
-
 ## Outcome
 
-[TODO: outcome of durable-execution so far, such as where I use it]
+I use durable-execution mostly as the orchestration layer for my personal agents. All five packages are published on npm.
 
 ## Resources
 

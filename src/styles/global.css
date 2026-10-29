@@ -182,3 +182,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+/*
+ * Not CLI output. Expressive Code's blocks sit outside `proseClasses` in `astro.config.ts`, so they
+ * get the same spacing as a table here.
+ */
+.expressive-code {
+  margin-block: 1.5rem;
+}

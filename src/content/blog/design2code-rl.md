@@ -1,11 +1,11 @@
 ---
 title: How well Claude Code rebuilds websites from screenshots
 description: I built an RL environment that grades coding agents on rebuilding multi-page websites from screenshots, and Claude Code with Opus 4.7 scored a mean reward of 0.80
-publishedOn: 29/10/2026
+publishedOn: 15/05/2026
 tags: [ai, agents, evals]
 ---
 
-Claude Code with Opus 4.7 rebuilds a multi-page website from screenshots well, but not perfectly. Over 100 trials it scored a mean reward of 0.80. The oracle, which hands the grader the original site, scored 0.98. That leaves the agent about 0.19 below the ceiling.
+Claude Code with Opus 4.7 rebuilds a multi-page website from screenshots well, but not perfectly. Over 100 trials it scored a mean reward of 0.80. The oracle, which hands the grader the original site, scored 0.98. That leaves the agent about 0.18 below the ceiling.
 
 I built [design2code-rl](https://github.com/gpahal/design2code-rl) to measure this. It generates websites, asks an agent to rebuild them from screenshots and grades the result on a continuous scale.
 
@@ -34,13 +34,21 @@ The judge sees only screenshots, never code, so any markup that looks right can 
 
 The site decided the score far more than the attempt did. Within a site, the standard deviation stayed under 0.05. Across sites, means ranged from 0.91 for a minimal space nonprofit to 0.67 for a retro storybook education site.
 
+![Box plot of total reward for each of the 10 eval sites over 10 trials, sorted by mean from a minimal space nonprofit near 0.91 to a retro storybook education site near 0.67](./images/design2code-rl/per-task-reward.png)
+
 Minimal layouts were easy. The three minimal sites scored 0.87 to 0.91, and form pages such as donation, contact and reservation flows scored highest of all.
 
 Retro was the hardest design language, about 0.18 below minimal. The agent dropped decorative type, background patterns and ornaments. It also pushed muted palettes towards vivid web colours. Dense grids of articles, products or schedules scored poorly too, worst when combined with decorative styling.
 
-![Mean total reward by design language: minimal-flat 0.887, brutalist 0.809, playful-illustrated 0.771, corporate-clean 0.759 and retro 0.707](../images/design2code-rl/design-language-hardness.png)
+![Mean total reward by design language: minimal-flat 0.887, brutalist 0.809, playful-illustrated 0.771, corporate-clean 0.759 and retro 0.707](./images/design2code-rl/design-language-hardness.png)
 
 Much of the lost score is imagery the agent cannot draw: about 60% of the judge's lost points came from photos and illustrations. Some failures don't show at all. Every trial wrote responsive CSS, but accessibility scored 0.44, because alt text and heading order were often missing. The prompt didn't ask for them.
+
+## Outcome
+
+The environment gives a reward that separates easy sites from hard ones and stays stable across attempts at the same site, which is what training needs. Claude Code is already good at plain, minimal sites. The remaining gap is in decorative styles, dense layouts and imagery.
+
+Next I plan to build more evals like this, and RL environments for much more complex and involved tasks, where a reward can do more than rank models: it can help train better ones.
 
 ## Resources
 

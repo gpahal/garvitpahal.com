@@ -1,9 +1,11 @@
 ---
+import { PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN } from 'astro:env/client'
 import { ClientRouter } from 'astro:transitions'
 
 import { dateOnlyToUtc } from '@/lib/dates'
 import type { DateOnly } from '@/lib/dates'
 import { BLOG_FEED_TITLE, isPrivatePath, isUnlistedPath, SITE_NAME, SITE_TAGLINE } from '@/lib/site'
+import { WEB_ANALYTICS_BEACON } from '@/lib/web-analytics'
 import Nav from '@/components/nav/index.astro'
 import IslandFailure from '@/components/shared/island-failure.astro'
 import satoshi from '@/assets/fonts/satoshi/variable.woff2?url'
@@ -110,6 +112,20 @@ const robots = isPrivatePath(Astro.url.pathname)
      * Site-wide so every navigation animates, and so Agenda's `transition:persist` root survives.
      */}
     <ClientRouter />
+    {/*
+     * In the head, identical on every page, so `<ClientRouter />` keeps it across navigations; the
+     * beacon reports each route change itself. Built pages only, so dev visits are not counted.
+     */}
+    {import.meta.env.PROD &&
+      PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN !== undefined &&
+      PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN !== '' && (
+        <script
+          is:inline
+          defer
+          src={WEB_ANALYTICS_BEACON}
+          data-cf-beacon={JSON.stringify({ token: PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN })}
+        />
+      )}
   </head>
   <body>
     <IslandFailure />

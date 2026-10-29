@@ -5,8 +5,6 @@ publishedOn: 01/05/2022
 tags: [programming, web3, solana, rust]
 ---
 
-_A note from 2026: Solana's tooling has changed a lot since I wrote this, so check the current docs before following any of the code._
-
 I love exploring new programming languages and I have been trying to learn Rust for a good two or three months now. I learned about Solana during this time. I started diving deeper into the web3 ecosystem, bought some SOL, created a wallet, started using some Solana apps and read a lot.
 
 Looking back, I feel Solana spoiled me. I expected all blockchains to be fast and have great wallets like [Phantom](https://phantom.com/). I tried Ethereum next, and the experience was significantly worse. I was paying \$80 gas fees and waiting for transactions to complete, and MetaMask wasn't very intuitive. Solana and products in its ecosystem were the only ones I looked forward to using.
@@ -123,9 +121,9 @@ This week's exercise was to create an NFT marketplace supporting dynamic NFTs. I
 
 I bootstrapped with [Metaplex Storefront](https://web.archive.org/web/20220121074927/https://docs.metaplex.com/storefront/introduction) and added UI components to create and evolve Pokémon NFTs. The creator could go to the Pokémon NFT page and click a button to evolve it. Learning about the Metaplex APIs and the Metaplex Storefront UI cache management was the most challenging part.
 
-![Metaplex NFT page showing a Charmander with evolution index 0 while the evolve button reads "Evolving Pokemon..."](./images/evolving-dynamic-pokemon-nft.jpg)
+![Metaplex NFT page showing a Charmander with evolution index 0 while the evolve button reads "Evolving Pokemon..."](./images/solana-fellowship/evolving-dynamic-pokemon-nft.jpg)
 
-![The same NFT page after evolving, now showing a Charmeleon with evolution index 1](./images/evolved-dynamic-pokemon-nft.jpg)
+![The same NFT page after evolving, now showing a Charmeleon with evolution index 1](./images/solana-fellowship/evolved-dynamic-pokemon-nft.jpg)
 
 It was not the best solution, though. Right now, the dynamic nature requires the creator to manually update the metadata by clicking a button. Ideally, there should be an on-chain program as the NFT's update authority. That program would be responsible for checking the conditions for evolution and automatically evolving the NFT based on conditions like time passed, etc. But I didn't have enough time to implement that, unfortunately! It's a nice add-on that I may implement at some point.
 
@@ -151,7 +149,7 @@ The first two interacted with Solana through its JSON RPC API, but the last one 
 
 The exercise for this week was to add support for staking to the cryptocurrency created in one of the quests. This is what I ended up making.
 
-![Staking app with buttons to airdrop SOL, mint a token and stake 10 tokens, and the resulting token, staked and escrow balances](./images/staking-app.jpg)
+![Staking app with buttons to airdrop SOL, mint a token and stake 10 tokens, and the resulting token, staked and escrow balances](./images/solana-fellowship/staking-app.jpg)
 
 I had to consider where to escrow the funds, how to create different escrow accounts for tokens and how to connect it all in the UI to provide a good user experience. It was a fun exercise, and I ended up learning a lot.
 
@@ -254,6 +252,6 @@ It was a fun and productive eight weeks. I learned a lot, built a lot of things 
 
 I'm especially pleased about this project. I plan to dedicate some time to market it and build a community around it.
 
-_Update from 2026: Superstream became a company, which I founded and ran until March 2022. More on my [work](/work) page._
+Superstream later became a company, which I founded and ran until March 2022. More on my [work](/work) page.
 
 If you have any questions about the fellowship, feel free to reach out to me on [email](mailto:g10pahal@gmail.com) or [X](https://x.com/g10pahal).

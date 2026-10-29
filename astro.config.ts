@@ -16,11 +16,13 @@ import { PROSE_CLASSES, TABLE_SCROLL_REGION } from './src/components/shared/pros
 import {
   connectSourcesOf,
   contentSecurityPolicy,
+  embedsWebAnalytics,
   headersWithPolicy,
   inlineScripts,
   scriptHashSource,
 } from './src/lib/server/content-security-policy'
 import { isUnlistedPath } from './src/lib/site'
+import { WEB_ANALYTICS_BEACON, WEB_ANALYTICS_REPORTS } from './src/lib/web-analytics'
 
 /**
  * Hash built pages and write their shared CSP into `_headers`; dev serves no policy.
@@ -61,13 +63,20 @@ function contentSecurityPolicyHeader(): AstroIntegration {
             "PUBLIC_CONVEX_URL is unset, so the Content-Security-Policy allows no Convex deployment and blocks Agenda's socket. In GitHub Actions, set it as a repository variable to the production deployment URL",
           )
         }
+        const analytics = sources.some((source) => embedsWebAnalytics(source))
         const policy = contentSecurityPolicy({
           scriptHashSources: await Promise.all([...scripts].map(scriptHashSource)),
-          connectSources: convexUrl === undefined ? [] : connectSourcesOf(convexUrl),
+          scriptSources: analytics ? [WEB_ANALYTICS_BEACON] : [],
+          connectSources: [
+            ...(convexUrl === undefined ? [] : connectSourcesOf(convexUrl)),
+            ...(analytics ? [WEB_ANALYTICS_REPORTS] : []),
+          ],
         })
         const headersPath = `${root}/_headers`
         await writeFile(headersPath, headersWithPolicy(await readFile(headersPath, 'utf8'), policy))
-        logger.info(`Allowed ${scripts.size} inline scripts in _headers.`)
+        logger.info(
+          `Allowed ${scripts.size} inline scripts${analytics ? ' and Cloudflare Web Analytics' : ''} in _headers.`,
+        )
       },
     },
   }
@@ -320,6 +329,12 @@ export default defineConfig({
         optional: true,
         url: true,
       }),
+      // Public by design: the beacon carries it in every page.
+      PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
     },
   },
   integrations: [
@@ -328,6 +343,7 @@ export default defineConfig({
       // Files in `public/` are not pages, so the resume is listed by hand for search engines to find.
       customPages: ['https://garvitpahal.com/docs/resume.pdf'],
     }),
+    // Options live in `ec.config.mjs`.
     expressiveCode(),
     react(),
     contentSecurityPolicyHeader(),

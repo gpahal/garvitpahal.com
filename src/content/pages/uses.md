@@ -116,5 +116,3 @@ T3 Code runs the Claude Code and [Codex](https://github.com/openai/codex) CLIs, 
 ## This site
 
 This site is built with [Astro](https://astro.build/), Markdown, [React](https://react.dev/) islands and [Tailwind CSS](https://tailwindcss.com/). It runs on a [Cloudflare Worker](https://workers.cloudflare.com/), and [Convex](https://www.convex.dev/) backs its private tools. The source is on [GitHub](https://github.com/gpahal/garvitpahal.com).
-
-Last updated October 2026

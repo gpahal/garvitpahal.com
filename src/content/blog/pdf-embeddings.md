@@ -1,7 +1,7 @@
 ---
 title: Which embedding setup works best for PDF retrieval
 description: I benchmarked text, multimodal and multi-vector embedders with sparse retrieval and reranking on PDF pages, and the best combination reached 94.0% NDCG@5
-publishedOn: 29/10/2026
+publishedOn: 20/07/2025
 tags: [ai, rag, embeddings, search]
 ---
 
@@ -9,11 +9,13 @@ The best setup I tested reached 94.0% NDCG@5 at finding the right PDF page. It c
 
 A simpler setup came close. Colnomic alone, with sparse retrieval and a reranker, reached 93.8%.
 
-## Why
+## Why build it
+
+Much of the world's private knowledge lives in PDFs: contracts, reports, filings, manuals and papers. Adobe [estimates](https://blog.adobe.com/en/publish/2023/06/15/celebrating-30-years-of-digital-transformation-with-adobe-acrobat) there are more than 3 trillion of them, and an [IDC study for Box](https://www.box.com/resources/transform-unstructured-data-with-box-ai) puts 90% of an organisation's data as unstructured. Most of it was never on the public web, so models weren't trained on it. To use it, you have to be able to search it.
 
 A RAG system over PDFs has to find the right page before a model can answer from it. There are many ways to do that: parse the PDF and embed the text, embed page images directly, use multi-vector models, add sparse retrieval or rerank. Each choice adds cost and latency, so I wanted numbers on which ones pay off.
 
-## How
+## How it works
 
 I used a subset of the PDFs in [OHR-Bench](https://huggingface.co/datasets/opendatalab/OHR-Bench), across seven domains: academic, administration, finance, law, manuals, news and textbooks. Each setup returns its top five pages for a query, scored with NDCG@5.
 
@@ -37,7 +39,7 @@ The best of each kind:
 | Image multi-vector (Colnomic) | 91.4% | 93.5%    | 93.8%               |
 | Best combination              | -     | -        | 94.0%               |
 
-## Takeaways
+## Outcome
 
 1. **Always rerank.** Reranking lifted every embedder, by 2.1 to 9.2 points. It took the weakest, Gemini on text, from 76.6% to 85.8%.
 2. **Embed the page, not only its text.** Cohere on page images scored 85.8%, against 84.0% for the best text embedder. Even Voyage on the dataset's ground-truth text reached only 86.4%. Images help most with figures, tables and charts.

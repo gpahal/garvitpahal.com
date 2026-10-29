@@ -10,11 +10,11 @@ The best setup I tested found the right PDF page with 94.0% NDCG@5. It combined 
 
 A simpler setup came close: Colnomic alone, with sparse retrieval and the reranker, reached 93.8%.
 
-## Why
+## Why build it
 
 A RAG system over PDFs has to find the right page before a model can answer from it. There are many ways to do that: parse the PDF and embed the text, embed page images, use multi-vector models, add sparse retrieval or rerank. Each choice adds cost and latency, so I wanted numbers on which ones pay off.
 
-## How
+## How it works
 
 I used a subset of the PDFs in [OHR-Bench](https://huggingface.co/datasets/opendatalab/OHR-Bench), across seven domains: academic, administration, finance, law, manuals, news and textbooks. Each setup returns its top five pages for a query, scored with NDCG@5 and recall@5.
 
@@ -28,7 +28,7 @@ I compared text embedders from Voyage, Cohere and Gemini on pages parsed by [Mar
 | Image multi-vector (Colnomic) | 91.4% | 93.5%    | 93.8%               |
 | Best combination              | -     | -        | 94.0%               |
 
-## What came of it
+## Outcome
 
 Reranking lifted every embedder, by 2.1 to 9.2 points, and it took Gemini on text from 76.6% to 85.8%. Embedding the page beat embedding its text. Among dense embedders, Cohere on page images scored 85.8% against 84.0% for Voyage on text. Among multi-vector ones, Colnomic on images scored 91.4% against 87.9% for Jina on text. Even perfect text, the dataset's ground truth, lifted Voyage only to 86.4%.
 

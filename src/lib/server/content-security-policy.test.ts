@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
+import { WEB_ANALYTICS_BEACON, WEB_ANALYTICS_REPORTS } from '@/lib/web-analytics'
+
 import {
   contentSecurityPolicy,
+  embedsWebAnalytics,
   headersWithPolicy,
   inlineScripts,
   MAX_HEADER_LINE_CHARS,
@@ -52,6 +55,28 @@ describe('contentSecurityPolicy', () => {
     expect(policy).toContain("base-uri 'none'")
     expect(policy).toContain("object-src 'none'")
     expect(policy).toContain("frame-ancestors 'none'")
+  })
+})
+
+describe('embedsWebAnalytics', () => {
+  it('finds the beacon only where a page loads it', () => {
+    expect(
+      embedsWebAnalytics(
+        `<head><script defer src="${WEB_ANALYTICS_BEACON}" data-cf-beacon='{"token":"t"}'></script></head>`,
+      ),
+    ).toBe(true)
+    expect(embedsWebAnalytics('<head><script>console.log(1)</script></head>')).toBe(false)
+    expect(embedsWebAnalytics(`<a href="${WEB_ANALYTICS_BEACON}">beacon</a>`)).toBe(false)
+  })
+
+  it('allows the beacon and its reports beside the Convex deployment', () => {
+    const policy = contentSecurityPolicy({
+      scriptHashSources: ["'sha256-abc='"],
+      scriptSources: [WEB_ANALYTICS_BEACON],
+      connectSources: ['https://a.convex.cloud', WEB_ANALYTICS_REPORTS],
+    })
+    expect(policy).toContain(`script-src 'self' ${WEB_ANALYTICS_BEACON} 'sha256-abc=';`)
+    expect(policy).toContain(`connect-src 'self' https://a.convex.cloud ${WEB_ANALYTICS_REPORTS};`)
   })
 })
 
