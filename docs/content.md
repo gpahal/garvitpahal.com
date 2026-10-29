@@ -10,7 +10,7 @@ Pages and posts are Markdown under `src/content/`. [`src/content.config.ts`](../
 - **Project pages**: case studies of featured projects in `src/content/project-pages/`, served at `/projects/<file name>`. Nothing links to them; the sitemap lists them.
 - **Pages**: an entry renders only where a route passes its id to [`src/layouts/content-page.astro`](../src/layouts/content-page.astro). A new top-level page also needs an entry in `links` in [`src/components/nav/content.astro`](../src/components/nav/content.astro).
 
-`/projects` is hard-coded in [`src/pages/projects.astro`](../src/pages/projects.astro). When a project changes, check it there, in [`pages/about.md`](../src/content/pages/about.md), in its notable personal project and in its project page.
+`/projects` is hard-coded in [`src/pages/projects.astro`](../src/pages/projects.astro). When a project changes, check it there, in [`pages/about.md`](../src/content/pages/about.md), in its notable personal project, its project page and its blog post.
 
 ## Share images
 

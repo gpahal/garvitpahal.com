@@ -1,10 +1,9 @@
-import type { ApiRefusal } from '@/lib/access-session'
 import { errorText } from '@/lib/server/log'
 import { setTimer as realSetTimer } from '@/lib/timers'
 import type { SetTimer } from '@/lib/timers'
 
 import { READ_TIME_LIMIT_MESSAGE, wireFailure } from '../extract-wire'
-import type { ExtractError, ExtractRead } from '../extract-wire'
+import type { ExtractError, ExtractRead, ReadRefusal } from '../extract-wire'
 import { UNREADABLE } from './openai-exchange'
 
 /**
@@ -118,7 +117,7 @@ export async function runReadSession<TResult>({
   }
   signal.removeEventListener('abort', onLeave)
 
-  let sent: { body: ExtractRead<TResult> | ApiRefusal; outcome: string } | undefined
+  let sent: { body: ExtractRead<TResult> | ReadRefusal; outcome: string } | undefined
   if (outcome?.ok) sent = { body: { puzzle: outcome.result }, outcome: 'ok' }
   else {
     const error = outcome?.error ?? (ending.reason === 'deadline' ? READ_TIMEOUT : undefined)

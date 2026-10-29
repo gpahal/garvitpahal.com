@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content'
 
+import { formatYearRange } from '@/lib/dates'
 import Layout from '@/layouts/layout.astro'
 import { ButtonLink } from '@/components/shared/button-link'
 import PageHeader from '@/components/shared/page-header.astro'
@@ -14,7 +15,7 @@ if (profile === undefined) {
   throw new Error("Missing content entry 'resume/profile'")
 }
 const { education, awards } = profile.data
-const years = [education.startedOn, education.endedOn].map((date) => date.slice(0, 4)).join(' – ')
+const years = formatYearRange(education.startedOn, education.endedOn)
 ---
 
 <Layout
@@ -25,8 +26,8 @@ const years = [education.startedOn, education.endedOn].map((date) => date.slice(
 
   <P>
     I've worked in tech since 2015, almost always at early-stage startups. I joined Harness, Giga,
-    Coram AI, Dgraph, GM Labs and Superstream early, building their products and the systems under
-    them from zero to one, and before them founded Plato while still at college.
+    Coram AI, Dgraph and GM Labs early, building their products and the systems under them from zero
+    to one. I also founded Superstream, and before all of them Plato, while still at college.
   </P>
   <P>
     Between roles I work independently, consulting and doing my own research. The projects I'm

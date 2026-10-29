@@ -9,7 +9,7 @@ image:
 
 ## The result
 
-Claude Code with Opus 4.7 rebuilt multi-page websites from screenshots with a mean reward of 0.80 over 100 trials. The oracle, which feeds the original site back to the grader, scored 0.98. That leaves the agent about 0.19 below the ceiling.
+Claude Code with Opus 4.7 rebuilt multi-page websites from screenshots with a mean reward of 0.80 over 100 trials. The oracle, which feeds the original site back to the grader, scored 0.98. That leaves the agent about 0.18 below the ceiling.
 
 ## Why build it
 

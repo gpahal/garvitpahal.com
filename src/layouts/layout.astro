@@ -148,10 +148,12 @@ const robots = isPrivatePath(Astro.url.pathname)
      */}
     <ClientRouter />
     {/*
-     * In the head, identical on every page, so `<ClientRouter />` keeps it across navigations; the
-     * beacon reports each route change itself. Built pages only, so dev visits are not counted.
+     * In the head, identical on every public page, so `<ClientRouter />` keeps it across
+     * navigations; the beacon reports each route change itself. Built public pages only, so neither
+     * dev nor the owner's `/x` visits are counted.
      */}
     {import.meta.env.PROD &&
+      !isPrivatePath(Astro.url.pathname) &&
       PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN !== undefined &&
       PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN !== '' && (
         <script
@@ -161,6 +163,17 @@ const robots = isPrivatePath(Astro.url.pathname)
           data-cf-beacon={JSON.stringify({ token: PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN })}
         />
       )}
+    <script>
+      import { isPrivatePath } from '@/lib/site'
+
+      // A beacon started on a public page would report the `/x` routes the router swaps in, so
+      // crossing between the two takes a full load. Back and Forward included.
+      document.addEventListener('astro:before-preparation', (event) => {
+        if (isPrivatePath(event.from.pathname) !== isPrivatePath(event.to.pathname)) {
+          event.preventDefault()
+        }
+      })
+    </script>
   </head>
   <body>
     <IslandFailure />

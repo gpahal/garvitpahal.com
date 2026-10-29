@@ -24,7 +24,7 @@ The model is deliberately plain. It has no newer features such as grouped-query 
 
 ## How it works
 
-The tokenizer is my own byte-pair encoding tokenizer with GPT-2's vocabulary size of 50,257, trained on a slice of [FineWeb-Edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu).
+The tokeniser is my own byte-pair encoding tokeniser with GPT-2's vocabulary size of 50,257, trained on a slice of [FineWeb-Edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu).
 
 Training has two stages:
 
@@ -53,7 +53,7 @@ Data quality isn't the whole story, though. FineWeb-Edu's gains are biggest on k
 
 Next I'd like to try post-training it, with supervised fine-tuning and then reinforcement learning.
 
-The pretrained model and tokenizer download with one script, and the notebooks walk through the tokenizer, the model and the training plots.
+The pretrained model and tokeniser download with one script, and the notebooks walk through the tokeniser, the model and the training plots.
 
 ## Resources
 

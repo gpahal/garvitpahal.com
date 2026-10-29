@@ -69,7 +69,11 @@ const workExperiences = defineCollection({
       resume: z.array(z.string().trim().min(1)).min(1),
     })
     .refine(isInOrder, OUT_OF_ORDER)
-    .refine((entry) => arePeriodsInOrder(periodsOf(entry)), PERIODS_OUT_OF_ORDER),
+    // Zod runs every refine, so an inverted latest period would fail both.
+    .refine(
+      (entry) => !isInOrder(entry) || arePeriodsInOrder(periodsOf(entry)),
+      PERIODS_OUT_OF_ORDER,
+    ),
 })
 
 const notablePersonalProjects = defineCollection({

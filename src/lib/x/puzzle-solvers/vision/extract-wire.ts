@@ -15,6 +15,8 @@ export type ReadRemedy = Omit<ReadFailure, 'message'>
 
 export const readRefusalSchema = z.object({ error: readFailureSchema })
 
+export type ReadRefusal = z.infer<typeof readRefusalSchema>
+
 /**
  * Calls run in parallel, one request each. `VisionModels` in `server/models.ts` is sized to it.
  */

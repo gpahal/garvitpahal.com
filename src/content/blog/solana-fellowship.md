@@ -255,6 +255,6 @@ It was a fun and productive eight weeks. I learned a lot, built a lot of things 
 
 I'm especially pleased about this project. I plan to dedicate some time to market it and build a community around it.
 
-Superstream later became a company, which I founded and ran until March 2022. More on my [work](/work) page.
+Superstream became a company, which I founded and ran from September 2021 to March 2022. More on my [work](/work) page.
 
 If you have any questions about the fellowship, feel free to reach out to me on [email](mailto:g10pahal@gmail.com) or [X](https://x.com/g10pahal).

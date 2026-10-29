@@ -1,7 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content'
 
-import { formatPeriods, periodsOf, sortNewestFirst } from '@/lib/dates'
+import { formatPeriods, formatYearRange, periodsOf, sortNewestFirst } from '@/lib/dates'
 import type { DateOnly } from '@/lib/dates'
 import { SITE_NAME, SITE_TAGLINE, SOCIAL_LINKS } from '@/lib/site'
 
@@ -50,7 +50,7 @@ const links = [
   SOCIAL_LINKS.github,
   SOCIAL_LINKS.linkedin,
 ]
-const educationYears = `${education.startedOn.slice(0, 4)} – ${education.endedOn.slice(0, 4)}`
+const educationYears = formatYearRange(education.startedOn, education.endedOn)
 /**
  * One string: Astro drops a line break between text and an expression, which ran "2016." into the
  * notes.

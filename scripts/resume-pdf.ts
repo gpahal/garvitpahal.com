@@ -76,6 +76,8 @@ function main(): void {
   }
   const output = path.join(ROOT, phone === undefined ? PUBLIC_PDF : PRIVATE_PDF)
   mkdirSync(path.dirname(output), { recursive: true })
+  // Chrome's output is ignored, so a print that fails quietly would leave the old PDF to check.
+  rmSync(output, { force: true })
 
   try {
     execFileSync(

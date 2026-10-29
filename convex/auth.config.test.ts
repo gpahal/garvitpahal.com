@@ -43,8 +43,14 @@ test('accepts only ES256 tokens from its issuer for its audience', async () => {
   ])
 })
 
-test('refuses to load without an owner', async () => {
+test('refuses to load without an owner or with an invalid JWKS', async () => {
   await expect(loadConfig({ OWNER_EMAIL: undefined, CONVEX_JWT_JWKS: jwks(KEY) })).rejects.toThrow(
     'OWNER_EMAIL is not set',
   )
+  await expect(
+    loadConfig({
+      OWNER_EMAIL: 'owner@example.com',
+      CONVEX_JWT_JWKS: jwks({ ...KEY, d: 'secret' }),
+    }),
+  ).rejects.toThrow('holds a private key')
 })
