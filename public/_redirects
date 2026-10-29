@@ -1,0 +1,3 @@
+# Some tools and crawlers guess `/sitemap.xml` without reading `robots.txt`; Astro's sitemap
+# integration writes `sitemap-index.xml`.
+/sitemap.xml /sitemap-index.xml 301
