@@ -308,6 +308,9 @@ export default defineConfig({
   site: 'https://garvitpahal.com',
   // Change with `html_handling` in `wrangler.jsonc`.
   trailingSlash: 'never',
+  // For tools that guess `/sitemap.xml` without reading `robots.txt`. The status is explicit so the
+  // redirect stays permanent on any adapter.
+  redirects: { '/sitemap.xml': { status: 301, destination: '/sitemap-index.xml' } },
   adapter: cloudflare({
     // Sharp never ships to workerd.
     imageService: 'compile',
