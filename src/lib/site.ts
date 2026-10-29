@@ -34,15 +34,10 @@ export function isPrivatePath(pathname: string): boolean {
 }
 
 /**
- * Left out of search results and the sitemap. `/resume-print` is only the resume PDF's source.
+ * Left out of search results and the sitemap.
  */
 export function isUnlistedPath(pathname: string): boolean {
-  return (
-    isPrivatePath(pathname) ||
-    pathname === '/404' ||
-    pathname === '/nav' ||
-    pathname === '/resume-print'
-  )
+  return isPrivatePath(pathname) || pathname === '/404' || pathname === '/nav'
 }
 
 export const PRIVATE_TOOLS = [

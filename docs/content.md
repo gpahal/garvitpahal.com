@@ -18,7 +18,7 @@ A blog post or project page can set `image` (`src`, relative like a post image, 
 
 ## Resume
 
-[`src/pages/resume-print.astro`](../src/pages/resume-print.astro) builds the resume from the collections above as a standalone, unlisted A4 document, and `pnpm resume` prints it to [`public/docs/resume.pdf`](../public/docs/resume.pdf) with headless Chrome ([`resume-pdf.ts`](../scripts/resume-pdf.ts)). Run it on a Mac after changing any of them and commit the PDF: the page prints in Avenir Next, which only macOS ships, and the deploy only copies the committed file. The script fails unless the PDF is one page with no Type 3 fonts, whose text extracts broken for applicant tracking systems; `RESUME_PHONE` writes a copy with a phone number to `tmp/` instead.
+[`src/resume/resume-print.astro`](../src/resume/resume-print.astro) builds the resume from the collections above as a standalone A4 document. It is a route, `/resume-print`, only in `pnpm resume`'s build (`resumePrintRoute` in [`astro.config.ts`](../astro.config.ts)), so the deployed site never serves it. `pnpm resume` prints it to [`public/docs/resume.pdf`](../public/docs/resume.pdf) with headless Chrome ([`resume-pdf.ts`](../scripts/resume-pdf.ts)). Run it on a Mac after changing any of them and commit the PDF: the page prints in Avenir Next, which only macOS ships, and the deploy only copies the committed file. The script fails unless the PDF is one page with no Type 3 fonts, whose text extracts broken for applicant tracking systems.
 
 ## Dates
 

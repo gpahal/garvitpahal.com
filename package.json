@@ -23,7 +23,7 @@
     "lint-fix:stylelint": "pnpm lint:stylelint --fix",
     "og-card": "node scripts/og-card.ts",
     "preview": "astro preview",
-    "resume": "astro build && node scripts/resume-pdf.ts",
+    "resume": "RESUME_PRINT=1 astro build && node scripts/resume-pdf.ts",
     "sync": "astro sync",
     "test": "vitest run",
     "typecheck:app": "astro check --noSync",

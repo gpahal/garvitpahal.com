@@ -44,8 +44,8 @@ const projects = byLatestStart(await getCollection('notablePersonalProjects')).f
         },
 )
 
-const email = SOCIAL_LINKS.email
 const links = [
+  SOCIAL_LINKS.email,
   { href: site.href.replace(/\/$/, ''), text: site.host },
   SOCIAL_LINKS.github,
   SOCIAL_LINKS.linkedin,
@@ -343,11 +343,6 @@ const educationRest = `, ${education.degree}, ${educationYears}.${education.note
             <p>{SITE_TAGLINE}</p>
           </div>
           <address>
-            {/* `scripts/resume-pdf.ts` fills the slot for a private copy, on this line so the page still fits. */}
-            <span>
-              <a href={email.href}>{email.text}</a>
-              <span data-resume-phone></span>
-            </span>
             {links.map(({ href, text }) => (
               <a href={href}>{text}</a>
             ))}

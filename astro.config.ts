@@ -200,6 +200,23 @@ function fontTesterInDev(): AstroIntegration {
 }
 
 /**
+ * `/resume-print` is only the resume PDF's source, so it is a route in `pnpm resume`'s build alone
+ * and the site, dev included, never serves it.
+ */
+function resumePrintRoute(): AstroIntegration {
+  return {
+    name: 'resume-print-route',
+    hooks: {
+      'astro:config:setup': ({ injectRoute }) => {
+        if (process.env.RESUME_PRINT === '1') {
+          injectRoute({ pattern: '/resume-print', entrypoint: './src/resume/resume-print.astro' })
+        }
+      },
+    },
+  }
+}
+
+/**
  * `false` is Astro's default, localhost.
  */
 const LOCAL_DEV_HOSTS: ReadonlySet<string | boolean> = new Set([
@@ -348,6 +365,7 @@ export default defineConfig({
     react(),
     contentSecurityPolicyHeader(),
     fontTesterInDev(),
+    resumePrintRoute(),
     refuseExposedDevServer(),
     separateViteCaches(),
   ],
