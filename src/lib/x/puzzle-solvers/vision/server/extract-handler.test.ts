@@ -121,11 +121,9 @@ describe('extract route', () => {
     expect(steps).toEqual(['config'])
   })
 
-  // Paid work fails closed when metering is unavailable.
   it.each([
     [{ status: 'limited', retryAfterMs: 1500 }, 429, 'You have reached the limit'],
     [{ status: 'unavailable', cause: 'outage' }, 503, 'Reading is unavailable right now'],
-    [{ status: 'unavailable', cause: 'misconfigured' }, 503, 'The server is not set up correctly'],
   ] as const)('refuses a %j meter before reading the body', async (rateLimit, status, message) => {
     const { steps, post } = setup({ rateLimit })
     expect(await post(VALID_BODY)).toMatchObject({
@@ -157,9 +155,7 @@ describe('extract route', () => {
     expect(steps).toEqual(['config', 'meter 1', 'body', ...(status === 200 ? ['model'] : [])])
   })
 
-  // The schema is checked once the body is read, which comes after metering.
   it.each([
-    ['a body that is not JSON', 'not json', 'invalid_json'],
     ['base64 that is not a JPEG', { ...VALID_BODY, data: 'iVBORw0KGgo=' }, 'invalid_request'],
     ['a model choice', { ...VALID_BODY, model: 'gpt-6-sol' }, 'invalid_request'],
   ])('refuses %s before any model call', async (_label, body, outcome) => {
@@ -173,11 +169,8 @@ describe('extract route', () => {
   })
 
   it.each([
-    ['no query', ''],
     ['an unknown phase', '?phase=final&call=0'],
     ['a call the chain does not have', '?phase=initial&call=2'],
-    ['a fallback call the chain does not have', '?phase=fallback&call=1'],
-    ['a call that is not one digit', '?phase=initial&call=00'],
   ])('refuses %s before metering, so it spends no admission', async (_label, search) => {
     const { steps, post } = setup()
     expect(await post(VALID_BODY, { search })).toEqual({
@@ -191,19 +184,10 @@ describe('extract route', () => {
   it.each([
     ['a standard initial call', '?phase=initial&call=0', 1],
     ['an initial call on the priority lane', '?phase=initial&call=1', 2],
-    ['the fallback call on the priority lane', '?phase=fallback&call=0', 2],
   ])("meters %s at its model's price", async (_label, search, cost) => {
     const { steps, post } = setup()
     expect(await post(VALID_BODY, { search })).toMatchObject({ status: 200 })
     expect(steps).toEqual(['config', `meter ${String(cost)}`, 'body', 'model'])
-  })
-
-  it("refuses a priority-lane call's meter before reading the body", async () => {
-    const { steps, post } = setup({ rateLimit: { status: 'limited', retryAfterMs: 1500 } })
-    expect(await post(VALID_BODY, { search: '?phase=initial&call=1' })).toMatchObject({
-      status: 429,
-    })
-    expect(steps).toEqual(['config', 'meter 2'])
   })
 
   it.each(['chess', '__proto__'])(

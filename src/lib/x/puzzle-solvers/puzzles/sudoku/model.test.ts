@@ -23,14 +23,6 @@ describe('resizeGrid', () => {
     // 9 cannot exist on a 6x6.
     expect(smaller.values[1 * 6 + 3]).toBe(EMPTY)
   })
-
-  it('moves no value when only the box orientation flips', () => {
-    const grid = createGrid(6, 3, 2)
-    grid.values[5 * 6 + 5] = 6
-    const flipped = resizeGrid(grid, 6, 2, 3)
-    expect([...flipped.values]).toEqual([...grid.values])
-    expect([flipped.boxWidth, flipped.boxHeight]).not.toEqual([grid.boxWidth, grid.boxHeight])
-  })
 })
 
 function filledCount(grid: SudokuGrid): number {

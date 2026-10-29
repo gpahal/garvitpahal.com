@@ -28,7 +28,7 @@ export const kenKenCompute: PuzzleCompute<KenKenPuzzle> = {
     hints: analyzeKenKen(rectify(capture, MEASURE_EDGE)),
   }),
   // A read that contradicts itself was misread systematically, so two models agreeing on it must
-  // not promote it. The model's own `uncertain` list only drives review.
+  // not promote it.
   fingerprint: (puzzle) =>
     puzzle.contradictions.length > 0 ? undefined : gridFingerprint(puzzle.grid),
   solve: solveKenKen,

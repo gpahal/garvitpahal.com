@@ -44,7 +44,6 @@ export function ClueEditor({
 }): ReactNode {
   const targetId = useId()
   const isGiven = cage.op === '='
-  // As typed, so a value in progress is not rewritten under the cursor.
   const [text, setText] = useState<string>()
   const input = shownClue(text, cage.target)
   // Text that is not a clue leaves the cage unset, so only the field can say why.

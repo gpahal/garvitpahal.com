@@ -7,7 +7,6 @@ import {
   DAY_MS,
   EARLIEST_INSTANT,
   EARLIEST_LOCAL,
-  EARLIEST_YEAR,
   isWholeWithin,
   MAX_DESCRIPTION_LENGTH,
   MAX_INSTANT,
@@ -107,10 +106,10 @@ export function assertDayList({ start, end, limit }: ObjectType<typeof dayListAr
 }
 
 /**
- * A year before `EARLIEST_YEAR`, so the intervals around the first reachable day pass, and a leap
- * year short of the instant range, so every interval around the last stays inside it.
+ * From the first day the browser can reach (`reachableDays`) to a leap year short of the instant
+ * range, so every interval around the last stays inside it.
  */
-const MIN_QUERY_DAY = dayOfLocal(Date.UTC(EARLIEST_YEAR - 1, 0, 1))
+const MIN_QUERY_DAY = dayOfLocal(EARLIEST_LOCAL)
 const MAX_QUERY_DAY = Math.floor(MAX_INSTANT / DAY_MS) - 366
 
 export function assertQueryDay(day: number): void {

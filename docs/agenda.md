@@ -4,7 +4,7 @@ Tasks and recurring goals (routines) for one owner, on the `tasks`, `routines`, 
 
 ## Time and goals
 
-A task's completion and a log's start store their UTC instant with the local reading and zone frozen at write time, so they stay on their recorded day whatever zone is current later. Day lists select by those local readings, outstanding tasks by UTC instants. Browser and server share every rule in `convex/shared/`.
+A task's completion and a log's start store their UTC instant with the local reading and zone frozen at write time, so they stay on their recorded day whatever zone is current later. Day lists select by those local readings, outstanding tasks by UTC instants.
 
 No current zone is stored: it is the device's ([`use-device-time-zone.ts`](../src/hooks/use-device-time-zone.ts)). The current day, goal boundaries and reminder times follow it, so travelling moves them and two devices in different zones each show their own today. The server checks only that a zone it is sent is a known IANA name that matches the reading, and that the reading is no earlier than 2025 (`EARLIEST_YEAR` in [`limits.ts`](../convex/shared/limits.ts)), so a device in any zone can save.
 

@@ -1,10 +1,6 @@
 import { SECOND_MS } from './limits'
 
 /**
- * Wall-clock readings, shared so the browser takes a reading exactly as the server checks it.
- */
-
-/**
  * Longer than any IANA name, so a longer string is never a zone.
  */
 export const MAX_ZONE_NAME_LENGTH = 64

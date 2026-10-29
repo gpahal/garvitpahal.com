@@ -9,7 +9,6 @@ import type { ExtractError } from '../extract-wire'
 import type { ChainModel } from './models'
 
 /**
- * One vision call to OpenAI and how its reply is read.
  * The call is a bare `fetch` because the SDK's client would add most of a megabyte to the Worker,
  * evaluated within the first read's CPU allowance.
  */

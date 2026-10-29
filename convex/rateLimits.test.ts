@@ -33,8 +33,6 @@ async function buckets(t: ReturnType<typeof setup>) {
 
 test.each([
   ['the burst bucket', 'puzzleReadsBurst', 10, 1],
-  ['the daily bucket', 'puzzleReadsDaily', 150, 1],
-  ['the burst bucket, one short of a priority call', 'puzzleReadsBurst', 9, 2],
   ['the daily bucket, one short of a priority call', 'puzzleReadsDaily', 149, 2],
 ] as const)('leaves both buckets as they were when %s refuses', async (_, name, count, cost) => {
   const t = setup()

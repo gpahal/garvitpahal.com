@@ -220,7 +220,7 @@ function refuseExposedDevServer(): AstroIntegration {
       'astro:config:setup': ({ command, config }) => {
         if (command === 'dev' && !LOCAL_DEV_HOSTS.has(config.server.host)) {
           throw new Error(
-            'The dev server signs every request in as the owner, so it listens only on this machine. Run pnpm dev without --host',
+            'The dev server signs local requests in as the owner, so it listens only on this machine. Run pnpm dev without --host',
           )
         }
       },
@@ -311,10 +311,10 @@ export default defineConfig({
   // cannot remove it silently.
   security: { checkOrigin: true },
   env: {
+    // Server secrets are optional because prerendering runs without them; each is checked per
+    // request.
     schema: {
-      // Optional for prerendering; the puzzle route checks it per request.
       OPENAI_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
-      // Optional for prerendering; `pnpm dev` needs only `OWNER_EMAIL` and `CONVEX_JWT_PRIVATE_KEY`.
       ACCESS_TEAM_DOMAIN: envField.string({ context: 'server', access: 'secret', optional: true }),
       ACCESS_AUD: envField.string({ context: 'server', access: 'secret', optional: true }),
       OWNER_EMAIL: envField.string({ context: 'server', access: 'secret', optional: true }),

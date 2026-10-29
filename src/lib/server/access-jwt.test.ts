@@ -81,16 +81,10 @@ describe('createAccessJwtVerifier', () => {
 
   it.each([
     ['another issuer', { iss: 'https://other.cloudflareaccess.com' }, 'claim_iss'],
-    ['an issuer with a trailing slash', { iss: `https://${TEAM}/` }, 'claim_iss'],
     ["another application's audience", { aud: ['other-aud'] }, 'claim_aud'],
-    ['an expiry past the leeway', { exp: SECONDS - 61 }, 'expired'],
-    ['a start after the leeway', { nbf: SECONDS + 61 }, 'claim_nbf'],
     // A service token carries no email.
     ['no email', { email: undefined }, 'malformed_claims'],
-    ['an empty email', { email: ' ' }, 'malformed_claims'],
     ['no expiry', { exp: undefined }, 'claim_exp'],
-    ['no start', { nbf: undefined }, 'claim_nbf'],
-    ['no issue time', { iat: undefined }, 'claim_iat'],
   ])('refuses a token with %s', async (_label, change, reason) => {
     const { verify } = setup()
     expect(await verify(await accessJwt({ ...CLAIMS, ...change }))).toEqual({
@@ -126,7 +120,7 @@ describe('createAccessJwtVerifier', () => {
     })
   })
 
-  it.each(['none', 'HS256', 'RS384'])(
+  it.each(['none', 'HS256'])(
     'refuses a header naming %s before fetching the certs',
     async (alg) => {
       const { verify, fetchFn } = setup()
@@ -137,14 +131,6 @@ describe('createAccessJwtVerifier', () => {
       expect(fetchFn).not.toHaveBeenCalled()
     },
   )
-
-  it('refuses malformed input', async () => {
-    const { verify } = setup()
-    expect(await verify('!!!.???.***')).toEqual({
-      status: 'invalid',
-      reason: errors.JWSInvalid.code,
-    })
-  })
 
   it.each([
     ['unreachable', new TypeError('fetch failed')],

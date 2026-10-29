@@ -11,14 +11,7 @@ const withFirstCage = (cage: object) => ({ ...wire, cages: [cage, ...wire.cages.
 describe('the Ken Ken wire schema', () => {
   it.each([
     ['what this build sends', wire, true],
-    // Out of range is a misread the editor shows, not an incompatible payload.
     ['a clue out of range', withFirstCage({ op: '+', target: -5 }), true],
-    [
-      'a contradiction flagged for review',
-      { ...wire, unreviewedCages: [0], contradictions: [0] },
-      true,
-    ],
-    // Consistent with itself, so only the size list can refuse it.
     [
       'a size with no grid',
       {
@@ -33,7 +26,6 @@ describe('the Ken Ken wire schema', () => {
     ['too few cells', { ...wire, cageOf: wire.cageOf.slice(1) }, false],
     ['a cell naming a missing cage', { ...wire, cages: wire.cages.slice(0, -1) }, false],
     ['a clue that is not a whole number', withFirstCage({ op: '+', target: 2.5 }), false],
-    // An empty cage would enumerate to no tuples and read as unsolvable.
     [
       'a cage no cell belongs to',
       { ...wire, cages: [...wire.cages, { op: '+', target: 3 }] },

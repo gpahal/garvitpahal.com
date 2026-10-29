@@ -61,7 +61,8 @@ export function CapturePane({
       proceed()
     })
   const inputRef = useRef<HTMLInputElement | null>(null)
-  // Set just before a click the owner has already confirmed, so it opens without asking.
+  // Set just before a click the owner already confirmed. Browsers open the picker only inside a
+  // press.
   const isConfirmedRef = useRef(false)
   function openPicker(): void {
     isConfirmedRef.current = true
@@ -148,8 +149,6 @@ export function CapturePane({
           aria-invalid={uploadError !== undefined}
           aria-describedby={idRefs(uploadError === undefined ? undefined : errorId, describedBy)}
           className="sr-only"
-          // The picker opens only within a press, so a confirmed open is a fresh click from the
-          // dialog's button.
           onClick={(event) => {
             const isConfirmed = isConfirmedRef.current
             isConfirmedRef.current = false

@@ -138,9 +138,6 @@ export const forDialog = ownerQuery({
   },
 })
 
-/**
- * `null` once it is deleted.
- */
 async function notedLog(
   ctx: QueryCtx,
   id: Id<'routineLogs'>,

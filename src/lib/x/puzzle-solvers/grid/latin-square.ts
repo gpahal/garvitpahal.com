@@ -43,7 +43,7 @@ type SearchState = {
   isSolution: ((values: Uint8Array) => boolean) | undefined
   solutions: Array<Uint8Array>
   /**
-   * Per variable, one plus the failed subtrees branching on it has led to.
+   * Per variable, one plus the number of failed subtrees that branching on it led to.
    */
   weights: Float64Array
   failures: number
@@ -118,8 +118,7 @@ function search(domains: Domains, state: SearchState): void {
 }
 
 /**
- * `domains` is consumed, so pass a copy if the caller still needs it. Maps the search outcome to a
- * `SolveResult`, whose doc says what the mapping must keep.
+ * `domains` is consumed, so pass a copy if the caller still needs it.
  */
 export function solveLatinSquare(
   n: number,

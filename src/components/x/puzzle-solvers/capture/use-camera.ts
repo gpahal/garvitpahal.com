@@ -5,9 +5,6 @@ import { nextCameraId } from '@/lib/x/puzzle-solvers/capture/camera-cycle'
 import { videoToPixels } from '@/lib/x/puzzle-solvers/capture/canvas-pixels'
 import type { PixelImage } from '@/lib/x/puzzle-solvers/capture/pixels'
 
-/**
- * One value, so an error can never sit beside a camera that has since gone live.
- */
 type CameraState = { status: 'starting' | 'live' } | { status: 'error'; message: string }
 
 export function isCameraSupported(): boolean {
@@ -62,8 +59,7 @@ function stopTracks(stream: MediaStream): void {
 
 /**
  * Mount only while the camera is wanted: unmount is the one place that stops tracks, and getting
- * that wrong leaves the device light on. Retry and switch are remounts. `deviceId` is the caller's
- * so it outlives a camera stopped to review a still.
+ * that wrong leaves the device light on. Retry and switch are remounts.
  */
 export function useCamera(deviceId: string | undefined): UseCameraResult {
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -145,8 +141,7 @@ export function useCamera(deviceId: string | undefined): UseCameraResult {
         try {
           await video.play()
         } catch {
-          // Cleanup's `stop()` rejects a pending `play()` only after setting `isCancelled`.
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- cleanup sets it while `play()` is awaited
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- cleanup sets it, then its `stop()` rejects `play()`
           if (!isCancelled) {
             stop()
             setState({ status: 'error', message: CAMERA_FAILED_MESSAGE })

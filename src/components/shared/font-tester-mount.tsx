@@ -2,9 +2,6 @@ import { createRoot } from 'react-dom/client'
 
 import { FontTester } from '@/components/shared/font-tester'
 
-/**
- * Only `fontTesterInDev` in `astro.config.ts` calls this, under `astro dev`.
- */
 export function mountFontTester(fontshareFontsPath: string): void {
   const host = document.createElement('div')
   document.body.append(host)

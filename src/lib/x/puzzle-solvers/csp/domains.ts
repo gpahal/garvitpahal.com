@@ -6,8 +6,8 @@ export type Domains = Uint32Array
 export type PropagationResult = 'changed' | 'stable' | 'contradiction'
 
 /**
- * Narrows in place and must never widen: the search backtracks by restoring a snapshot. Takes no
- * deadline, so one pass may run past it.
+ * Narrows in place and never widens: each branch searches its own copy, so nothing is undone. Takes
+ * no deadline, so one pass may run past it.
  */
 export type Propagator = (domains: Domains) => PropagationResult
 

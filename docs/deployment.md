@@ -46,7 +46,7 @@ The project [`.infisical.yaml`](../.infisical.yaml) names, on Infisical's US Clo
 4. Under the project's Access Control → Machine Identities, add the identity with the Viewer role, which only reads. Without custom roles it can read `dev` as well as `prod`.
 5. Note the identity's ID and the `project-id` in `.infisical.yaml` for [GitHub step 2](#github).
 
-GitHub mints the token only for a job in the `production` environment, which [GitHub step 3](#github) limits to `main`, so no other branch or fork can read `prod`. Should Deploy's sign-in fail with a subject error, compare the subject above with the `sub` GitHub documents for the repository ([OpenID Connect reference](https://docs.github.com/en/actions/reference/security/oidc)).
+The identity accepts only a token whose subject names the `production` environment, which [GitHub step 3](#github) limits to `main`, so no other branch or fork can read `prod`. Should Deploy's sign-in fail with a subject error, compare the subject above with the `sub` GitHub documents for the repository ([OpenID Connect reference](https://docs.github.com/en/actions/reference/security/oidc)).
 
 ### Convex
 
@@ -180,7 +180,7 @@ A secret the Worker reads needs all of these. [`wrangler-config.test.ts`](../che
 2. Its name in `WORKER_SECRETS` ([`deploy-worker.ts`](../scripts/deploy-worker.ts)) and in `env.deploy.secrets.required` in [`wrangler.jsonc`](../wrangler.jsonc). If `pnpm dev` reads it, also in `env.dev.secrets.required` and in `DEV_SECRETS` in the check.
 3. A value in Infisical's `prod` environment, and in `dev` if `pnpm dev` reads it. Then re-run Deploy.
 
-A setting Convex reads comes from a Worker secret through `convexEnvFile` in [`convex-env.ts`](../scripts/convex-env.ts). A `PUBLIC_*` value takes an `envField` with `context: 'client'` and `access: 'public'`, a [`.env.development`](../.env.development) line for the dev deployment and a GitHub variable passed to the build step in [`check.yml`](../.github/workflows/check.yml). A Worker setting that is not secret goes in `vars` in `wrangler.jsonc`, under `env.dev` for `pnpm dev` and `env.deploy` for production.
+A setting Convex reads comes from a Worker secret through `convexEnvFile` in [`convex-env.ts`](../scripts/convex-env.ts). A `PUBLIC_*` value takes an `envField` with `context: 'client'` and `access: 'public'`, a [`.env.development`](../.env.development) line if dev needs it and a GitHub variable passed to the build step in [`check.yml`](../.github/workflows/check.yml). A Worker setting that is not secret goes in `vars` in `wrangler.jsonc`, under `env.dev` for `pnpm dev` and `env.deploy` for production.
 
 ## Rotating the Convex token key
 

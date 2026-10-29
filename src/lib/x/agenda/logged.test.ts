@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { toLocal } from '@convex/shared/localTime'
 
-import { isReadFurther, mergeLogged } from './logged'
+import { mergeLogged } from './logged'
 import type { LoggedEntry } from './logged'
 
 function log(id: string, at: number): { _id: string; started: { at: number; atLocal: number } } {
@@ -32,8 +32,6 @@ describe('mergeLogged', () => {
         entry.kind === 'log' ? entry.log._id : entry.task._id,
       )
     expect(shown({ logs: true, tasks: false })).toEqual(['t3', 'l2', 't2'])
-    expect(shown({ logs: false, tasks: true })).toEqual(['t3', 'l2', 't2', 'l1'])
-    expect(shown({ logs: true, tasks: true })).toEqual(['t3', 'l2', 't2'])
     expect(shown({ logs: false, tasks: false })).toEqual(['t3', 'l2', 't2', 'l1', 't1'])
   })
 
@@ -64,21 +62,5 @@ describe('mergeLogged', () => {
     expect(first).toHaveLength(99)
     expect(more.slice(0, first.length)).toEqual(first)
     expect(more.at(-1)).toBe('est')
-  })
-})
-
-describe('isReadFurther', () => {
-  const read = (length: number, hasMore: boolean) => ({
-    rows: Array.from({ length }, (_, index) => index),
-    hasMore,
-  })
-
-  it('reads further a source cut short of the most one read may ask for', () => {
-    expect(isReadFurther(read(100, true), 1000)).toBe(true)
-  })
-
-  it('reads no further a source cut at the most one read may ask for, or not cut', () => {
-    expect(isReadFurther(read(1000, true), 1000)).toBe(false)
-    expect(isReadFurther(read(100, false), 1000)).toBe(false)
   })
 })

@@ -203,7 +203,6 @@ export function createExtractHandler<TRaw, TPuzzle, TResult, THints extends obje
         )
       }
       case 'unavailable': {
-        // Paid work fails closed when metering is unavailable.
         return refuse(
           'rate_limit_unavailable',
           503,

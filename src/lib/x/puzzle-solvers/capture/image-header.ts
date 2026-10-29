@@ -170,7 +170,7 @@ function isHeifHeader(head: Uint8Array): boolean {
 }
 
 /**
- * The signature decides, since a file's type and name are often missing or generic.
+ * Falls back to the signature, since a file's type and name are often missing or generic.
  */
 export async function unreadableFileMessage(source: Blob): Promise<string> {
   const name = 'name' in source && typeof source.name === 'string' ? source.name : ''

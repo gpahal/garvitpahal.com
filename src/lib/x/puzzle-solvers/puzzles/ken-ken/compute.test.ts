@@ -92,7 +92,6 @@ describe('kenKenCompute.fingerprint', () => {
   it('withholds the fingerprint of a read the parser caught contradicting itself', () => {
     const puzzle = createPuzzle(4)
     expect(kenKenCompute.fingerprint(puzzle)).toBe(gridFingerprint(puzzle.grid))
-    // Its misreads were systematic, so two models agreeing on it must not promote it.
     const contradicted = { ...puzzle, unreviewedCages: [0], contradictions: [0] }
     expect(kenKenCompute.fingerprint(contradicted)).toBeUndefined()
   })

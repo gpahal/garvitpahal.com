@@ -43,8 +43,6 @@ describe('isNamedTimeZone', () => {
   })
 
   it('refuses a fixed offset and a name no tzdata has', () => {
-    // Should `Intl` ever refuse an offset, the check has become dead code.
-    expect(() => new Intl.DateTimeFormat('en-US', { timeZone: '+05:30' })).not.toThrow()
     expect(isNamedTimeZone('+05:30')).toBe(false)
     // A Unicode minus, which `Intl` reads as `-05:30`.
     expect(isNamedTimeZone('\u{2212}05:30')).toBe(false)

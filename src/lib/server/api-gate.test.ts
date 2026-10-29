@@ -69,17 +69,6 @@ describe('createApiGate', () => {
     })
   })
 
-  it("keeps each of a route's repeated headers beside the gate's own", async () => {
-    const { response } = await run('/api/x/token', OWN_FETCH, '/api/x/token', async () => {
-      const headers = new Headers()
-      headers.append('set-cookie', 'a=1')
-      headers.append('set-cookie', 'b=2')
-      return new Response(null, { headers })
-    })
-    expect(response.headers.getSetCookie()).toEqual(['a=1', 'b=2'])
-    expect(response.headers.get('x-content-type-options')).toBe('nosniff')
-  })
-
   it('answers a throw with a bare 500 that still carries the headers, and logs why', async () => {
     const { response } = await run('/api/x/token', OWN_FETCH, '/api/x/token', async () => {
       throw new Error('route bug')

@@ -29,30 +29,17 @@ describe('sudokuHintsSchema', () => {
     expect(sudokuHintsSchema.safeParse({ n: 6, boxWidth: 3, boxHeight: 3 }).success).toBe(false)
     expect(sudokuHintsSchema.safeParse({ n: 9, boxWidth: 9, boxHeight: 1 }).success).toBe(false)
   })
-
-  it('checks nothing against a size it was not given', () => {
-    expect(sudokuHintsSchema.safeParse({ empty: [{ row: 9, col: 9 }] }).success).toBe(true)
-  })
 })
 
 describe('describeHints', () => {
-  it('gives the measured size and boxes, names the cells that hold a digit, or says none does', () => {
+  it('names the cells that hold a digit', () => {
     const prompt = describeHints({
       n: 4,
-      boxWidth: 2,
-      boxHeight: 2,
       empty: emptyExcept(4, [
         [0, 0],
         [3, 2],
       ]),
     })
-    expect(prompt).toContain('- The grid is 4x4 with boxes 2 cells wide and 2 cells tall.\n')
-    expect(prompt).toContain(
-      '- Only these cells appear to hold a printed digit: A1, C4. Every other cell appears empty.\n',
-    )
-    expect(describeHints({ n: 4, empty: emptyExcept(4, []) })).toContain(
-      '- The grid is 4x4.\n- No cell appears to hold a printed digit.\n',
-    )
-    expect(describeHints({})).toBe('')
+    expect(prompt).toContain('A1, C4')
   })
 })

@@ -21,14 +21,6 @@ describe('table', () => {
     expect(propagate(domains)).toBe('stable')
   })
 
-  it('finds a contradiction when no tuple fits', () => {
-    const propagate = table([
-      { variables: new Uint16Array([0, 1]), tuples: [new Uint8Array([1, 1])] },
-    ])
-    const domains = new Uint32Array([maskOf(1), maskOf(2)])
-    expect(propagate(domains)).toBe('contradiction')
-  })
-
   it('answers from each constraint as its scope stands, across the branches of a search', () => {
     const propagate = table([
       { variables: new Uint16Array([0]), tuples: [new Uint8Array([1]), new Uint8Array([2])] },

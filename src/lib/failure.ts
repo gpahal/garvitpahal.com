@@ -14,8 +14,6 @@ export const failureSchema = z.object({
   reload: remedy,
   // Trying again would meet it again, so the page offers no Try again.
   noRetry: remedy,
-  // Permits a puzzle read's paid fallback. Absent means none.
-  fallback: remedy,
 })
 
 export type Failure = z.infer<typeof failureSchema>

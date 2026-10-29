@@ -65,7 +65,7 @@ export function KenKenEditor({
   const issueId = useId()
   const [draft, setDraft] = useState<CageDraft>()
   const [cluePass, setCluePass] = useState(0)
-  // While drafting, only Done and Cancel clear the cursor.
+  // While drafting, a press outside keeps the cursor.
   const {
     selected,
     setSelected,

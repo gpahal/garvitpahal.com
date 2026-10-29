@@ -10,7 +10,7 @@ import type { LogTotals } from '../shared/goalRules'
 import type { TimeRange } from '../shared/intervals'
 
 /**
- * Frozen local starts decide membership and elapsed time the sum.
+ * Sorted by each log's frozen local start, which decides its interval, and summing elapsed UTC time.
  */
 export const routineLogAggregate = new TableAggregate<{
   DataModel: DataModel

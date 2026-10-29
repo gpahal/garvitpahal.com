@@ -14,7 +14,7 @@ export function clueTextClass(n: number): string {
 
 /**
  * Each cell draws only its top and left edges, so adjacent cells never double a line. Cage edges
- * stop short of `foreground`, which the values use, so the frame does not compete with them.
+ * use `muted-foreground`, not the values' `foreground`, so the frame does not compete with them.
  */
 export function cageBorderClasses(grid: KenKenGrid, cell: number): string {
   const { n } = grid

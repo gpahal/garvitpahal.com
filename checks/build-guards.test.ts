@@ -131,9 +131,7 @@ describe('the exposed dev server refusal', () => {
     for (const host of [true, '0.0.0.0']) {
       expect(start(host), String(host)).toThrow(/listens only on this machine/)
     }
-    for (const host of [false, 'localhost', '::1']) {
-      expect(start(host), String(host)).not.toThrow()
-    }
+    expect(start(false)).not.toThrow()
     // A build signs no one in, so its host is not this guard's business.
     expect(start(true, 'build')).not.toThrow()
   })

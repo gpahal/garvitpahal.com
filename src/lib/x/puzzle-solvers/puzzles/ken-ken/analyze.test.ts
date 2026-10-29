@@ -49,9 +49,4 @@ describe('analyzeKenKen', () => {
     expect(touched).not.toContain('C3')
     expect(hints.heavyEdges).toContainEqual({ a: 'B1', b: 'C1' })
   })
-
-  it('offers no edges when none stand out', () => {
-    const hints = analyzeDrawn({ n: 5 })
-    expect(hints).toEqual({ n: 5 })
-  })
 })

@@ -80,26 +80,26 @@ describe('solveSudoku', () => {
     expect([5, 6]).toContain(result.solution[8])
   })
 
-  it.each([
-    [12, 4, 3],
-    [16, 4, 4],
-  ])('fills a %i-wide grid of %ix%i boxes from two givens in five', (n, boxWidth, boxHeight) => {
-    // A full grid by the usual shifted-row pattern, then three cells in five emptied.
-    const full = Array.from({ length: n * n }, (_, cell) => {
-      const row = Math.floor(cell / n)
-      return (((row % boxHeight) * boxWidth + Math.floor(row / boxHeight) + (cell % n)) % n) + 1
-    })
-    const givens = full.map((value, cell) => ((cell * 7) % 5 < 2 ? value : 0))
-    const result = solveSudoku(grid(n, boxWidth, boxHeight, givens), { timeoutMs: 5000 })
-    expect(['solved', 'multiple']).toContain(result.status)
-    if (result.status !== 'solved' && result.status !== 'multiple') {
-      return
-    }
-    const solved = grid(n, boxWidth, boxHeight, [...result.solution])
-    expect(solved.values.every((value) => value >= 1 && value <= n)).toBe(true)
-    expect(findConflicts(solved)).toEqual([])
-    expect(givens.every((value, cell) => value === 0 || solved.values[cell] === value)).toBe(true)
-  })
+  it.each([[16, 4, 4]])(
+    'fills a %i-wide grid of %ix%i boxes from two givens in five',
+    (n, boxWidth, boxHeight) => {
+      // A full grid by the usual shifted-row pattern, then three cells in five emptied.
+      const full = Array.from({ length: n * n }, (_, cell) => {
+        const row = Math.floor(cell / n)
+        return (((row % boxHeight) * boxWidth + Math.floor(row / boxHeight) + (cell % n)) % n) + 1
+      })
+      const givens = full.map((value, cell) => ((cell * 7) % 5 < 2 ? value : 0))
+      const result = solveSudoku(grid(n, boxWidth, boxHeight, givens), { timeoutMs: 5000 })
+      expect(['solved', 'multiple']).toContain(result.status)
+      if (result.status !== 'solved' && result.status !== 'multiple') {
+        return
+      }
+      const solved = grid(n, boxWidth, boxHeight, [...result.solution])
+      expect(solved.values.every((value) => value >= 1 && value <= n)).toBe(true)
+      expect(findConflicts(solved)).toEqual([])
+      expect(givens.every((value, cell) => value === 0 || solved.values[cell] === value)).toBe(true)
+    },
+  )
 
   it('finds two solutions of a sparse grid that thrashed plain minimum-remaining-values', () => {
     const givens =

@@ -6,12 +6,10 @@ import { admissionsOf, agreementKey } from '../../vision/server/models'
 import { toStrictJsonSchema } from '../../vision/server/strict-json-schema'
 import { EXTRACTIONS } from './extraction-registry'
 
-// Why the schema is built here first: `toStrictJsonSchema` in `strict-json-schema.ts`.
 test.each(Object.entries(EXTRACTIONS))('builds the %s provider schema', (_, { responseSchema }) => {
   expect(toStrictJsonSchema(responseSchema)).toMatchObject({ type: 'object' })
 })
 
-// Why every call must differ: `agreementKey` in `vision/server/models.ts`.
 test.each(Object.entries(EXTRACTIONS))(
   'makes every %s call differ in model or effort',
   (_, { models }) => {

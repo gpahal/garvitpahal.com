@@ -39,10 +39,9 @@ function cancelled(): DOMException {
 const COOPERATIVE_TIMEOUT_ALLOWANCE_MS = 500
 
 /**
- * Spans the initial phase's model calls between a read's jobs; a Worker ended sooner costs only a
- * restart.
+ * Outlasts the initial phase's model window (`EXTRACT_DEADLINE_MS.initial`) plus upload.
  */
-const IDLE_LIMIT_MS = 60_000
+const IDLE_LIMIT_MS = 75_000
 
 type Pending = {
   id: number
@@ -53,10 +52,10 @@ type Pending = {
 }
 
 /**
- * One job at a time on one Worker, kept between jobs. Only termination interrupts synchronous
- * computation, so a cancelled, timed-out or crashed job takes its Worker with it and any late reply
- * is dropped. A limit or crash before the Worker reports `started` is a `WorkerStartError`; an abort
- * rejects with an `AbortError`, which the caller ignores.
+ * One job at a time on one Worker, kept between jobs. A new run cancels the running job. Only
+ * termination interrupts synchronous computation, so a cancelled, timed-out or crashed job takes its
+ * Worker with it and any late reply is dropped. A limit or crash before the Worker reports `started`
+ * is a `WorkerStartError`; an abort rejects with an `AbortError`, which the caller ignores.
  */
 export class ProcessingJobs {
   private worker?: Transport

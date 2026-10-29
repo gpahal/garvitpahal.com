@@ -56,15 +56,6 @@ describe('applyDraft', () => {
     expect(findCageIssues(committed.grid).size).toBe(0)
   })
 
-  it('refuses a click that would leave the draft in pieces, empty or apart from it', () => {
-    const cells = new Set([0, 1, 2])
-    expect(draftIssue(4, cells, 1)).toBe('would_split')
-    expect(draftIssue(4, cells, 2)).toBeUndefined()
-    expect(toggleDraftCell(4, cells, 1)).toBeUndefined()
-    expect(draftIssue(4, new Set([0]), 0)).toBe('last_cell')
-    expect(toggleDraftCell(4, new Set([0]), 15)).toBeUndefined()
-  })
-
   it('takes the clue along with the draft, leaving what the origin kept blank', () => {
     // The row's first cell drafted away with the cell below it.
     const committed = applyDraft(row, grow(startDraft(row.grid, 0), [2, 1, 4]))
@@ -97,28 +88,6 @@ describe('applyDraft', () => {
     expect(committed.contradictions).toEqual([])
   })
 
-  it('drops the flags on a cage the draft took whole', () => {
-    // Cell 4 is cage 2 and cell 5 is cage 3.
-    const flagged: KenKenPuzzle = { ...row, unreviewedCages: [2, 3], contradictions: [2] }
-    const committed = applyDraft(flagged, grow(startDraft(flagged.grid, 0), [4]))
-    // Cell 5's cage is renumbered past the one the draft absorbed.
-    expect(cageIdAt(committed.grid, 5)).toBe(2)
-    expect(committed.unreviewedCages).toEqual([2])
-    expect(committed.contradictions).toEqual([])
-  })
-
-  it("keeps a split cage's flags on the piece that keeps its clue", () => {
-    const flagged: KenKenPuzzle = { ...row, unreviewedCages: [0], contradictions: [0] }
-    // Cell 5 takes the row's middle cell, leaving cell 0 with the clue and cell 2 blank.
-    const committed = applyDraft(flagged, grow(startDraft(flagged.grid, 5), [1]))
-    expectPartition(committed)
-    const kept = cageIdAt(committed.grid, 0)
-    expect(committed.grid.cages[kept]).toEqual({ op: '+', target: 6 })
-    expect(cageIdAt(committed.grid, 2)).not.toBe(kept)
-    expect(committed.unreviewedCages).toEqual([kept])
-    expect(committed.contradictions).toEqual([kept])
-  })
-
   it('opens only the clicked piece of a cage a misread split, leaving the other blank', () => {
     // One `+ 5` cage over cells 0 and 2 of the top row, with cell 1 between them its own cage.
     const puzzle = createPuzzle(4)
@@ -136,6 +105,17 @@ describe('applyDraft', () => {
     expect(committed.grid.cages[drafted]).toEqual({ op: '+', target: 5 })
     expect(cageCells(committed.grid, cageIdAt(committed.grid, 0))).toEqual([0])
     expect(committed.grid.cages[cageIdAt(committed.grid, 0)]).toEqual({ op: '=', target: 0 })
+  })
+})
+
+describe('draftIssue', () => {
+  it('refuses a click that would leave the draft in pieces, empty or apart from it', () => {
+    const cells = new Set([0, 1, 2])
+    expect(draftIssue(4, cells, 1)).toBe('would_split')
+    expect(draftIssue(4, cells, 2)).toBeUndefined()
+    expect(toggleDraftCell(4, cells, 1)).toBeUndefined()
+    expect(draftIssue(4, new Set([0]), 0)).toBe('last_cell')
+    expect(toggleDraftCell(4, new Set([0]), 15)).toBeUndefined()
   })
 })
 

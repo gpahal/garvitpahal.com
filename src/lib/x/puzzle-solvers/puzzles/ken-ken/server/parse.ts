@@ -53,8 +53,8 @@ export const kenKenRawSchema = z.strictObject({
 export type KenKenRaw = z.infer<typeof kenKenRawSchema>
 
 /**
- * Every cell is named exactly once by construction, so the only work is mapping the distinct
- * clue-cell names onto `0..k-1`.
+ * Each cell names its cage's clue cell. Compaction numbers the distinct names `0..k-1` in reading
+ * order.
  */
 function readLayout(
   n: number,

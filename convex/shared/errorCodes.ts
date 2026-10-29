@@ -1,5 +1,6 @@
 /**
- * Codes the server throws and `src/lib/convex-errors.ts` matches.
+ * Codes `requireOwner` throws, matched by `src/lib/convex-errors.ts` and the Worker's
+ * `convex-server.ts`.
  */
 
 /**

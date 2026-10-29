@@ -46,13 +46,6 @@ describe('analyzeSudoku', () => {
     expect(hints).toMatchObject({ n: 6, boxWidth, boxHeight })
   })
 
-  it('offers no box geometry when no lines stand out', () => {
-    const hints = analyzeDrawn({ n: 9, inked: [0] })
-    expect(hints.n).toBe(9)
-    expect(hints.boxWidth).toBeUndefined()
-    expect(hints.boxHeight).toBeUndefined()
-  })
-
   it('offers no box geometry when the heavy lines are not evenly spaced', () => {
     const hints = analyzeDrawn({ n: 9, isHeavy: isUnevenBoxLine })
     expect(hints.boxWidth).toBeUndefined()

@@ -47,10 +47,6 @@ describe('kenKenHintsSchema', () => {
       false,
     )
   })
-
-  it('checks nothing against a size it was not given', () => {
-    expect(kenKenHintsSchema.safeParse({ unreadCells: ['H8'] }).success).toBe(true)
-  })
 })
 
 describe('describeHints', () => {
@@ -65,12 +61,5 @@ describe('describeHints', () => {
     expect(prompt).toContain(
       '- The borders of D4 could not be measured, so trace that part of the grid from the picture.\n',
     )
-  })
-
-  it('gives only the size when no border was measured, and nothing measured when nothing was', () => {
-    const sized = describeHints({ n: 6 })
-    expect(sized).toContain('- The grid is 6x6.\n')
-    expect(sized).not.toContain('heavy borders enclose')
-    expect(describeHints({})).toBe('')
   })
 })

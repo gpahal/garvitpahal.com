@@ -3,8 +3,7 @@ import { UserFacingError } from '../user-facing-error'
 type JpegAttempt = { quality: number; scale: number }
 
 /**
- * High, since tokens depend on pixels, not bytes, and ringing on a thin grid line is the thing to
- * avoid.
+ * Starts high: tokens depend on pixels, not bytes.
  */
 const RECTIFIED_JPEG_QUALITY = 0.92
 

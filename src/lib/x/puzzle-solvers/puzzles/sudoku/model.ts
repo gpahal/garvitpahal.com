@@ -29,9 +29,6 @@ export type SudokuGrid = {
   values: Uint8Array
 }
 
-/**
- * `uncertain` rides with the grid so a resize cannot leave stale refs pointing at unrelated cells.
- */
 export type SudokuPuzzle = {
   grid: SudokuGrid
   uncertain: Array<CellRef>
@@ -45,9 +42,8 @@ export type SudokuPuzzle = {
 export const SUDOKU_BOX_EDGES = [2, 3, 4] as const
 
 /**
- * Fractional edges multiply out to `n` too (32 by 0.5 tiles a 16), but `boxGroups` would then emit
- * groups that are not boxes, which the solver would enforce. A 1x9's boxes are the rows again, and
- * no accepted size is printed that way.
+ * Edges come from `SUDOKU_BOX_EDGES`: a fractional edge (32 by 0.5 tiles a 16) would make
+ * `boxGroups` emit groups that are not boxes, and a 1x9 box is a row.
  */
 export function isValidBoxGeometry(n: number, boxWidth: number, boxHeight: number): boolean {
   const edges: ReadonlyArray<number> = SUDOKU_BOX_EDGES

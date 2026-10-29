@@ -11,12 +11,12 @@ const BACKGROUND_DOWNSAMPLE = 4
 
 /**
  * Wide enough that digits stay ink, narrow enough to follow a shadow. A wider flat fill is
- * flattened away, so `analyzeKenKen` reads filled cells from the unenhanced crop.
+ * flattened away.
  */
 const BACKGROUND_RADIUS = 20
 
 /**
- * Past these the fix is louder than the shadow.
+ * Gain limits. Past them the correction adds more artefacts than the shadow it removes.
  */
 const MIN_GAIN = 0.7
 const MAX_GAIN = 2.5
@@ -56,9 +56,6 @@ function boxBlur(plane: Float32Array, width: number, height: number, radius: num
   }
 }
 
-/**
- * At thumbnail resolution; callers sample it bilinearly.
- */
 function backgroundGain(
   image: PixelImage,
   channel: number,

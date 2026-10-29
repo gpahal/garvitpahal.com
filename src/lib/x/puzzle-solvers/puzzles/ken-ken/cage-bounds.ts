@@ -176,7 +176,6 @@ function isAllDecided(domains: Domains, cells: Uint16Array, scratch: Uint8Array)
  * cell is decided, which covers the operators with no bounds here.
  */
 export function cageBounds(n: number, cages: Array<BoundedCage>): Propagator {
-  // Built once, not on every node the search visits.
   const entries = cages.map(({ cells, cage }) => {
     const segments = lineSegments(n, cells)
     return {

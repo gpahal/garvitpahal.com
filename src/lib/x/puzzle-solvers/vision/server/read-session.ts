@@ -9,7 +9,7 @@ import { UNREADABLE } from './openai-exchange'
 
 /**
  * A proxy or browser may drop a connection silent for most of the deadline, and a failed write is
- * how a browser that left is noticed. `JSON.parse` skips the whitespace before the body.
+ * how a browser that left is noticed.
  */
 export const KEEPALIVE_MS = 15_000
 

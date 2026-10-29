@@ -25,9 +25,8 @@ function namesCageIn(cages: ReadonlyArray<unknown>): (cageId: number) => boolean
 }
 
 /**
- * Closed to what this build constructs; see "Stale tabs" in docs/puzzle-solvers.md. Every
- * cage has a cell and every flag is a distinct cage, so each count on screen has something on the
- * grid to point at.
+ * Bounded to what this build constructs ("Stale tabs" in docs/puzzle-solvers.md). An empty cage
+ * would read as unsolvable, and each flag must name one distinct cage the grid can highlight.
  */
 export const kenKenPuzzleWireSchema = z
   .object({

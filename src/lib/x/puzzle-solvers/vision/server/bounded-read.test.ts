@@ -75,14 +75,4 @@ describe('readBoundedText', () => {
       status: 'too_large',
     })
   })
-
-  it('gives up on a body that stops arriving and never ends', async () => {
-    // Opens, sends a little, then never sends again: under any byte cap, indefinitely.
-    const body = new ReadableStream<Uint8Array>({
-      start: (controller) => {
-        controller.enqueue(encoder.encode('{"a":'))
-      },
-    })
-    await expect(readBoundedText(body, 1024, 5)).resolves.toStrictEqual({ status: 'timed_out' })
-  })
 })

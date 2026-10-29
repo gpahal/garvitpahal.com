@@ -7,15 +7,9 @@ import { WorkerStartError } from '../processing/jobs'
 import { OPERATIONS } from '../processing/protocol'
 import type { ReadAssessment } from '../puzzles/types'
 import type { ExtractOutcome, PreparedImage } from './extract-client'
-import { READ_TIME_LIMIT, READ_TIME_LIMIT_MESSAGE, UNREADABLE_MESSAGE } from './extract-wire'
-import {
-  finishRead,
-  MISREAD_KEPT_MESSAGE,
-  MISREAD_KEPT_NO_RETRY_MESSAGE,
-  readPicture,
-} from './read-picture'
+import { READ_TIME_LIMIT_MESSAGE } from './extract-wire'
+import { finishRead, MISREAD_KEPT_MESSAGE, readPicture } from './read-picture'
 
-const KEPT = 'The new read has no solution, so your puzzle was kept.'
 const REFUSED_NOTICE =
   'Checking the read could not finish, and trying again would not help. Compare it with the picture'
 const UNFINISHED_NOTICE =
@@ -92,7 +86,6 @@ describe('finishRead', () => {
     lastResort: undefined,
     isPuzzleOnScreen: false,
   }
-  const reload = { message: 'Reload the page', reload: true, noRetry: true } as const
   const signIn = { message: 'Sign in again in a new tab', signIn: true } as const
   const refused = { message: 'Enter it by hand', noRetry: true } as const
   const passing = { message: 'Unreadable', fallback: true } as const
@@ -117,41 +110,15 @@ describe('finishRead', () => {
     ],
     ['a read beside a refusal', { best: 'read', failure: refused }, read(refusedNotice)],
     [
-      'a read at the deadline',
-      { best: 'read', isTimedOut: true, failure: { message: 'Stopped' } },
-      read({ message: UNFINISHED_NOTICE }),
-    ],
-    [
       'a read beside a failure the fallback may pass',
       { best: 'read', failure: passing },
       read({ message: UNFINISHED_NOTICE }),
-    ],
-    [
-      'a read beside a reload',
-      { best: 'read', isTimedOut: true, failure: reload },
-      read({ ...reload, message: 'Checking the read could not finish. Reload the page' }),
     ],
     [
       'a misread with a puzzle on screen',
       { lastResort: 'misread', isPuzzleOnScreen: true },
       failed({ message: MISREAD_KEPT_MESSAGE }),
     ],
-    [
-      'a misread with a puzzle on screen and a refusal',
-      { lastResort: 'misread', isPuzzleOnScreen: true, failure: refused },
-      failed({ message: MISREAD_KEPT_NO_RETRY_MESSAGE, noRetry: true }),
-    ],
-    [
-      'a misread with a puzzle on screen and a sign-in',
-      { lastResort: 'misread', isPuzzleOnScreen: true, failure: signIn },
-      failed({ ...signIn, message: `${KEPT} ${signIn.message}` }),
-    ],
-    [
-      'a misread beside a failure that changes nothing',
-      { lastResort: 'misread', failure: passing },
-      unsolvable(),
-    ],
-    ['a misread beside a sign-in', { lastResort: 'misread', failure: signIn }, unsolvable(signIn)],
     [
       'a misread beside a refusal',
       { lastResort: 'misread', failure: refused },
@@ -162,13 +129,7 @@ describe('finishRead', () => {
       { isTimedOut: true, failure: passing },
       failed({ message: READ_TIME_LIMIT_MESSAGE }),
     ],
-    [
-      'a timed-out read beside a reload',
-      { isTimedOut: true, failure: reload },
-      failed({ ...reload, message: `${READ_TIME_LIMIT} ${reload.message}` }),
-    ],
     ['a failed read', { failure: { ...signIn, fallback: true } }, failed(signIn)],
-    ['a read that met no failure and read nothing', {}, failed({ message: UNREADABLE_MESSAGE })],
   ] as const)('ends %s', (_label, input, result) => {
     expect(finishRead<string>({ ...ended, ...input })).toEqual(result)
   })

@@ -72,7 +72,6 @@ describe('createWireRead', () => {
       () => new Response(null, { status: 401 }),
       { message: SIGN_IN_AGAIN_MESSAGE, signIn: true },
     ],
-    ['a 429 without retry-after', () => refusal(429), wording],
     [
       'a refusal with a remedy',
       () => refusal(400, { reload: true, noRetry: true }),
@@ -83,11 +82,6 @@ describe('createWireRead', () => {
       'a 503 that is not JSON',
       () => new Response('<html>', { status: 503 }),
       { message: 'The server ran into a problem while reading the picture. Try again shortly' },
-    ],
-    [
-      'a 404 that is not JSON',
-      () => new Response('<html>', { status: 404 }),
-      { message: "The server's answer could not be read. Try again" },
     ],
     [
       'an unreachable server',

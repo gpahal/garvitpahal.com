@@ -24,9 +24,6 @@ function checkedGoal(goal: Goal): Goal {
   return goal
 }
 
-/**
- * `null` once it is deleted.
- */
 export const get = ownerQuery({
   args: { id: v.id('routines') },
   returns: v.union(routineValidator, v.null()),
@@ -214,7 +211,6 @@ export const resumeDeletes = internalMutation({
       .withIndex('by_creation_time', (q) => q.lt('_creationTime', Date.now() - STALLED_AFTER_MS))
       .take(DELETIONS_PER_RESUME)
     for (const { _id, routineId, _creationTime } of stalled) {
-      // The log is the only sign that chains are breaking.
       logError('routines.delete_resumed', { routineId, deletedAt: _creationTime })
       await ctx.scheduler.runAfter(0, internal.routines.drainBatch, { deletionId: _id })
     }

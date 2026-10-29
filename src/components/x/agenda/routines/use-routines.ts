@@ -8,7 +8,7 @@ import type { Tracked } from '@/lib/x/agenda/routines/schedule'
 import { useDeviceTimeZone } from '@/hooks/use-device-time-zone'
 
 /**
- * Every routine, oldest first, archived ones included; `undefined` while loading.
+ * `undefined` while loading.
  */
 export function useRoutines(): Array<Routine> | undefined {
   return useQuery(api.routines.list)

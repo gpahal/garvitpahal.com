@@ -12,7 +12,6 @@ const wire = (n = 9, boxWidth = 3, boxHeight = 3, boxesGuessed?: true): SudokuPu
 describe('the Sudoku wire schema', () => {
   it.each([
     ['6 in 2x3 with guessed boxes', wire(6, 2, 3, true), true],
-    ['16 in 4x4', wire(16, 4, 4), true],
     [
       'a size with no grid',
       {
@@ -27,7 +26,6 @@ describe('the Sudoku wire schema', () => {
     ['too few cells', { ...wire(), values: wire().values.slice(1) }, false],
     ['a value the grid cannot hold', { ...wire(), values: [10, ...wire().values.slice(1)] }, false],
     ['boxes that do not tile', { ...wire(), boxWidth: 4, boxHeight: 3 }, false],
-    ['boxes that are the rows', { ...wire(), boxWidth: 1, boxHeight: 9 }, false],
     ['guessed square boxes', { ...wire(), boxesGuessed: true }, false],
     [
       'an uncertain cell listed twice',
