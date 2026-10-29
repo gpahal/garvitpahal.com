@@ -37,7 +37,7 @@ GitHub runs `pnpm check` on every pull request and deploy.
 - `src/pages/`, `src/components/` and `src/lib/`: routes, UI and logic.
 - `convex/`: the backend for the private tools.
 - `checks/`: repo-level checks, such as build guards and site links.
-- `scripts/`: the signing-key generator, the script that sets Convex's settings from the Worker's secrets, the Convex guidelines refresher and the deploy and Access verification scripts.
+- `scripts/`: the Node scripts behind the `pnpm` commands, Deploy and Verify production.
 - `docs/`: how the trickier parts work.
 
 ## Private tools

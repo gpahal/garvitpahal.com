@@ -41,10 +41,12 @@ jobs:
 
       - run: pnpm check
 
-      # The CSP allows the deployment `PUBLIC_CONVEX_URL` names.
+      # The CSP allows the deployment `PUBLIC_CONVEX_URL` names, and the beacon when
+      # `PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN` embeds it.
       - run: pnpm build
         env:
           PUBLIC_CONVEX_URL: ${{ vars.PUBLIC_CONVEX_URL }}
+          PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN }}
 
       # The marker is the log event only `src/lib/server/dev-owner-token.ts` writes. Only grep's
       # status 1, no match, passes.

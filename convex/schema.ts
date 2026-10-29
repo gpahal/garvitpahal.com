@@ -65,9 +65,6 @@ const routineLogs = defineTable({
   .index('by_started_atLocal', ['started.atLocal'])
   .index('by_routineId_and_started_atLocal', ['routineId', 'started.atLocal'])
 
-/**
- * One per log at most.
- */
 const routineLogNotes = defineTable({
   logId: v.id('routineLogs'),
   note: v.string(),

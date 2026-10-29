@@ -36,8 +36,7 @@ type PuzzleWorkspaceProps = {
 }
 
 /**
- * One island, since Astro cannot hydrate a component resolved from a registry. Each id is its own
- * component type, so no state crosses puzzles.
+ * One island, since Astro cannot hydrate a component resolved from a registry.
  */
 export function PuzzleWorkspace({ puzzleId }: PuzzleWorkspaceProps): ReactNode {
   const Current = PUZZLE_WORKSPACES[puzzleId]

@@ -11,6 +11,7 @@ import type { ReadAssessment } from '../puzzles/types'
 import { failureOf, UserFacingError } from '../user-facing-error'
 import type { ExtractOptions, ExtractOutcome, PreparedImage } from './extract-client'
 import { READ_TIME_LIMIT, READ_TIME_LIMIT_MESSAGE, UNREADABLE_MESSAGE } from './extract-wire'
+import type { ReadFailure } from './extract-wire'
 import { considerRead, createArbitration } from './read-arbitration'
 import { READ_DEADLINE_MS, readPhases } from './read-phases'
 
@@ -89,9 +90,8 @@ export function canReadPictures(): boolean {
 }
 
 /**
- * One deadline, the requests' only one, spans preparation and both phases. Cancellation is checked
- * after every await, since a collaborator may finish after its signal aborts. Only the result may
- * replace the puzzle on screen.
+ * Cancellation is checked after every await, since a collaborator may finish after its signal
+ * aborts. Only the result may replace the puzzle on screen.
  */
 export async function readPicture<TPuzzle>({
   picture,
@@ -115,7 +115,7 @@ export async function readPicture<TPuzzle>({
   const arbitration = createArbitration<TPuzzle>()
   const deadline = now() + READ_DEADLINE_MS
   let isTrusted = false
-  let failure: Failure | undefined
+  let failure: ReadFailure | undefined
   let isStartFailure = false
   let retryAt: number | undefined
   let request = picture.prepared
@@ -169,7 +169,7 @@ export async function readPicture<TPuzzle>({
     if (phases.failure) {
       failure = phases.failure.error
     } else if (phases.skipped) {
-      // Any read so far ends up on screen, as the best read or the last resort.
+      // Any read so far reaches `finishRead`, which shows it or keeps the puzzle on screen.
       failure = {
         message:
           arbitration.best || arbitration.lastResort
@@ -212,7 +212,7 @@ type ReadEnd<TPuzzle> = {
   isTrusted: boolean
   isTimedOut: boolean
   isStartFailure: boolean
-  failure: Failure | undefined
+  failure: ReadFailure | undefined
   best: TPuzzle | undefined
   lastResort: TPuzzle | undefined
   isPuzzleOnScreen: boolean
@@ -225,7 +225,7 @@ type FailureKind = 'remedied' | 'refused' | 'unfinished' | 'plain' | 'none'
  * `fallback` failure is worded for a picture that produced nothing, which a puzzle on screen would
  * contradict.
  */
-function kindOf(failure: Failure | undefined, isTimedOut: boolean): FailureKind {
+function kindOf(failure: ReadFailure | undefined, isTimedOut: boolean): FailureKind {
   if (failure?.signIn || failure?.reload) return 'remedied'
   if (failure?.noRetry) return 'refused'
   if (isTimedOut || failure?.fallback) return 'unfinished'

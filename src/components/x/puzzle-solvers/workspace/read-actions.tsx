@@ -24,13 +24,13 @@ type ReadActionsProps = {
   retryRef: RefObject<HTMLButtonElement | null>
   isBusy: boolean
   /**
-   * The countdown to the next allowed read.
+   * Id of the `RetryWait` countdown.
    */
   waitId: string | undefined
   hasSignInLink: boolean
   hasReload: boolean
   /**
-   * Available during a read or solve, which it cancels.
+   * Also offered during a read or solve, which pressing it cancels.
    */
   choosePicture: { label: string; onChoose: () => void } | undefined
 }

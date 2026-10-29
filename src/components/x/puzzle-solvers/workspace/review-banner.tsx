@@ -5,10 +5,6 @@ import type { ReviewUnit, SolveResult } from '@/lib/x/puzzle-solvers/puzzles/typ
 import type { PuzzleOrigin } from '@/lib/x/puzzle-solvers/workspace-state'
 import { NoticeAlert } from '@/components/shared/notice-alert'
 
-/**
- * For a read, `unsolvable` and `multiple` almost always mean a misread; for a hand-entered puzzle,
- * a typing slip.
- */
 function describeWarning(
   result: SolveResult | undefined,
   origin: PuzzleOrigin,

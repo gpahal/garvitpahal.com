@@ -1,7 +1,7 @@
 import { orthogonalNeighbours } from '../../grid/geometry'
 import { compactLabels, connectedComponents } from '../../grid/regions'
 import { isCageArityValid } from './cage-math'
-import { cageCells, cageIdAt, cloneGrid } from './model'
+import { cageCells, cageIdAt, cellsByCage, cloneGrid } from './model'
 import type { Cage, KenKenGrid, KenKenPuzzle } from './model'
 
 /**
@@ -163,19 +163,20 @@ export function applyDraft(puzzle: KenKenPuzzle, draft: CageDraft): KenKenPuzzle
     grid.cageOf[cell] = draftId
   }
 
+  // Only the origin's flags are answered. A cage the draft took whole is dropped with its flags by
+  // compaction.
+  const unreviewedCages = retire(puzzle.unreviewedCages, draft.originCageId)
+  const cellsBefore = cellsByCage(puzzle.grid)
   for (const donor of donors) {
-    // The origin's clue left with the draft, so its leftovers start blank. A cage that merely lost
-    // a cell keeps its clue.
-    recomponent(grid, donor, donor === draft.originCageId ? undefined : puzzle.grid.cages[donor])
+    const isOrigin = donor === draft.originCageId
+    // Other donors keep their clue, flagged when the draft took the cell it was printed in.
+    recomponent(grid, donor, isOrigin ? undefined : puzzle.grid.cages[donor])
+    const clueCell = cellsBefore[donor]?.[0]
+    const tookClueCell = clueCell !== undefined && draft.cells.has(clueCell)
+    if (!isOrigin && tookClueCell && !unreviewedCages.includes(donor)) unreviewedCages.push(donor)
   }
 
-  // Only the origin's flags are answered: a cage that merely lost a cell was not reviewed. A cage
-  // the draft took whole is dropped with its flags by compaction.
-  return compactCages(
-    grid,
-    retire(puzzle.unreviewedCages, draft.originCageId),
-    retire(puzzle.contradictions, draft.originCageId),
-  )
+  return compactCages(grid, unreviewedCages, retire(puzzle.contradictions, draft.originCageId))
 }
 
 /**

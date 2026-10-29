@@ -1,11 +1,24 @@
 import * as z from 'zod/mini'
 
-import type { Failure, Remedy } from '@/lib/failure'
+import { failureSchema } from '@/lib/failure'
 
 export type ReadPhase = 'initial' | 'fallback'
 
 /**
- * Calls run in parallel, one request each. The chains in `server/models.ts` are sized to it.
+ * The site's `Failure` plus `fallback`, which permits a read's paid fallback. Absent means none.
+ */
+export const readFailureSchema = z.extend(failureSchema, { fallback: z.optional(z.literal(true)) })
+
+export type ReadFailure = z.infer<typeof readFailureSchema>
+
+export type ReadRemedy = Omit<ReadFailure, 'message'>
+
+export const readRefusalSchema = z.object({ error: readFailureSchema })
+
+export type ReadRefusal = z.infer<typeof readRefusalSchema>
+
+/**
+ * Calls run in parallel, one request each. `VisionModels` in `server/models.ts` is sized to it.
  */
 export const PHASE_CALLS = { initial: 2, fallback: 1 } as const satisfies Record<ReadPhase, number>
 
@@ -72,7 +85,7 @@ export type ExtractError = { code: ExtractErrorCode; message: string }
  * provider refusal. A missing key or a refused account keeps Try again, which works once the owner
  * fixes it.
  */
-const REMEDIES: Readonly<Record<ExtractErrorCode, Remedy>> = {
+const REMEDIES: Readonly<Record<ExtractErrorCode, ReadRemedy>> = {
   invalid_request: { reload: true, noRetry: true },
   image_too_large: { noRetry: true },
   rate_limited: {},
@@ -85,7 +98,7 @@ const REMEDIES: Readonly<Record<ExtractErrorCode, Remedy>> = {
   request_timeout: {},
 }
 
-export function wireFailure({ code, message }: ExtractError): Failure {
+export function wireFailure({ code, message }: ExtractError): ReadFailure {
   return { message, ...REMEDIES[code] }
 }
 

@@ -91,7 +91,9 @@ export function orientImage(image: PixelImage, orientation: Orientation): PixelI
     [0, -1, width - 1, 1, 0, 0],
   ]
   const [ax, bx, cx, ay, by, cy] = turns[quarterTurns]
-  const source = new Uint32Array(data.buffer, data.byteOffset, width * height)
+  // A `Uint32Array` view needs a byte offset that is a multiple of 4.
+  const aligned = data.byteOffset % 4 === 0 ? data : new Uint8ClampedArray(data)
+  const source = new Uint32Array(aligned.buffer, aligned.byteOffset, width * height)
   const out = new Uint32Array(outWidth * outHeight)
   for (let y = 0; y < outHeight; y++) {
     for (let x = 0; x < outWidth; x++) {

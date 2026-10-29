@@ -1,26 +1,9 @@
-import { describe, expect, it } from 'vitest'
+import { expect, test } from 'vitest'
 
-import {
-  UNREADABLE_FILE_MESSAGE,
-  UNREADABLE_HEIC_MESSAGE,
-  unreadableFileMessage,
-} from './image-header'
+import { inspectImage } from './image-header'
 
-/**
- * The start of an ISO base media file: a box size, then `ftyp` and the major brand.
- */
-function isoMedia(brand: string): Blob {
-  const bytes = new Uint8Array(24)
-  bytes.set([0, 0, 0, 24])
-  bytes.set(new TextEncoder().encode(`ftyp${brand}`), 4)
-  return new Blob([bytes])
-}
-
-describe('unreadable file message', () => {
-  it.each([
-    ['heic', UNREADABLE_HEIC_MESSAGE],
-    ['avif', UNREADABLE_FILE_MESSAGE],
-  ])('suggests a JPEG export only for a HEIF signature (%s)', async (brand, message) => {
-    expect(await unreadableFileMessage(isoMedia(brand))).toBe(message)
-  })
+test('reads a JPEG whose standalone markers come before its frame', async () => {
+  // SOI, RST0, TEM, a 10 by 20 SOF0 with three zeroed components, then EOI.
+  const jpeg = Buffer.from(`ffd8ffd0ff01ffc0001108000a001403${'00'.repeat(9)}ffd9`, 'hex')
+  await expect(inspectImage(new Blob([jpeg]))).resolves.toEqual({ width: 20, height: 10 })
 })

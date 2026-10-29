@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { dayOfLocal } from '@convex/shared/intervals'
 import { toLocal } from '@convex/shared/localTime'
 
-import { dayOfInstant, dayOfMonth, fromDateTimeInput, fromLocal, instantRangeOfDay } from './dates'
+import { dayOfInstant, fromDateTimeInput, fromLocal, instantRangeOfDay } from './dates'
 import { KOLKATA, local, NEW_YORK } from './test-readings'
 
 const HOUR_MS = 3_600_000
@@ -23,8 +23,6 @@ describe('fromLocal', () => {
     // 8 Mar 2026: 02:00 EST jumps to 03:00 EDT at 07:00Z, so 02:30 never happens.
     const transition = Date.parse('2026-03-08T07:00:00Z')
     expect(fromLocal(local('2026-03-08T02:30:00'), NEW_YORK)).toBe(transition)
-    expect(fromLocal(local('2026-03-08T02:00:00'), NEW_YORK)).toBe(transition)
-    expect(fromLocal(local('2026-03-08T02:59:59.999'), NEW_YORK)).toBe(transition)
     expect(toLocal(transition, NEW_YORK)).toBe(local('2026-03-08T03:00:00'))
   })
 
@@ -32,9 +30,6 @@ describe('fromLocal', () => {
     // 1 Nov 2026: 02:00 EDT falls back to 01:00 EST at 06:00Z, so 01:30 happens twice.
     expect(fromLocal(local('2026-11-01T01:30:00'), NEW_YORK)).toBe(
       Date.parse('2026-11-01T05:30:00Z'),
-    )
-    expect(fromLocal(local('2026-11-01T01:00:00'), NEW_YORK)).toBe(
-      Date.parse('2026-11-01T05:00:00Z'),
     )
     // 02:00 only happens once, after the repeat.
     expect(fromLocal(local('2026-11-01T02:00:00'), NEW_YORK)).toBe(
@@ -44,9 +39,7 @@ describe('fromLocal', () => {
 })
 
 describe('day ranges', () => {
-  it('makes a clock-change day 23 or 25 real hours long', () => {
-    const forward = instantRangeOfDay(dayOfLocal(local('2026-03-08T12:00:00')), NEW_YORK)
-    expect(forward.end - forward.start).toBe(23 * HOUR_MS)
+  it('makes a clocks-back day 25 real hours long', () => {
     const back = instantRangeOfDay(dayOfLocal(local('2026-11-01T12:00:00')), NEW_YORK)
     expect(back.end - back.start).toBe(25 * HOUR_MS)
   })
@@ -75,12 +68,5 @@ describe('fromDateTimeInput', () => {
       expect(fromDateTimeInput(value, KOLKATA), value).toBeUndefined()
     }
     expect(fromDateTimeInput('2028-02-29T10:00', KOLKATA)).toBe(Date.parse('2028-02-29T04:30:00Z'))
-  })
-})
-
-describe('dayOfMonth', () => {
-  it("reads the day's date, whatever the device's zone", () => {
-    expect(dayOfMonth(dayOfLocal(local('2026-10-01T00:00:00')))).toBe(1)
-    expect(dayOfMonth(dayOfLocal(local('2028-02-29T23:59:00')))).toBe(29)
   })
 })

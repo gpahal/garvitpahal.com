@@ -50,10 +50,10 @@ const dev = resolvedConfig('dev')
 
 /**
  * `rules`, which the Vite plugin warns about at the top level, `targetEnvironment`, which Wrangler
- * sets on any config resolved for an environment, and `secrets`, which each environment lists for
- * itself.
+ * sets on any config resolved for an environment, and `secrets` and `vars`, which each environment
+ * lists for itself.
  */
-const DEPLOY_ONLY = ['rules', 'targetEnvironment', 'secrets'] as const
+const DEPLOY_ONLY = ['rules', 'targetEnvironment', 'secrets', 'vars'] as const
 
 function withoutDeployOnly(config: ResolvedConfig): Record<string, unknown> {
   const rest: Record<string, unknown> = { ...config }

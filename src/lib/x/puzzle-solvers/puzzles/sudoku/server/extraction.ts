@@ -8,10 +8,6 @@ import { describeHints, sudokuHintsSchema } from './hints'
 import { parseSudoku, sudokuRawSchema } from './parse'
 import type { ParsedSudoku, SudokuRaw } from './parse'
 
-/**
- * Targets three failure modes of grid extraction: drifting to a different blank symbol,
- * assuming box geometry instead of reading it and off-by-one row alignment.
- */
 export function sudokuExtractionPrompt(hints: SudokuHints): string {
   return `Read the Sudoku grid in this image and return it as structured data.
 

@@ -23,20 +23,12 @@ export type Cage = {
   target: number
 }
 
-/**
- * Cage membership is stored per cell, so irregular shapes need no special casing. Ken Ken has no
- * givens outside `=` cages, so there is no `values` array.
- */
 export type KenKenGrid = {
   n: number
   cageOf: Uint8Array
   cages: Array<Cage>
 }
 
-/**
- * The reviewable unit is a cage, not a cell: a model gets a shape or a clue wrong, and highlighting
- * the cage says more than highlighting its cells.
- */
 export type KenKenPuzzle = {
   grid: KenKenGrid
   unreviewedCages: Array<number>

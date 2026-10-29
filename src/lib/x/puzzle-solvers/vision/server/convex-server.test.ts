@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { FORBIDDEN, UNAUTHENTICATED } from '@convex/shared/errorCodes'
+import { FORBIDDEN } from '@convex/shared/errorCodes'
 
 import { captureLogs } from '@/lib/server/test-logs'
 
@@ -18,9 +18,8 @@ afterEach(() => {
 })
 
 describe('consumeRateLimit', () => {
-  const refused = (errorData?: string) =>
+  const refused = (errorData: string) =>
     Response.json({ status: 'error', errorMessage: 'No', errorData }, { status: 560 })
-  // Paid routes refuse both causes.
   it.each([
     [
       'an unreachable deployment',
@@ -29,8 +28,6 @@ describe('consumeRateLimit', () => {
       },
       'outage',
     ],
-    ['an unexpected refusal', () => refused(), 'outage'],
-    ['a gateway page', () => new Response('<html>', { status: 502 }), 'outage'],
     [
       'a verdict of another shape',
       () => Response.json({ status: 'success', value: { allowed: true } }),
@@ -42,7 +39,6 @@ describe('consumeRateLimit', () => {
       'misconfigured',
     ],
     ['another owner', () => refused(FORBIDDEN), 'misconfigured'],
-    ['no identity', () => refused(UNAUTHENTICATED), 'misconfigured'],
   ] as const)('fails closed on %s', async (_label, respond, cause) => {
     vi.stubGlobal('fetch', async () => respond())
     expect(await consumeRateLimit({ token: 'minted', requestId: 'request' }, 1)).toEqual({

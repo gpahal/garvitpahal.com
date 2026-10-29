@@ -24,9 +24,6 @@ export type VisionModels = {
 // Each chain must have exactly `PHASE_CALLS` entries.
 void (PHASE_CALLS satisfies { [P in ReadPhase]: VisionModels[P]['length'] })
 
-/**
- * The priority lane costs twice the price, so a call on it spends two admissions.
- */
 export function admissionsOf(model: ChainModel): 1 | 2 {
   return model.tier === 'fast' ? 2 : 1
 }

@@ -230,9 +230,6 @@ function detectLattice<TSize extends number>(
  */
 const CONTRAST_RADIUS = 20
 
-/**
- * Also returns the stroke contrast, which every mass here is measured in.
- */
 export function readLattice<TSize extends number>(
   gray: GrayImage,
   sizes: ReadonlyArray<TSize>,

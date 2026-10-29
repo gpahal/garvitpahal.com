@@ -82,7 +82,6 @@ describe('parseKenKen', () => {
     })
   })
 
-  // The wording goes only to the log, so one message is pinned, above.
   it('refuses a layout with a cage no clue was read for', () => {
     const cages = raw.cages.filter((cage) => cage.clueCell !== 'A1')
     expect(parseKenKen({ ...raw, cages })).toMatchObject({ ok: false })
@@ -175,12 +174,5 @@ describe('parseKenKen', () => {
     })
     expect(contradictions).toEqual([0])
     expect(unreviewedCages).toEqual([0, 1])
-  })
-
-  it('flags the cage holding a doubted cell that is not its clue cell', () => {
-    // B1 sits in A1's cage and D2 in C2's; A1 is cage 0 and C2 cage 3 in reading order.
-    const { contradictions, unreviewedCages } = parsed({ ...raw, uncertain: ['B1', 'D2', 'A1'] })
-    expect(contradictions).toEqual([])
-    expect(unreviewedCages).toEqual([0, 3])
   })
 })

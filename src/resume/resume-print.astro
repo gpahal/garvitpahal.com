@@ -1,0 +1,426 @@
+---
+import { getCollection, getEntry } from 'astro:content'
+
+import { formatPeriods, formatYearRange, periodsOf, sortNewestFirst } from '@/lib/dates'
+import type { DateOnly } from '@/lib/dates'
+import { SITE_NAME, SITE_TAGLINE, SOCIAL_LINKS } from '@/lib/site'
+
+/**
+ * The source `scripts/resume-pdf.ts` prints to the PDF, not a page to visit: it loads the built file
+ * from disk, so its styles are inline, nothing loads from the site and elements and ids select, with
+ * no Tailwind.
+ */
+
+const profile = await getEntry('resume', 'profile')
+if (profile === undefined) {
+  throw new Error("Missing content entry 'resume/profile'")
+}
+const { summary, skills, education, awards } = profile.data
+const site = Astro.site
+if (site === undefined) {
+  throw new Error('`site` must be set in astro.config.ts for the resume to link the site')
+}
+
+const byLatestStart = <T extends { id: string; data: { startedOn: DateOnly } }>(
+  entries: Array<T>,
+) => sortNewestFirst(entries, (entry) => ({ date: entry.data.startedOn, id: entry.id }))
+
+const experience = byLatestStart(await getCollection('workExperiences')).map(({ data }) => ({
+  name: data.company,
+  href: data.href,
+  role: data.role,
+  dates: formatPeriods(periodsOf(data)),
+  bullets: data.resume,
+}))
+const projects = byLatestStart(await getCollection('notablePersonalProjects')).flatMap(
+  ({ data }) =>
+    data.resume === undefined
+      ? []
+      : {
+          name: data.project,
+          href: data.href,
+          year: data.startedOn.slice(0, 4),
+          text: data.resume,
+        },
+)
+
+const links = [
+  SOCIAL_LINKS.email,
+  { href: site.href.replace(/\/$/, ''), text: site.host },
+  SOCIAL_LINKS.github,
+  SOCIAL_LINKS.linkedin,
+]
+const educationYears = formatYearRange(education.startedOn, education.endedOn)
+/**
+ * One string: Astro drops a line break between text and an expression, which ran "2016." into the
+ * notes.
+ */
+const educationRest = `, ${education.degree}, ${educationYears}.${education.notes === undefined ? '' : ` ${education.notes}`}`
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    {/* The PDF's title, which search results show for it. */}
+    <title>{SITE_NAME} resume</title>
+    <meta name="author" content={SITE_NAME} />
+    <meta name="robots" content="noindex, follow" />
+    <style is:inline>
+      @page {
+        size: a4;
+        margin: 8mm 14mm 11mm;
+      }
+
+      :root {
+        --ink: oklch(19% 0.006 56);
+        --body: oklch(31% 0.006 56);
+        --muted: oklch(50% 0.008 56);
+        --faint: oklch(70% 0.006 56);
+        --rule: oklch(89% 0.003 56);
+        --accent: oklch(45% 0.15 262);
+      }
+
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+
+      html {
+        print-color-adjust: exact;
+      }
+
+      /*
+       * Static system fonts: Chrome prints a variable font such as Satoshi as Type 3 glyphs, whose text
+       * extracts broken ("Garvi t").
+       */
+      body {
+        font-family: 'Avenir Next', 'Helvetica Neue', 'Arial', sans-serif;
+        font-size: 8.9pt;
+        font-kerning: normal;
+        /* pdfminer-based parsers extract a ligature as one character ("ﬁ"), which keyword searches miss. */
+        font-variant-ligatures: none;
+        line-height: 1.38;
+        color: var(--body);
+        background: oklch(96% 0.002 56);
+        text-rendering: optimizelegibility;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      main {
+        width: 210mm;
+        max-width: 100%;
+        min-height: 297mm;
+        padding: 8mm 14mm 11mm;
+        margin: 32px auto;
+        background: white;
+        box-shadow: 0 1px 3px oklch(0% 0 0 / 0.12);
+      }
+
+      /* The largest scale that keeps everything on one A4 page in the fonts above: 0.97 spills over. */
+      main > div {
+        zoom: 0.96;
+      }
+
+      @media print {
+        body {
+          background: none;
+        }
+
+        main {
+          width: auto;
+          min-height: 0;
+          padding: 0;
+          margin: 0;
+          box-shadow: none;
+        }
+      }
+
+      #masthead {
+        display: flex;
+        gap: 8mm;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+
+      h1 {
+        font-size: 24pt;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--ink);
+        letter-spacing: -0.025em;
+      }
+
+      #masthead p {
+        margin-top: 2mm;
+        font-size: 10.6pt;
+        font-weight: 500;
+        color: var(--accent);
+      }
+
+      address {
+        font-size: 8pt;
+        font-style: normal;
+        line-height: 1.5;
+        color: var(--muted);
+        text-align: right;
+      }
+
+      address > * {
+        display: block;
+      }
+
+      /* Balanced, so no word such as "I" is left at the end of the first line. */
+      #summary {
+        margin-top: 4.2mm;
+        font-size: 9.3pt;
+        line-height: 1.45;
+        text-wrap: balance;
+      }
+
+      section {
+        margin-top: 5.2mm;
+      }
+
+      /* Little letter-spacing: wide tracking extracts as "E X P E R I E N C E". */
+      h2 {
+        display: flex;
+        gap: 3mm;
+        align-items: center;
+        margin-bottom: 2mm;
+        font-size: 7.2pt;
+        font-weight: 600;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+      }
+
+      h2::after {
+        flex: 1;
+        height: 0.6pt;
+        content: '';
+        background: var(--rule);
+      }
+
+      article {
+        break-inside: avoid;
+      }
+
+      #experience article + article {
+        margin-top: 2.75mm;
+      }
+
+      /*
+       * Dates follow the role on the same line, not right-aligned: pdfminer splits text across a wide
+       * gap into separate boxes and then filed one entry's dates under the next entry.
+       */
+      article > header {
+        display: flex;
+        align-items: baseline;
+      }
+
+      article > header p::before {
+        color: var(--faint);
+        white-space: pre;
+        content: '  ·  ';
+      }
+
+      h3 {
+        font-size: 9.6pt;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      h3 span {
+        font-weight: 500;
+        color: var(--muted);
+      }
+
+      h3 span::before {
+        color: var(--faint);
+        white-space: pre;
+        content: '  ·  ';
+      }
+
+      article > header p,
+      h3 small {
+        flex: none;
+        font-size: 8pt;
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+      }
+
+      article ul {
+        margin-top: 0.6mm;
+        list-style: none;
+      }
+
+      /*
+       * An inline marker: Chrome paints positioned boxes in a later layer, which would move every
+       * bullet's text to the end of the extracted text.
+       */
+      article li {
+        padding-left: 3.4mm;
+        text-indent: -3.4mm;
+      }
+
+      article li + li {
+        margin-top: 0.3mm;
+      }
+
+      article li::before {
+        display: inline-block;
+        width: 3.4mm;
+        color: var(--faint);
+        text-indent: 0;
+        content: '–';
+      }
+
+      /* One column: some ATS parsers read straight across two, mixing the projects together. */
+      #projects article + article {
+        margin-top: 1.6mm;
+      }
+
+      #projects h3 {
+        font-size: 9.1pt;
+      }
+
+      h3 small {
+        margin-left: 1.5mm;
+      }
+
+      #projects p {
+        margin-top: 0.3mm;
+        font-size: 8.5pt;
+      }
+
+      /* Inline labels, for the same reason as the dates: pdfminer read a label column before its text. */
+      dl > div {
+        padding-left: 4mm;
+        text-indent: -4mm;
+      }
+
+      dl > div + div {
+        margin-top: 0.9mm;
+      }
+
+      dt,
+      dd {
+        display: inline;
+      }
+
+      dt::after {
+        white-space: pre;
+        content: ': ';
+      }
+
+      dt,
+      dd strong {
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      dd span {
+        margin: 0 1.6mm;
+        color: var(--faint);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div>
+        <header id="masthead">
+          <div>
+            <h1>{SITE_NAME}</h1>
+            <p>{SITE_TAGLINE}</p>
+          </div>
+          <address>
+            {links.map(({ href, text }) => (
+              <a href={href}>{text}</a>
+            ))}
+          </address>
+        </header>
+        <p id="summary">{summary}</p>
+
+        <section id="experience">
+          <h2>Experience</h2>
+          {experience.map(({ name, href, role, dates, bullets }) => (
+            <article>
+              <header>
+                <h3>
+                  {href === undefined ? name : <a href={href}>{name}</a>}
+                  {role !== undefined && <span>{role}</span>}
+                </h3>
+                <p>{dates}</p>
+              </header>
+              <ul>
+                {bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </section>
+
+        <section id="projects">
+          <h2>Projects</h2>
+          <div>
+            {projects.map(({ name, href, year, text }) => (
+              <article>
+                <h3>
+                  {href === undefined ? name : <a href={href}>{name}</a>}
+                  <small>{year}</small>
+                </h3>
+                <p>{text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2>Skills</h2>
+          <dl>
+            {skills.map(({ label, text }) => (
+              <div>
+                <dt>{label}</dt>
+                <dd>{text}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section>
+          <h2>Education and awards</h2>
+          <dl>
+            <div>
+              <dt>Education</dt>
+              <dd>
+                <strong>{education.school}</strong>
+                {educationRest}
+              </dd>
+            </div>
+            <div>
+              <dt>Awards</dt>
+              <dd>
+                {awards.map((award, i) => (
+                  <>
+                    {i > 0 && <span aria-hidden="true">·</span>}
+                    {award}
+                  </>
+                ))}
+              </dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

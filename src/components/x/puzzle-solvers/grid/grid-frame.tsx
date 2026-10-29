@@ -11,8 +11,7 @@ import { indexOf } from '@/lib/x/puzzle-solvers/grid/geometry'
 const MIN_CELL_REM = 1.75
 
 /**
- * Rows exist for ARIA only; they are `display: contents`, so every cell lays out against the same
- * tracks.
+ * Rows exist only for ARIA (`display: contents`), so every cell shares the grid's tracks.
  */
 export function GridFrame({
   role,

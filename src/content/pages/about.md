@@ -2,16 +2,10 @@
 title: Hi, I'm Garvit
 ---
 
-I'm a software engineer from India. I spend my days building, fixing bugs, rooting for FC Barcelona, watching movies and getting stuck in Bangalore traffic.
+I'm a software engineer who has spent most of the last ten years at early-stage startups, helping them go from zero to one. I was one of the first engineers at Harness, Giga, Coram AI, Dgraph and GM Labs, founded Superstream, and built the systems their products run on: workflow engines, voice agents and AI assistants.
 
-Currently, I'm a software engineer at [Coram AI](https://www.coram.ai) building Coram Assistant. Some of my recent personal projects:
+Right now I work independently, consulting with startups and doing my own research. I maintain [durable-execution](https://github.com/gpahal/durable-execution), a durable execution engine for TypeScript. Most of my research measures things: I've benchmarked how well multimodal embedding models retrieve PDFs, built an RL environment that grades coding agents on rebuilding websites and trained a small GPT from scratch. I've also recently started hacking on robotics, starting with the [SO-101](https://huggingface.co/docs/lerobot/so101) leader-follower arm kit. See all of it on [projects](/projects).
 
-- Benchmark for PDF RAG embedding systems, from text to multimodal to multi-vector and combinations of them: [gpahal/pdf-rag-embed-bench](https://github.com/gpahal/pdf-rag-embed-bench)
+Outside work I root for FC Barcelona, watch a lot of movies and sit in Bengaluru traffic.
 
-- Micro GPT implementation and training pipeline in PyTorch: [gpahal/microgpt](https://github.com/gpahal/microgpt)
-
-- Durable execution engine for running functions and workflows resiliently, ideal for AI workflows: [gpahal/durable-execution](https://github.com/gpahal/durable-execution)
-
-To know what I'm working on, check out my [projects](/projects) or [work experience](/work). You can also [check out my setup](/uses).
-
-I sometimes write about stuff I learn or build. You can find these writings on my [blog](/blog).
+Read my [blog](/blog), see where I've [worked](/work), what I [use](/uses) or my [resume](/docs/resume.pdf). If you're building with AI agents or taking a product from zero to one and want help, [email me](mailto:g10pahal@gmail.com).

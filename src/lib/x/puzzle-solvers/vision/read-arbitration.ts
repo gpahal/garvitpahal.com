@@ -3,8 +3,8 @@ import type { ReadConfidence } from '../puzzles/types'
 export type Candidate<TPuzzle> = {
   puzzle: TPuzzle
   /**
-   * Every call in a chain is a distinct configuration, so reads from different calls agree
-   * independently.
+   * `callRank`: later calls run stronger configurations, so a higher rank wins. Each call is its own
+   * configuration, so only reads of different ranks can agree.
    */
   rank: number
   confidence: ReadConfidence
@@ -41,9 +41,7 @@ export function considerRead<TPuzzle>(
   }
 
   if (candidate.confidence === 'suspect') {
-    // Two configurations agreeing is the strongest signal, not a proof: models fail on the same
-    // things, such as a blurred 6 or 8. The fingerprint rules keep the agreement about the reading,
-    // not what both would say.
+    // Not proof: models misread the same things, such as a blurred 6 or 8.
     const twin =
       candidate.fingerprint === undefined
         ? undefined

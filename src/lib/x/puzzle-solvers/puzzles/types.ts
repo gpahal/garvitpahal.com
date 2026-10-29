@@ -48,7 +48,7 @@ export type PuzzleDefinition<TPuzzle, TId extends string = string> = {
   read: (prepared: PreparedImage, options: ExtractOptions) => Promise<ExtractOutcome<TPuzzle>>
   blank: () => TPuzzle
   /**
-   * Units the model was unsure about and the user has not reviewed. Editing a unit reviews it.
+   * Units the read flagged and the user has not reviewed. Editing a unit reviews it.
    */
   unreviewedCount: (puzzle: TPuzzle) => number
   reviewUnit: ReviewUnit

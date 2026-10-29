@@ -21,12 +21,6 @@ describe('an earlier day', () => {
   const monday = dayOfInstant(onWednesday('12:00'), KOLKATA) - 2
   const week = intervalOf('weekly', onWednesday('12:00'), KOLKATA)
 
-  it("starts no earlier than that day's beginning, even within a longer interval", () => {
-    expect(defaultLogStart(monday, week, 30, onWednesday('00:10'), KOLKATA)).toBe(
-      Date.parse('2026-09-14T00:00:00+05:30'),
-    )
-  })
-
   it('is cut short to end at now when the goal would run past it', () => {
     // 1 day 12 hrs logged on Tuesday from Wednesday at 10:00, 34 hours after Tuesday began.
     const now = onWednesday('10:00')

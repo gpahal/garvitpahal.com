@@ -100,8 +100,6 @@ export default defineConfig({
   testFiles: (defaults) => [...defaults, TEST_HELPERS],
   vitest: true,
   antislop: true,
-  // Every `src/lib` module outside a `server/` folder is browser-safe, except the build-time
-  // helpers.
   browser: {
     files: [
       'src/components/**',

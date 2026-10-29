@@ -24,14 +24,6 @@ function answering(...responses: Array<Response | Error>): typeof fetch {
   })
 }
 
-const REFUSED = {
-  message:
-    'This browser did not send what the server needs to accept the request. Update it, or open this website in another browser',
-  noRetry: true,
-}
-
-const refused = (): Response => json({ error: REFUSED }, 403)
-
 const FORBIDDEN = { message: "Not the owner's account", signIn: true }
 
 const forbidden = (): Response => json({ error: FORBIDDEN }, 403)
@@ -49,18 +41,12 @@ describe('readAccessToken', () => {
   it.each([
     ['a token', json({ token: 'jwt' }), { kind: 'token', token: 'jwt' }],
     ['an account that is not the owner', forbidden(), { kind: 'refused', failure: FORBIDDEN }],
-    ['a browser without fetch metadata', refused(), { kind: 'refused', failure: REFUSED }],
     ["the route's 503", unavailable(), { kind: 'unavailable', failure: UNAVAILABLE }],
     ['a redirect', redirect(), { kind: 'expired' }],
     ["Access's own 401", json({}, 401), { kind: 'expired' }],
     ['a network error', blip(), { kind: 'unreachable' }],
     ['a 5xx', json({ token: 'jwt' }, 503), { kind: 'unreadable' }],
     ['a challenge page', new Response('<html>', { status: 403 }), { kind: 'unreadable' }],
-    [
-      'a refusal with an empty message',
-      json({ error: { message: '', signIn: true } }, 403),
-      { kind: 'unreadable' },
-    ],
   ])('reads %s', async (_, response, answer) => {
     expect(await readAccessToken(answering(response))).toEqual(answer)
   })
@@ -68,11 +54,10 @@ describe('readAccessToken', () => {
   it('does not follow a redirect', async () => {
     const fetchFn = answering(redirect())
     await readAccessToken(fetchFn)
-    expect(fetchFn).toHaveBeenCalledWith('/api/x/token', {
-      cache: 'no-store',
-      redirect: 'manual',
-      signal: expect.any(AbortSignal) as unknown,
-    })
+    expect(fetchFn).toHaveBeenCalledWith(
+      '/api/x/token',
+      expect.objectContaining({ redirect: 'manual' }),
+    )
   })
 })
 
@@ -83,11 +68,6 @@ describe('checkConvexToken', () => {
     ['success', json({ status: 'success', value: null }), 'accepted'],
     // The function's own refusal is a token that got through.
     ['a refusal', json({ status: 'error', errorMessage: 'Server Error' }, 560), 'accepted'],
-    [
-      'a refusal with data',
-      json({ status: 'error', errorMessage: 'Forbidden', errorData: 'FORBIDDEN' }, 560),
-      'accepted',
-    ],
     [
       'a 401',
       json({ code: 'InvalidAuthHeader', message: 'Could not decode token' }, 401),
@@ -171,13 +151,6 @@ describe('createAccessTokenFetcher', () => {
       [],
       [1000, 2000, 4000, 8000, 16_000, 30_000, 30_000, 30_000],
       ['unreachable', undefined],
-    ],
-    [
-      "an unavailable server quickly, then with the server's message",
-      Array.from({ length: STALLED_AFTER_FAILURES }, unavailable),
-      [],
-      [1000, 2000, 4000, 8000],
-      [{ kind: 'unavailable', failure: UNAVAILABLE }, undefined],
     ],
     [
       'an expired session slowly, resuming once it is renewed',

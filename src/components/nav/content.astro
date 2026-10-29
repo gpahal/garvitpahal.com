@@ -12,7 +12,14 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-import { isAtOrUnder, isPrivatePath, PRIVATE_TOOLS, SITE_NAME, SITE_TAGLINE } from '@/lib/site'
+import {
+  isAtOrUnder,
+  isPrivatePath,
+  PRIVATE_TOOLS,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SOCIAL_LINKS,
+} from '@/lib/site'
 import { ButtonLink } from '@/components/shared/button-link'
 import { FOCUS_OUTLINE } from '@/components/shared/focus-outline'
 import { Separator } from '@/components/ui/separator'
@@ -20,26 +27,10 @@ import { Separator } from '@/components/ui/separator'
 import { Github, Linkedin, XLogo } from './brand-icons'
 
 const socials = [
-  {
-    href: 'mailto:g10pahal@gmail.com',
-    label: 'Email',
-    Icon: AtSign,
-  },
-  {
-    href: 'https://x.com/g10pahal',
-    label: 'X (Twitter)',
-    Icon: XLogo,
-  },
-  {
-    href: 'https://github.com/gpahal',
-    label: 'GitHub',
-    Icon: Github,
-  },
-  {
-    href: 'https://www.linkedin.com/in/gpahal/',
-    label: 'LinkedIn',
-    Icon: Linkedin,
-  },
+  { ...SOCIAL_LINKS.github, Icon: Github },
+  { ...SOCIAL_LINKS.linkedin, Icon: Linkedin },
+  { ...SOCIAL_LINKS.x, Icon: XLogo },
+  { ...SOCIAL_LINKS.email, Icon: AtSign },
 ] as const
 
 const links = [
@@ -49,14 +40,14 @@ const links = [
     Icon: House,
   },
   {
-    path: '/projects',
-    label: 'Projects',
-    Icon: FolderKanban,
-  },
-  {
     path: '/work',
     label: 'Work',
     Icon: BriefcaseBusiness,
+  },
+  {
+    path: '/projects',
+    label: 'Projects',
+    Icon: FolderKanban,
   },
   {
     path: '/blog',

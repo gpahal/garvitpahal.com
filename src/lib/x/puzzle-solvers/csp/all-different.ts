@@ -18,10 +18,6 @@ function propagateNakedSingles(domains: Domains, peers: Array<Uint16Array>): Pro
   })
 }
 
-/**
- * A value with nowhere to go in a group is a contradiction, since a group is as wide as its value
- * range.
- */
 function propagateHiddenSingles(
   domains: Domains,
   groups: Array<Uint16Array>,

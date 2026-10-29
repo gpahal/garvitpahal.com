@@ -45,8 +45,7 @@ type CaptureReviewProps = {
 }
 
 /**
- * Icon-only squares below `sm`, so the picture and its handles get a phone's height. The name
- * stays as an `aria-label` and tooltip.
+ * Icon-only squares below `sm`, so the picture and its handles get a phone's height.
  */
 const ICON_ONLY_ON_PHONES = 'max-sm:w-7 max-sm:px-0'
 
@@ -73,9 +72,7 @@ function iconControl(
 }
 
 /**
- * Unusable corners outrank everything, since nothing can be read from a folded or mirrored shape;
- * a small grid comes next. Failed detection reads as a grid not found, since dragging is the way
- * on either way.
+ * Unusable corners outrank a small grid, since nothing reads from a folded or mirrored shape.
  */
 function reviewHint(
   isAwaitingDetection: boolean,
@@ -112,7 +109,6 @@ export function CaptureReview({
   const hintId = useId()
   const oriented = useMemo(() => orientImage(image, orientation), [image, orientation])
 
-  // `undefined` while detecting.
   const detection = useJob(
     jobs,
     'detect',

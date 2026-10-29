@@ -3,8 +3,7 @@ import { sudoku } from './sudoku/definition'
 import type { PuzzleDefinition } from './types'
 
 /**
- * The page half of every puzzle; `compute-registry.ts` holds the Worker half. Adding a puzzle: see
- * docs/puzzle-solvers.md.
+ * Adding a puzzle: docs/puzzle-solvers.md.
  */
 const PUZZLES = {
   [sudoku.id]: sudoku,

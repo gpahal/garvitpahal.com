@@ -3,6 +3,9 @@ title: Solana Fellowship
 description: Week-by-week notes from Superteam's eight-week Solana Fellowship (Rust, dApps, NFTs and DeFi) and how it led to Superstream
 publishedOn: 01/05/2022
 tags: [programming, web3, solana, rust]
+image:
+  src: ./images/solana-fellowship/evolved-dynamic-pokemon-nft.jpg
+  alt: A dynamic Pokemon NFT on Metaplex after evolving, at evolution index 1
 ---
 
 I love exploring new programming languages and I have been trying to learn Rust for a good two or three months now. I learned about Solana during this time. I started diving deeper into the web3 ecosystem, bought some SOL, created a wallet, started using some Solana apps and read a lot.
@@ -19,11 +22,9 @@ The [fellowship](https://web.archive.org/web/20220106144208/https://solana-india
 
 The fellowship aligned with my goals, so I applied. I had to fill out a few application forms and give an in-person interview. After a week, I got an email from them welcoming me to the fellowship. Yay! I was excited to dive deeper and learn from a fantastic team of mentors and supporters.
 
----
-
-If you have any questions about the fellowship, feel free to reach out to me on [email](mailto:g10pahal@gmail.com) or [X](https://x.com/g10pahal).
-
 ## Week 1: Getting started
+
+**In short:** Rust and Solana fundamentals: the ecosystem, the language and the programming model.
 
 The first week's goal was to brush up on Rust concepts, Solana's programming model and tooling.
 
@@ -46,6 +47,8 @@ The previous week, I read [Explaining Solana with The Simpsons](https://web.arch
 This week was about learning the [programming model](https://web.archive.org/web/20220408124107/https://docs.solana.com/developing/programming-model/overview), [how to deploy to Solana](https://web.archive.org/web/20231231234819/https://openquest.xyz/quest/deploying-the-program-on-to-solana) and [how to work with interfaces to Solana like the SPL Token CLI](https://web.archive.org/web/20220514154128/https://openquest.xyz/quest/create_crypto_with_solana_cli). It was a fun experience to actually use the technologies that I had read about, to experience them and to see how they worked.
 
 ## Week 2: Creating mini dApps
+
+**In short:** My first dApps, with the Solana web3.js library and an on-chain voting program.
 
 This week's goal was to start creating mini dApps on Solana. There are two parts to this: interacting with Solana using the [`@solana/web3.js`](https://web.archive.org/web/20220401091308/https://solana-labs.github.io/solana-web3.js/) library and creating on-chain programs.
 
@@ -73,6 +76,8 @@ That said, I'll be using the Anchor framework from now on. Not using it showed m
 
 ## Week 3: More dApps
 
+**In short:** Bigger programs, written with the Anchor framework.
+
 This week's goal was to continue creating dApps on Solana, not as simple as last week's.
 
 ### Anchor framework
@@ -97,6 +102,8 @@ Some final thoughts: Anchor is awesome. The documentation and example programs a
 
 ## Week 4: NFTs
 
+**In short:** NFTs on Solana, ending with dynamic NFTs that change over time.
+
 This week was about NFTs: what they are, when they can be used and how to create some on Solana.
 
 ### Creator ecosystem
@@ -117,13 +124,15 @@ This week's exercise was to create an NFT marketplace supporting dynamic NFTs. I
 
 I bootstrapped with [Metaplex Storefront](https://web.archive.org/web/20220121074927/https://docs.metaplex.com/storefront/introduction) and added UI components to create and evolve Pokémon NFTs. The creator could go to the Pokémon NFT page and click a button to evolve it. Learning about the Metaplex APIs and the Metaplex Storefront UI cache management was the most challenging part.
 
-![Metaplex NFT page showing a Charmander with evolution index 0 while the evolve button reads "Evolving Pokemon..."](./images/evolving-dynamic-pokemon-nft.jpg)
+![Metaplex NFT page showing a Charmander with evolution index 0 while the evolve button reads "Evolving Pokemon..."](./images/solana-fellowship/evolving-dynamic-pokemon-nft.jpg)
 
-![The same NFT page after evolving, now showing a Charmeleon with evolution index 1](./images/evolved-dynamic-pokemon-nft.jpg)
+![The same NFT page after evolving, now showing a Charmeleon with evolution index 1](./images/solana-fellowship/evolved-dynamic-pokemon-nft.jpg)
 
 It was not the best solution, though. Right now, the dynamic nature requires the creator to manually update the metadata by clicking a button. Ideally, there should be an on-chain program as the NFT's update authority. That program would be responsible for checking the conditions for evolution and automatically evolving the NFT based on conditions like time passed, etc. But I didn't have enough time to implement that, unfortunately! It's a nice add-on that I may implement at some point.
 
 ## Week 5: DeFi
+
+**In short:** Tokens, staking and tokenomics, including my own wallet and cryptocurrency.
 
 We focused on DeFi this week: basics of tokens, staking and tokenomics.
 
@@ -143,7 +152,7 @@ The first two interacted with Solana through its JSON RPC API, but the last one 
 
 The exercise for this week was to add support for staking to the cryptocurrency created in one of the quests. This is what I ended up making.
 
-![Staking app with buttons to airdrop SOL, mint a token and stake 10 tokens, and the resulting token, staked and escrow balances](./images/staking-app.jpg)
+![Staking app with buttons to airdrop SOL, mint a token and stake 10 tokens, and the resulting token, staked and escrow balances](./images/solana-fellowship/staking-app.jpg)
 
 I had to consider where to escrow the funds, how to create different escrow accounts for tokens and how to connect it all in the UI to provide a good user experience. It was a fun exercise, and I ended up learning a lot.
 
@@ -152,6 +161,8 @@ This exercise also made me think about token economics (tokenomics for short). D
 I read the documentation of [Solana economics](https://web.archive.org/web/20211227121250/https://docs.solana.com/economics_overview). It is a well-written set of articles. I would suggest everyone go through them to know why people stake and why it's beneficial for the blockchain that people distribute their stake to different validators, a problem some projects are trying to solve.
 
 ## Week 6: More complex dApps
+
+**In short:** Harder dApps, and the problem my fellowship project would solve.
 
 This week, there was no particular theme; we just practised, built more complicated programs and started on the fellowship project.
 
@@ -201,6 +212,8 @@ There are solutions in the Solana ecosystem that are trying to bring streaming p
 
 ## Week 7: Starting on my project
 
+**In short:** Designing and building the first version of the project, and naming it Superstream.
+
 This week, I designed and started implementing the project idea. I made significant progress, finalised the scope and implemented major parts of the smart contract.
 
 ### Components
@@ -241,3 +254,7 @@ It took me a month, but the project is finally ready. It's live at [superstream.
 It was a fun and productive eight weeks. I learned a lot, built a lot of things and got to know a lot of people. I'm excited to continue building on Solana. I would recommend it to anyone who wants to learn how to develop Solana apps.
 
 I'm especially pleased about this project. I plan to dedicate some time to market it and build a community around it.
+
+Superstream became a company, which I founded and ran from September 2021 to March 2022. More on my [work](/work) page.
+
+If you have any questions about the fellowship, feel free to reach out to me on [email](mailto:g10pahal@gmail.com) or [X](https://x.com/g10pahal).

@@ -23,8 +23,9 @@ const REFUSED = v.object({ ok: v.literal(false), retryAfterMs: v.number() })
 
 /**
  * Spends a model call's admissions, or returns when to come back rather than throwing. The caller
- * names no limit, and both are checked before either is spent, so a refusal spends nothing. The
- * Worker meters each paid call itself, so a page holding the owner token can only spend more.
+ * names no limit, and both are checked before either is spent, so a refusal spends nothing. A
+ * page holding the owner token can call this too, but only to spend budget: the Worker meters every
+ * paid call itself.
  */
 export const consumePuzzleRead = ownerMutation({
   args: { cost: v.union(v.literal(1), v.literal(2)) },

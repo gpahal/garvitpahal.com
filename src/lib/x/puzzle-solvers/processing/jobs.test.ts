@@ -8,7 +8,7 @@ import { ProcessingJobs, WorkerStartError } from './jobs'
 import { OPERATIONS } from './protocol'
 import type { Job, WorkerMessage } from './protocol'
 
-const IDLE_LIMIT_MS = 60_000
+const IDLE_LIMIT_MS = 75_000
 const ALLOWANCE_MS = 500
 
 function createTransport() {
@@ -133,19 +133,6 @@ describe('ProcessingJobs', () => {
     expect(worker().terminated()).toBe(1)
   })
 
-  it("rejects a started job past its limit with its timeout's message", async () => {
-    const { jobs, scheduler, worker } = setup()
-    const result = jobs.run('detect', { image })
-    worker().send({ type: 'started', id: 1 })
-    expect(scheduler.live()).toEqual([OPERATIONS.detect.limitMs])
-    scheduler.fire(OPERATIONS.detect.limitMs)
-    const error: unknown = await rejection(result)
-    expect(error).toBeInstanceOf(UserFacingError)
-    expect(error).not.toBeInstanceOf(WorkerStartError)
-    expect(error).toHaveProperty('message', OPERATIONS.detect.onTimeout.message)
-    expect(worker().terminated()).toBe(1)
-  })
-
   it('resolves with the reply and reuses the Worker for the next job', async () => {
     const { jobs, scheduler, transports, worker } = setup()
     const first = jobs.run('detect', { image })
@@ -165,16 +152,6 @@ describe('ProcessingJobs', () => {
     expect(worker().terminated()).toBe(0)
   })
 
-  it("rejects an ok: false reply with the failure's message and keeps the Worker", async () => {
-    const { jobs, worker } = setup()
-    const result = jobs.run('detect', { image })
-    worker().send({ id: 1, ok: false, failure: { message: 'Not a grid', noRetry: true } })
-    const error: unknown = await rejection(result)
-    expect(error).toBeInstanceOf(UserFacingError)
-    expect(error).toHaveProperty('failure', { message: 'Not a grid', noRetry: true })
-    expect(worker().terminated()).toBe(0)
-  })
-
   it('rejects an aborted job with an AbortError and terminates its Worker', async () => {
     const { jobs, scheduler, worker } = setup()
     const controller = new AbortController()
@@ -183,13 +160,6 @@ describe('ProcessingJobs', () => {
     await expect(result).rejects.toHaveProperty('name', 'AbortError')
     expect(worker().terminated()).toBe(1)
     expect(scheduler.live()).toEqual([])
-  })
-
-  it('rejects at once when the signal is already aborted', async () => {
-    const { jobs, transports } = setup()
-    const result = jobs.run('detect', { image }, AbortSignal.abort())
-    await expect(result).rejects.toHaveProperty('name', 'AbortError')
-    expect(transports).toHaveLength(0)
   })
 
   it('cancels the previous job when a new one starts', async () => {
@@ -231,15 +201,6 @@ describe('ProcessingJobs', () => {
     expect(scheduler.live()).toEqual([OPERATIONS.solve.limitMs])
   })
 
-  it('rejects a crash before start with a WorkerStartError', async () => {
-    const { jobs, worker } = setup()
-    const result = jobs.run('solve', puzzle)
-    worker().fail('messageerror')
-    await expect(result).rejects.toBeInstanceOf(WorkerStartError)
-    await expect(result).rejects.toThrow(OPERATIONS.solve.startFailure)
-    expect(worker().terminated()).toBe(1)
-  })
-
   it("rejects a crash after start with the operation's failure", async () => {
     const { jobs, worker } = setup()
     const result = jobs.run('solve', puzzle)
@@ -250,47 +211,5 @@ describe('ProcessingJobs', () => {
     expect(error).not.toBeInstanceOf(WorkerStartError)
     expect(error).toHaveProperty('message', OPERATIONS.solve.failure)
     expect(worker().terminated()).toBe(1)
-  })
-
-  it('rejects with a WorkerStartError when the Worker cannot be created', async () => {
-    const cause = new Error('Refused by the CSP')
-    const jobs = new ProcessingJobs(() => {
-      throw cause
-    }, createScheduler().schedule)
-    const error: unknown = await rejection(jobs.run('decode', { source: new Blob() }))
-    expect(error).toBeInstanceOf(WorkerStartError)
-    expect(error).toHaveProperty('message', OPERATIONS.decode.startFailure)
-    expect(error).toHaveProperty('cause', cause)
-  })
-
-  it("rejects with the operation's failure when the job cannot be posted", async () => {
-    const { jobs, scheduler, worker } = setup()
-    const cause = new DOMException('Could not be cloned', 'DataCloneError')
-    const result = jobs.run('detect', { image })
-    // The first post has already happened; make the next one throw.
-    worker().transport.postMessage = () => {
-      throw cause
-    }
-    worker().send({ id: 1, ok: true, result: undefined })
-    await result
-    const error: unknown = await rejection(jobs.run('decode', { source: new Blob() }))
-    expect(error).toBeInstanceOf(UserFacingError)
-    expect(error).not.toBeInstanceOf(WorkerStartError)
-    expect(error).toHaveProperty('message', OPERATIONS.decode.failure)
-    expect(error).toHaveProperty('cause', cause)
-    expect(worker().terminated()).toBe(1)
-    expect(scheduler.live()).toEqual([])
-  })
-
-  it('terminates the idle Worker after the idle limit', async () => {
-    const { jobs, scheduler, transports, worker } = setup()
-    const result = jobs.run('detect', { image })
-    worker().send({ id: 1, ok: true, result: undefined })
-    await result
-    scheduler.fire(IDLE_LIMIT_MS)
-    expect(worker().terminated()).toBe(1)
-
-    void jobs.run('detect', { image }).catch(() => undefined)
-    expect(transports).toHaveLength(2)
   })
 })

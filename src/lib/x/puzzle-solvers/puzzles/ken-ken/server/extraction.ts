@@ -10,8 +10,7 @@ import { kenKenRawSchema, parseKenKen } from './parse'
 import type { KenKenRaw } from './parse'
 
 /**
- * Guards against assuming rectangles, losing track of invented cage labels (hence clue-cell names)
- * and dropping or double-claiming border cells. Rules 6 and 7 name the two commonest misreads.
+ * Cages are named by their clue cell, since a model loses track of invented labels.
  */
 export function kenKenExtractionPrompt(hints: KenKenHints): string {
   return `Read the Ken Ken (Calcudoku, Mathdoku) grid in this image and return it as structured data.

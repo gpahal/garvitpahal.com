@@ -32,7 +32,7 @@ export type JobReply = { id: number } & (
   { ok: true; result: unknown } | { ok: false; failure: Failure }
 )
 /**
- * `started` starts the compute budget; a crash or time limit before it is a `WorkerStartError`.
+ * `started` starts the compute budget.
  */
 export type WorkerMessage = JobReply | { type: 'started'; id: number }
 const PROCESS_TIMEOUT_MS = 15_000

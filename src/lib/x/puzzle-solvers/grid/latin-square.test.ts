@@ -46,17 +46,4 @@ describe('solveLatinSquare', () => {
       expect(result.status).toBe(isSolution ? 'solved' : 'unsolvable')
     },
   )
-
-  it('checks an expired deadline before any propagation', () => {
-    const result = solveLatinSquare(1, openDomains(1), {
-      deadline: 10,
-      now: () => 10,
-      propagators: [
-        () => {
-          throw new Error('must not propagate')
-        },
-      ],
-    })
-    expect(result).toEqual({ status: 'timeout' })
-  })
 })

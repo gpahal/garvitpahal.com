@@ -123,9 +123,6 @@ export function findCageIssues(grid: KenKenGrid): Map<number, MarkedCageIssue> {
   return cageIssuesIn(grid, cellsByCage(grid))
 }
 
-/**
- * In reading order, since compaction numbers cages row-major.
- */
 function findCagesMissingClue(grid: KenKenGrid): Array<number> {
   return grid.cages.flatMap((cage, cageId) => (cage.target === 0 ? cageId : []))
 }

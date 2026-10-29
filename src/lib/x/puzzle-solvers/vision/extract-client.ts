@@ -1,19 +1,19 @@
-import { ACCESS_FETCH_INIT, apiRefusalSchema, isAccessSessionExpired } from '@/lib/access-session'
-import type { Failure } from '@/lib/failure'
+import { ACCESS_FETCH_INIT, isAccessSessionExpired } from '@/lib/access-session'
 
 import {
   extractReadSchema,
   extractSearch,
   OUT_OF_DATE_MESSAGE,
+  readRefusalSchema,
   SIGN_IN_AGAIN_MESSAGE,
 } from './extract-wire'
-import type { ExtractRequest, ReadPhase } from './extract-wire'
+import type { ExtractRequest, ReadFailure, ReadPhase } from './extract-wire'
 
 /**
  * `retryAt` is fixed on the `Date.now()` clock when the 429 arrives, so the wait does not grow while
  * the read's other calls finish.
  */
-export type ExtractFailure = { ok: false; error: Failure; retryAt?: number }
+export type ExtractFailure = { ok: false; error: ReadFailure; retryAt?: number }
 
 export type ExtractOutcome<TPuzzle> = ExtractFailure | { ok: true; puzzle: TPuzzle }
 
@@ -27,7 +27,7 @@ export type ExtractOptions = {
   call: number
 }
 
-function refusalOutcome(error: Failure, response: Response, now: () => number): ExtractFailure {
+function refusalOutcome(error: ReadFailure, response: Response, now: () => number): ExtractFailure {
   if (response.status !== 429) return { ok: false, error }
   const retryAfterS = Number(response.headers.get('retry-after'))
   return Number.isFinite(retryAfterS) && retryAfterS > 0
@@ -114,15 +114,14 @@ async function requestRead(
     if (response.ok) return CONNECTION_DROPPED
     return response.status >= 500 ? SERVER_FAILED : UNREADABLE_RESPONSE
   }
-  const refusal = apiRefusalSchema.safeParse(json)
+  const refusal = readRefusalSchema.safeParse(json)
   if (refusal.success) return refusalOutcome(refusal.data.error, response, now)
   if (!response.ok) return UNREADABLE_RESPONSE
-  // JSON this build cannot read means the endpoint is newer.
   const read = extractReadSchema.safeParse(json)
   return read.success ? { ok: true, puzzle: read.data.puzzle } : OUT_OF_DATE
 }
 
-function failure(error: Failure): ExtractFailure {
+function failure(error: ReadFailure): ExtractFailure {
   return { ok: false, error }
 }
 

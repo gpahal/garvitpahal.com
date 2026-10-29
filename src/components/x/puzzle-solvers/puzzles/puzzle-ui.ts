@@ -6,9 +6,8 @@ export type PuzzleEditorProps<TPuzzle> = {
    */
   onChange: (puzzle: TPuzzle, isContinuingEdit?: boolean) => void
   /**
-   * Why solving now would answer the wrong question. `solveBlocker` cannot see a half-finished edit,
-   * since it is uncommitted, so only the editor can report one. Clear it on unmount: the editor
-   * remounts on every read and undo.
+   * A half-finished edit, which `solveBlocker` cannot see because it is uncommitted. Setting one
+   * ends the running read or solve. Clear it on unmount: the editor remounts on every read and undo.
    */
   onBlockerChange: (blocker: string | undefined) => void
 }

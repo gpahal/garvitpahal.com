@@ -12,8 +12,7 @@ import { cageBorderClasses, cellTextClass } from './grid-classes'
 import { CageClue } from './grid-view'
 
 /**
- * A printed value is drawn like the rest, since its single-cell cage's clue already shows it; the
- * label still tells screen readers.
+ * Givens are drawn like solved cells, since a single-cell cage's clue already shows the value.
  */
 export function KenKenSolutionView({
   puzzle,

@@ -1,34 +1,38 @@
 ---
-import { getCollection } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
 
+import { formatYearRange } from '@/lib/dates'
 import Layout from '@/layouts/layout.astro'
 import { ButtonLink } from '@/components/shared/button-link'
 import PageHeader from '@/components/shared/page-header.astro'
 import Timeline from '@/components/shared/timeline.astro'
-import { A, H2, P } from '@/components/shared/typography'
+import { A, H2, H3, Muted, P, Ul } from '@/components/shared/typography'
 
 const workExperiences = await getCollection('workExperiences')
 const notablePersonalProjects = await getCollection('notablePersonalProjects')
+const profile = await getEntry('resume', 'profile')
+if (profile === undefined) {
+  throw new Error("Missing content entry 'resume/profile'")
+}
+const { education, awards } = profile.data
+const years = formatYearRange(education.startedOn, education.endedOn)
 ---
 
 <Layout
   title="Work"
-  description="Where Garvit Pahal has worked in tech since 2015, and the personal projects he is proudest of"
+  description="Where Garvit Pahal has worked since 2015, mostly at early-stage startups, and the personal projects he is proudest of"
 >
   <PageHeader title="Work" />
 
   <P>
-    I've worked in the tech industry since 2015. The initial years were a rollercoaster: I founded a
-    startup and worked for a graph database company and a high-frequency trading firm. I found that
-    building products that people use every day is the most motivating thing for me.
+    I've worked in tech since 2015, almost always at early-stage startups. I joined Harness, Giga,
+    Coram AI, Dgraph and GM Labs early, building their products and the systems under them from zero
+    to one. I also founded Superstream, and before all of them Plato, while still at college.
   </P>
   <P>
-    Apart from my day jobs (listed below), I work on a few <A href="/projects">side projects</A>{' '}
-    from time to time. A few recent ones that I'm proud of are{' '}
-    <A href="https://github.com/gpahal/pdf-rag-embed-bench">pdf-rag-embed-bench</A>,{' '}
-    <A href="https://github.com/gpahal/microgpt">microgpt</A>,{' '}
-    <A href="https://github.com/gpahal/durable-execution">durable-execution</A> and{' '}
-    <A href="https://superstream.finance/">Superstream</A>.
+    Between roles I work independently, consulting and doing my own research. The projects I'm
+    proudest of are under notable personal projects below, and the rest are on{' '}
+    <A href="/projects">projects</A>.
   </P>
 
   <div class="mt-8 flex items-center justify-between gap-4">
@@ -41,12 +45,27 @@ const notablePersonalProjects = await getCollection('notablePersonalProjects')
     items={workExperiences.map((entry) => ({
       entry,
       heading: entry.data.company,
+      href: entry.data.href,
       role: entry.data.role,
     }))}
   />
 
   <H2>Notable personal projects</H2>
   <Timeline
-    items={notablePersonalProjects.map((entry) => ({ entry, heading: entry.data.project }))}
+    items={notablePersonalProjects.map((entry) => ({
+      entry,
+      heading: entry.data.project,
+      href: entry.data.href,
+    }))}
   />
+
+  <H2>Education</H2>
+  <H3 className="mt-6">{education.school}</H3>
+  <Muted className="mt-1">{`${education.degree}, ${years}`}</Muted>
+  {education.notes !== undefined && <P>{education.notes}</P>}
+  <Ul>
+    {awards.map((award) => (
+      <li>{award}</li>
+    ))}
+  </Ul>
 </Layout>

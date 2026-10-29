@@ -3,8 +3,7 @@ import { formatDuration } from './durations'
 import { DAY_MINUTES, isWholeWithin, MAX_GOAL_COUNT, MAX_REMINDERS, MINUTE_MS } from './limits'
 
 /**
- * What a validator cannot say about a goal, its reminders and its logs, shared so the browser
- * cannot drift from the server. Each issue is a sentence without its full stop.
+ * What a validator cannot say about a goal, its reminders and its logs.
  */
 
 export const INTERVAL_KINDS = ['daily', 'weekly', 'monthly', 'yearly'] as const

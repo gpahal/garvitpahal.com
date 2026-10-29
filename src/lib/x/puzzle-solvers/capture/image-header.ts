@@ -124,6 +124,11 @@ async function jpegDimensions({ take, size }: Header): Promise<Size> {
       continue
     }
     const code = marker[1] ?? 0
+    // TEM and RST0 to RST7 stand alone, with no length.
+    if (code === 0x01 || (code >= 0xd0 && code <= 0xd7)) {
+      offset += 2
+      continue
+    }
     const length = view(marker).getUint16(2)
     if (code === 0xda || code === 0xd9 || length < 2 || offset + 2 + length > size)
       throw new UserFacingError(DAMAGED)
@@ -170,7 +175,7 @@ function isHeifHeader(head: Uint8Array): boolean {
 }
 
 /**
- * The signature decides, since a file's type and name are often missing or generic.
+ * Falls back to the signature, since a file's type and name are often missing or generic.
  */
 export async function unreadableFileMessage(source: Blob): Promise<string> {
   const name = 'name' in source && typeof source.name === 'string' ? source.name : ''

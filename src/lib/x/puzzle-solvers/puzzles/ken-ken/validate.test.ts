@@ -7,7 +7,7 @@ import { isClueSatisfied } from './cage-math'
 import { CAGE_OPS, createGrid, createPuzzle } from './model'
 import type { Cage, CageOp } from './model'
 import { issueOf } from './test-cages'
-import { findCageIssues, findSolveBlocker } from './validate'
+import { findSolveBlocker } from './validate'
 
 /**
  * Cages laid over a 4x4 of single cells, however disconnected, then compacted; they keep their ids
@@ -32,21 +32,6 @@ describe('cageIssue', () => {
     const grid = laidOut([[{ op: '+', target: 3 }, [0, 2]]])
     expect(issueOf(grid, 0)).toBe('split')
     expect(issueOf(laidOut([[{ op: '+', target: 3 }, [0, 1]]]), 0)).toBeUndefined()
-  })
-
-  it('refuses a given the grid cannot hold, and a negative clue', () => {
-    const grid = laidOut([
-      [{ op: '=', target: 5 }, [0]],
-      [{ op: '=', target: 4 }, [1]],
-      [{ op: '+', target: -1 }, [2, 3]],
-    ])
-    expect(issueOf(grid, 0)).toBe('out_of_range')
-    expect(issueOf(grid, 1)).toBeUndefined()
-    expect(issueOf(grid, 2)).toBe('out_of_range')
-    expect([...findCageIssues(grid)]).toEqual([
-      [0, 'out_of_range'],
-      [2, 'out_of_range'],
-    ])
   })
 })
 

@@ -44,7 +44,6 @@ export async function readBoundedText(
   const decoder = new TextDecoder()
   let text = ''
   let bytes = 0
-  // Armed once rather than per chunk, so a chunk that beats it leaves no timer behind.
   let timeoutId: ReturnType<typeof setTimeout> | undefined
   const timedOut = new Promise<typeof TIMED_OUT>((resolve) => {
     timeoutId = setTimeout(() => {

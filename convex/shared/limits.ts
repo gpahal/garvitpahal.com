@@ -1,6 +1,5 @@
 /**
- * Fixed limits, shared so the forms cannot drift from what the server enforces. A read limit never
- * hides a row: the result says when it was cut.
+ * A read limit never hides a row: the result says when it was cut.
  */
 
 export function isWholeWithin(value: number, min: number, max: number): boolean {

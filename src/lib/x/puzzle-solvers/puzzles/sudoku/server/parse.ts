@@ -35,9 +35,8 @@ const cellValueSchema = z
 const cellRowSchema = z.array(cellValueSchema)
 
 /**
- * The descriptions are prompt text. Anything that depends on another value, such as row counts
- * against `n`, is `parseSudoku`'s job, since the structured-output subset cannot tie a length or a
- * value to `n`.
+ * The descriptions are prompt text. The structured-output subset cannot tie a length or value to
+ * `n`, so `parseSudoku` checks those.
  */
 export const sudokuRawSchema = z.strictObject({
   n: z.literal([...SUDOKU_SIZES.list]).describe('Grid width and height in cells.'),
@@ -57,8 +56,7 @@ export type SudokuRaw = z.infer<typeof sudokuRawSchema>
 
 export type ParsedSudoku = SudokuPuzzle & {
   /**
-   * The boxes the model read when they did not tile and the default replaced them, which can lie
-   * the wrong way for 6, 8 and 12.
+   * The model's boxes when they did not tile and the default replaced them. Only logged.
    */
   unusableBoxes?: { boxWidth: number; boxHeight: number }
 }
@@ -66,7 +64,6 @@ export type ParsedSudoku = SudokuPuzzle & {
 export function parseSudoku(raw: SudokuRaw): ParseResult<ParsedSudoku> {
   const { n } = raw
 
-  // A rectangular default may lie the wrong way, so the page asks the user to check it.
   const isTiling = isValidBoxGeometry(n, raw.boxWidth, raw.boxHeight)
   const { boxWidth, boxHeight } = isTiling ? raw : defaultBoxGeometry(n)
   const isGuessed = !isTiling && boxWidth !== boxHeight
@@ -77,8 +74,7 @@ export function parseSudoku(raw: SudokuRaw): ParseResult<ParsedSudoku> {
   }
 
   const values = new Uint8Array(n * n)
-  // A value out of range for this grid is emptied and flagged uncertain, so the review step points
-  // at the cell rather than leaving a silent gap.
+  // An out-of-range value is emptied and flagged, so review points at the cell.
   const emptied: Array<number> = []
   for (const [row, line] of raw.cells.entries()) {
     for (const [col, cell] of line.entries()) {

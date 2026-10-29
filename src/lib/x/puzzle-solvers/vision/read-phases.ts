@@ -59,7 +59,6 @@ export async function readPhases<TPuzzle>(
   },
 ): Promise<PhasesResult> {
   if (options.isStopped()) return {}
-  // In arrival order.
   const failures: Array<ExtractFailure> = []
   const end = ({ failure, skipped, rejected }: Omit<PhasesResult, 'retryAt'>): PhasesResult => ({
     // Once the read is cut short, no read excuses a failure: only the calls' failures can still

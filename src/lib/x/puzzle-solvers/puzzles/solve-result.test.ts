@@ -5,7 +5,6 @@ import type { ReadAssessment, SolveResult } from './types'
 
 const SOLUTION = Uint8Array.of(1)
 
-// A dropped fingerprint means agreement between two reads cannot promote the read to trusted.
 test.each<[string, SolveResult, string | undefined, ReadAssessment]>([
   ['no solution', { status: 'unsolvable' }, 'f', { confidence: 'misread' }],
   [

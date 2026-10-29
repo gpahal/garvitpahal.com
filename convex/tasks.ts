@@ -46,9 +46,6 @@ function assertShowAtInReach(showAt: number): void {
   }
 }
 
-/**
- * `null` once it is deleted.
- */
 export const get = ownerQuery({
   args: { id: v.id('tasks') },
   returns: v.union(taskValidator, v.null()),
@@ -71,7 +68,7 @@ export const listOutstanding = ownerQuery({
 })
 
 /**
- * Outstanding tasks that start showing within a day still ahead.
+ * Outstanding tasks whose show-at time is in `[start, end)`, oldest first.
  */
 export const listScheduled = ownerQuery({
   args: dayListArgs,

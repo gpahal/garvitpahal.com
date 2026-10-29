@@ -30,6 +30,7 @@ const { Content } = await render(blogPost)
     publishedTime: blogPost.data.publishedOn,
     tags: blogPost.data.tags,
   }}
+  image={blogPost.data.image}
 >
   <PageHeader title={blogPost.data.title} subtitle={formatMonthYear(blogPost.data.publishedOn)} />
 

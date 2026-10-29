@@ -2,13 +2,14 @@
 import { render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
-import { formatMonthRange, sortNewestFirst } from '@/lib/dates'
-import { H3, Muted } from '@/components/shared/typography'
+import { formatPeriods, formatYearRange, periodsOf, sortNewestFirst } from '@/lib/dates'
+import { A, H3, Muted } from '@/components/shared/typography'
 
 type Props = {
   items: Array<{
     entry: CollectionEntry<'workExperiences' | 'notablePersonalProjects'>
     heading: string
+    href?: string
     role?: string
   }>
 }
@@ -23,12 +24,23 @@ const items = await Promise.all(
 
 {/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- WebKit drops a list role under list-style: none */}
 <ul role="list" class="mt-6 flex flex-col gap-10">
-  {items.map(({ entry, heading, role, Content }) => (
+  {items.map(({ entry, heading, href, role, Content }) => (
     <li>
-      <H3>{heading}</H3>
+      <H3>
+        {href === undefined ? (
+          heading
+        ) : (
+          <A href={href} className="text-foreground">
+            {heading}
+          </A>
+        )}
+      </H3>
       <Muted className="mt-1">
         {role !== undefined ? `${role}, ` : ''}
-        {formatMonthRange(entry.data.startedOn, entry.data.endedOn)}
+        {/* Projects' months are approximate, so they show years. */}
+        {entry.collection === 'notablePersonalProjects'
+          ? formatYearRange(entry.data.startedOn, entry.data.endedOn)
+          : formatPeriods(periodsOf(entry.data))}
       </Muted>
       <Content />
     </li>

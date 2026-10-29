@@ -18,8 +18,8 @@ function farCell(n: number, edge: GridEdge): number {
 }
 
 /**
- * Lines are measured on the enhanced crop, where their weights separate. Filled cells are looked for
- * on `crop` as given, since enhancement flattens a fill wider than its background window away.
+ * Lines are measured on the enhanced crop, where their weights separate. Shaded cells are found on
+ * `crop` as given, since enhancement flattens a fill wider than its background window.
  */
 export function analyzeKenKen(crop: PixelImage): KenKenHints {
   const { contrast, lattice } = readLattice(toGray(enhance(crop)), KEN_KEN_SIZES.list)

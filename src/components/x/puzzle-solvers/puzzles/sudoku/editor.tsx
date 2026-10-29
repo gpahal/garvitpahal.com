@@ -74,8 +74,7 @@ export function SudokuEditor({ puzzle, onChange }: PuzzleEditorProps<SudokuPuzzl
     )
   }
 
-  // A typed 1 that a second digit may extend to 10-16, joining its edit for undo. Keys such as
-  // Shift leave the window open (`readTwoDigitWindowEnd`).
+  // A typed 1 that a second digit may extend to 10-16, joining its edit for undo.
   const pendingRef = useRef<{ tens: PendingTens; isCommitted: boolean } | undefined>(undefined)
   // A focused cell's changed name is not reliably read out, and a 1 that may become 12 waits out
   // the window rather than being read twice.
@@ -92,7 +91,7 @@ export function SudokuEditor({ puzzle, onChange }: PuzzleEditorProps<SudokuPuzzl
     }, delayMs)
     announceTimerRef.current = { id, text }
   }
-  // A delayed announcement would name a value these have replaced, so it is dropped.
+  // Drops the held announcement, which would name a value the next action replaces.
   const endTwoDigitWindow = (): void => {
     pendingRef.current = undefined
     clearTimeout(announceTimerRef.current?.id)

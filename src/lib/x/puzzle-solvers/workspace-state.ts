@@ -73,8 +73,8 @@ export type WorkspaceState<T> = {
 }
 
 /**
- * An event carrying the `token` of a replaced read changes nothing. An event that ends the job on
- * screen is dispatched with the abort that stops it (`usePuzzleProcessing`).
+ * An event carrying the `token` of a replaced read changes nothing but `retryAt`. An event that ends
+ * the job on screen is dispatched with the abort that stops it (`usePuzzleProcessing`).
  */
 export type WorkspaceEvent<T> =
   | { type: 'readStarted'; token: number; picture: RetainedPicture; isRetry: boolean; now: number }
@@ -168,7 +168,7 @@ function afterReadEnded<T>(
   }
   const picture = pictureAfterRead(withPrepared(read.picture, result.prepared), result)
   if (result.status === 'read' || result.status === 'unsolvable') {
-    // A read with no notice was trusted; an unsolvable one is spoken for by its warning.
+    // A read without a notice was trusted. An unsolvable one shows the unsolvable result instead.
     return {
       ...shown(state, result.puzzle, 'read'),
       read: undefined,

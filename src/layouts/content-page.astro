@@ -1,6 +1,7 @@
 ---
 import { getEntry, render } from 'astro:content'
 
+import { personJsonLd } from '@/lib/structured-data'
 import Layout from '@/layouts/layout.astro'
 import PageHeader from '@/components/shared/page-header.astro'
 
@@ -18,9 +19,16 @@ if (!page) {
   throw new Error(`Missing content entry 'pages/${id}'`)
 }
 const { Content } = await render(page)
+if (Astro.site === undefined) {
+  throw new Error('`site` must be set in astro.config.ts for structured data to link the site')
+}
 ---
 
-<Layout title={isHome ? undefined : page.data.title} description={page.data.description}>
+<Layout
+  title={isHome ? undefined : page.data.title}
+  description={page.data.description}
+  jsonLd={isHome ? personJsonLd(Astro.site) : undefined}
+>
   <PageHeader title={page.data.title} />
 
   <Content />

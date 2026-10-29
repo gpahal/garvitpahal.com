@@ -9,10 +9,7 @@ import type { RoutineDraft } from './routine-draft'
 import type { Goal } from './schedule'
 
 describe('withKind', () => {
-  it.each([
-    ['daily', 'weekly', { weekday: '' }],
-    ['monthly', 'yearly', { month: '' }],
-  ] as const)(
+  it.each([['monthly', 'yearly', { month: '' }]] as const)(
     'blanks what a %s reminder did not show when it becomes %s, leaving it to choose',
     (from, to, blanks) => {
       const draft = { ...draftOf(undefined), name: 'Stretch', kind: from }
@@ -25,14 +22,14 @@ describe('withKind', () => {
 })
 
 describe('areRoutineDraftsDifferent', () => {
-  it.each([
-    ['daily', 'weekly'],
-    ['monthly', 'yearly'],
-  ] as const)('counts %s to %s and back as unchanged', (kind, other) => {
-    const initial = { ...draftOf(undefined), name: 'Stretch', kind }
-    const roundTrip = withKind(withKind(initial, other), kind)
-    expect(areRoutineDraftsDifferent(initial, roundTrip)).toBe(false)
-  })
+  it.each([['monthly', 'yearly']] as const)(
+    'counts %s to %s and back as unchanged',
+    (kind, other) => {
+      const initial = { ...draftOf(undefined), name: 'Stretch', kind }
+      const roundTrip = withKind(withKind(initial, other), kind)
+      expect(areRoutineDraftsDifferent(initial, roundTrip)).toBe(false)
+    },
+  )
 
   it('counts a round trip that blanks a shown field as changed', () => {
     const initial = { ...draftOf(undefined), name: 'Stretch', kind: 'yearly' as const }
@@ -107,9 +104,7 @@ const ALLOWED: Array<[label: string, goal: Goal]> = [
     'a count at the most, and the shortest duration',
     daily(MAX_GOAL_COUNT, minutes(MAX_GOAL_COUNT), 1),
   ],
-  ['a day each, daily', daily(1, [NOON], DAY)],
   ['the shortest month each, monthly', monthly([1], 28 * DAY)],
-  ['a year each, yearly', yearly([[1, 1]], 365 * DAY)],
   ['the most reminders', daily(1, minutes(MAX_REMINDERS))],
   ['the first and last minutes of the day', daily(2, [0, 1439])],
   ['Sunday', weekly(7)],

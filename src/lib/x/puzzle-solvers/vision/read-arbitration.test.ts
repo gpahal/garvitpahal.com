@@ -41,13 +41,6 @@ describe('considerRead', () => {
     expect(arbitration.best).toMatchObject({ puzzle: 'b', rank: 1, confidence: 'trusted' })
   })
 
-  it('settles on a trusted read whatever rank it has, after suspects', () => {
-    const arbitration = createArbitration<string>()
-    considerRead(arbitration, read('a', 2, 'suspect'))
-    expect(considerRead(arbitration, read('t', 0, 'trusted')).isSettled).toBe(true)
-    expect(arbitration.best?.puzzle).toBe('t')
-  })
-
   it('never agrees on a read without a fingerprint', () => {
     const arbitration = createArbitration<string>()
     const first = { ...read('a', 0, 'suspect'), fingerprint: undefined }

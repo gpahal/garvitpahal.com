@@ -34,9 +34,6 @@ function requiredJwks(): string {
   return jwks
 }
 
-/**
- * The only provider: tokens the Worker mints for the owner.
- */
 export default {
   providers: [
     {

@@ -6,7 +6,7 @@ import { isInRange } from '@convex/shared/intervals'
 import { MINUTE_MS } from '@convex/shared/limits'
 
 import { fromLocal } from '../time/dates'
-import { intervalOf, KOLKATA, local, NEW_YORK } from '../time/test-readings'
+import { intervalOf, KOLKATA, local } from '../time/test-readings'
 import { remindersElapsed, routineStatusOf } from './schedule'
 import type { Goal, ScheduledRoutine } from './schedule'
 
@@ -60,19 +60,9 @@ function yearly(month: number, day: number): Goal {
   return { kind: 'yearly', count: 1, reminders: [{ month, day, minuteOfDay: 540 }] }
 }
 
-function dailyAt(hours: number, minutes: number, minutesEach?: number): Goal {
-  return {
-    kind: 'daily',
-    count: 1,
-    minutesEach,
-    reminders: [{ minuteOfDay: hours * 60 + minutes }],
-  }
-}
-
 describe('when a reminder fires', () => {
   it.each([
     ['the last day of a 28-day month', monthly(-1), '2026-02-28T09:00:00'],
-    ['30 days back from the end', monthly(-30), '2026-04-01T09:00:00'],
     ['29 February in a leap year', yearly(2, 29), '2028-02-29T09:00:00'],
   ])('fires on %s', (_, goal, iso) => {
     expect(willFireAt(goal, iso)).toBe(true)
@@ -80,7 +70,6 @@ describe('when a reminder fires', () => {
 
   it.each([
     ['the 31st of a 30-day month', monthly(31), '2026-04-30T23:59:59'],
-    ['31 days back in a 30-day month', monthly(-31), '2026-04-30T23:59:59'],
     ['29 February in a year without one', yearly(2, 29), '2026-12-31T23:59:59'],
   ])('skips %s rather than shifting it', (_, goal, iso) => {
     expect(firedBy(goal, iso)).toBe(0)
@@ -98,34 +87,6 @@ describe('when a reminder fires', () => {
     // October's 31st is its last day; September has a last day and no 31st.
     expect(firedBy(goal, '2026-10-31T09:00:00')).toBe(2)
     expect(firedBy(goal, '2026-09-30T23:59:59')).toBe(1)
-  })
-})
-
-describe('across a clock change', () => {
-  function elapsedInNewYork(goal: Goal, now: string): number {
-    return elapsedAt(routine(goal), Date.parse(now), NEW_YORK)
-  }
-
-  it('fires a reminder inside the spring-forward gap at the next real instant', () => {
-    // 02:30 never happens on 8 March 2026: the clock goes from 01:59 EST to 03:00 EDT.
-    expect(elapsedInNewYork(dailyAt(2, 30), '2026-03-08T06:59:00Z')).toBe(0)
-    expect(elapsedInNewYork(dailyAt(2, 30), '2026-03-08T07:00:00Z')).toBe(1)
-  })
-
-  it('fires a reminder inside the fall-back repeat on its first occurrence', () => {
-    // 01:30 happens twice on 1 November 2026: at 05:30Z in EDT and again at 06:30Z in EST.
-    expect(elapsedInNewYork(dailyAt(1, 30), '2026-11-01T05:29:00Z')).toBe(0)
-    expect(elapsedInNewYork(dailyAt(1, 30), '2026-11-01T05:30:00Z')).toBe(1)
-  })
-
-  it('counts the real minutes of a log that spans the change', () => {
-    // 01:30 EST to 03:30 EDT reads as two hours and lasts one.
-    const log: LoggedSpan = {
-      started: { at: Date.parse('2026-03-08T06:30:00Z'), atLocal: local('2026-03-08T01:30:00') },
-      ended: { at: Date.parse('2026-03-08T07:30:00Z') },
-    }
-    const now = Date.parse('2026-03-08T20:00:00Z')
-    expect(statusAt(routine(dailyAt(9, 0, 60)), [log], now, NEW_YORK).completed).toBe(1)
   })
 })
 

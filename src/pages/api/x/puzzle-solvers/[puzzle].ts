@@ -12,7 +12,7 @@ export const prerender = false
 const DEPS: ExtractHandlerDeps = {
   isConfigured: () => Boolean(OPENAI_API_KEY),
   consumeRateLimit,
-  // The handler asks `isConfigured` before any call.
+  // `?? ''` is never sent: the handler checks `isConfigured` first.
   extractStructured: async (options) =>
     extractStructured(options, { apiKey: OPENAI_API_KEY ?? '', fetchFn: fetch }),
 }

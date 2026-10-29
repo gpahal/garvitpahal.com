@@ -1,5 +1,19 @@
 export const SITE_NAME = 'Garvit Pahal'
-export const SITE_TAGLINE = 'Software engineer interested in technology, football and movies'
+export const SITE_TAGLINE = 'Building durable systems and AI products'
+
+/**
+ * In the sidebar's order. `text` is how the resume prints the link.
+ */
+export const SOCIAL_LINKS = {
+  github: { href: 'https://github.com/gpahal', label: 'GitHub', text: 'github.com/gpahal' },
+  linkedin: {
+    href: 'https://www.linkedin.com/in/gpahal',
+    label: 'LinkedIn',
+    text: 'linkedin.com/in/gpahal',
+  },
+  x: { href: 'https://x.com/g10pahal', label: 'X (Twitter)', text: 'x.com/g10pahal' },
+  email: { href: 'mailto:g10pahal@gmail.com', label: 'Email', text: 'g10pahal@gmail.com' },
+} as const
 /**
  * Matches the `/blog` page's own title, which `src/layouts/layout.astro` builds as `<page> |
  * <site>`.

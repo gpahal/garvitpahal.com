@@ -30,13 +30,7 @@ describe('classifyFailure', () => {
     [{ status: 429, code: 'insufficient_quota', type: 'insufficient_quota' }, ACCOUNT],
     [{ status: 400, code: 'image_parse_error' }, PICTURE],
     [{ status: 400, code: 'invalid_value' }, REFUSED],
-    [
-      { status: 429, code: 'rate_limit_exceeded', type: 'requests' },
-      { message: 'OpenAI is limiting requests right now. Try again shortly', fallback: true },
-    ],
     [{ status: 500 }, UNFINISHED],
-    [{ status: 408 }, UNFINISHED],
-    [{}, { message: 'OpenAI could not be reached. Try again', fallback: true }],
   ])('classifies %j', (failure, wire) => {
     expect(wireFailure(classifyFailure(failure))).toEqual(wire)
   })

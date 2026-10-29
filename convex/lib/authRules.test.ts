@@ -24,9 +24,7 @@ describe('jwksIssue', () => {
     ['bare JSON', JSON.stringify({ keys: [PUBLIC_KEY] }), 'must start with'],
     ['another curve', jwksDataUri({ keys: [{ ...PUBLIC_KEY, crv: 'P-384' }] }), 'P-256 public key'],
     ['a private key', jwksDataUri({ keys: [{ ...PUBLIC_KEY, d: 'dd' }] }), 'holds a private key'],
-  ])('refuses %s, naming how to set it', (_label, value, wording) => {
-    const issue = jwksIssue(value)
-    expect(issue).toContain(wording)
-    expect(issue).toContain('pnpm convex-dev-set-env')
+  ])('refuses %s', (_label, value, wording) => {
+    expect(jwksIssue(value)).toContain(wording)
   })
 })

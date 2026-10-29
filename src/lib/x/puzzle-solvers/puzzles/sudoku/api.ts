@@ -15,9 +15,8 @@ export type SudokuHints = {
 const cellRefSchema = z.object({ row: z.number(), col: z.number() })
 
 /**
- * Closed to what this build constructs; see "Stale tabs" in docs/puzzle-solvers.md.
- * Uncertain cells are distinct and inside the grid because the editor highlights, clears and counts
- * them by cell.
+ * Bounded to what this build constructs ("Stale tabs" in docs/puzzle-solvers.md). Uncertain cells
+ * are distinct and inside the grid because the editor highlights, clears and counts them by cell.
  */
 export const sudokuPuzzleWireSchema = z
   .object({

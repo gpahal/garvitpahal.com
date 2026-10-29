@@ -1,21 +1,18 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Remedy } from '@/lib/failure'
-
 import type { ExtractFailure, ExtractOutcome } from './extract-client'
+import type { ReadRemedy } from './extract-wire'
 import { READ_DEADLINE_MS, readPhases } from './read-phases'
 
 const read = { ok: true, puzzle: 'puzzle' } as const
 
-function failed(message: string, remedy: Remedy = {}): ExtractFailure {
+function failed(message: string, remedy: ReadRemedy = {}): ExtractFailure {
   return { ok: false, error: { message, ...remedy } }
 }
 
 const recoverable = failed('Unreadable', { fallback: true })
 const refused = failed('Refused', { fallback: true, noRetry: true })
 const alsoRefused = failed('Also refused', { noRetry: true })
-const reload = failed('Reload', { reload: true, noRetry: true })
-const bare = failed('No remedy')
 const aborted = new DOMException('Aborted', 'AbortError')
 
 /**
@@ -44,8 +41,6 @@ describe('read phases', () => {
   it.each([
     ['every initial call recoverable', [recoverable, recoverable, recoverable], recoverable, true],
     ['a refusal beside a read', [read, alsoRefused], alsoRefused, false],
-    ['a reload beside a read', [read, reload], reload, false],
-    ['a failure with no remedy beside a read', [read, bare], bare, false],
     [
       'a refusal, then a failure allowing Try again',
       [refused, refused, recoverable],

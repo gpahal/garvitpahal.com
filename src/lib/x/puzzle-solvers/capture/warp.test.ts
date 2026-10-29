@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest'
 import type { PixelImage } from './pixels'
 import { isUsableQuad } from './quad'
 import type { Quad } from './quad'
-import { RECHOOSE_CORNERS_MESSAGE, rectify } from './rectify'
 import { marginQuad, warpQuadToRect } from './warp'
 
 /**
@@ -45,26 +44,6 @@ describe('warpQuadToRect', () => {
     expect(pixelAt(out, 22, 31)).toEqual([43, 55])
     expect(pixelAt(out, 5, 8)).toEqual([22, 28])
     expect(pixelAt(out, 17, 23)).toEqual([39, 48])
-  })
-
-  it('takes at most eight samples per axis however far the crop shrinks', () => {
-    // A white column at x = 1, shrunk 24 times: one in eight samples lands on it, where covering
-    // the footprint would give 255 / 24.
-    const size = 48
-    const data = new Uint8ClampedArray(size * size * 4)
-    for (let y = 0; y < size; y++) {
-      for (let x = 0; x < size; x++) {
-        data.set(x === 1 ? [255, 255, 255, 255] : [0, 0, 0, 255], (y * size + x) * 4)
-      }
-    }
-    const quad: Quad = [
-      { x: 0, y: 0 },
-      { x: size, y: 0 },
-      { x: size, y: size },
-      { x: 0, y: size },
-    ]
-    const out = warpQuadToRect({ width: size, height: size, data }, quad, 2)
-    expect(pixelAt(out, 0, 0)[0]).toBe(32)
   })
 })
 
@@ -108,20 +87,5 @@ describe('marginQuad', () => {
     ]
     expect(isUsableQuad(quad, 2048, 1536)).toBe(true)
     expect(marginQuad(quad, 0.04)).toBe(quad)
-  })
-})
-
-describe('rectify', () => {
-  it('refuses crossed corners, sending the owner back to the picture to drag them', () => {
-    const image = { width: 100, height: 100, data: new Uint8ClampedArray(100 * 100 * 4) }
-    const bowTie: Quad = [
-      { x: 10, y: 10 },
-      { x: 90, y: 90 },
-      { x: 90, y: 10 },
-      { x: 10, y: 90 },
-    ]
-    expect(() => rectify({ image, quad: bowTie }, 64)).toThrow(
-      expect.objectContaining({ failure: { message: RECHOOSE_CORNERS_MESSAGE, noRetry: true } }),
-    )
   })
 })

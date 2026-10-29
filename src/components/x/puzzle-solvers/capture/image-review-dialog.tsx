@@ -44,7 +44,6 @@ export function ImageReviewDialog({
     'decode',
     useMemo(() => (shown ? { source: shown } : undefined), [shown]),
   )
-  // Each failure's message comes from its source, written for the Choose another picture here.
   const failure =
     decoded?.ok === false ? failureOf(decoded.error, OPERATIONS.decode.failure) : undefined
 
@@ -117,15 +116,13 @@ function OpenFailureView({
   onCancel: () => void
   onChooseAnother: () => void
 }): ReactNode {
-  // Another picture cannot help a `noRetry` failure, such as an outdated browser, so Cancel is
-  // then the only way on.
   const wayOnRef = useRef<HTMLButtonElement | null>(null)
   useEffect(() => {
     wayOnRef.current?.focus()
   }, [])
   const wayOn = failure.reload ? (
     <ReloadButton ref={wayOnRef} />
-  ) : failure.noRetry ? undefined : (
+  ) : (
     <Button ref={wayOnRef} onClick={onChooseAnother}>
       Choose another picture
     </Button>
@@ -137,7 +134,7 @@ function OpenFailureView({
       </ScrollDialogBody>
       <CaptureDialogFooter>
         <div className="flex items-center justify-end gap-2">
-          <Button ref={wayOn ? undefined : wayOnRef} variant="outline" onClick={onCancel}>
+          <Button variant="outline" onClick={onCancel}>
             Cancel
           </Button>
           {wayOn}

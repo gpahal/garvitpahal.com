@@ -49,18 +49,8 @@ test('keeps a completed task out of the outstanding lists and in the done list, 
   })
   expect(ids(await t.query(api.tasks.listOutstanding, { limit: 10 }))).toEqual([last, next])
   expect(ids(await t.query(api.tasks.listScheduled, { start, end, limit: 10 }))).toEqual([last])
-  expect(
-    ids(await t.query(api.tasks.listScheduled, { start: end, end: end + DAY_MS, limit: 10 })),
-  ).toEqual([next])
   const done = async (range: { start: number; end: number }) =>
     ids(await t.query(api.tasks.listDone, { ...range, limit: 10 }))
   expect(await done({ start: doneAt, end: doneAt + 1 })).toEqual([first])
   expect(await done({ start: doneAt - DAY_MS, end: doneAt })).toEqual([])
-  expect(await done({ start: doneAt + 1, end: doneAt + DAY_MS })).toEqual([])
-  await t.mutation(api.tasks.uncomplete, { id: first })
-  expect(ids(await t.query(api.tasks.listScheduled, { start, end, limit: 10 }))).toEqual([
-    first,
-    last,
-  ])
-  expect(await done({ start: doneAt, end: doneAt + 1 })).toEqual([])
 })

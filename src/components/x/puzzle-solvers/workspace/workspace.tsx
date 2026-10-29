@@ -315,7 +315,7 @@ export function Workspace<TId extends PuzzleId>({
   // A read on screen cost an admission even untouched, and leaving or Start over would lose it.
   const isReadOnScreen = puzzle !== undefined && origin === 'read'
   const isReading = activity.kind === 'reading' && activity.stage !== undefined
-  // So does leaving a read in flight.
+  // Leaving mid-read loses its admissions too.
   const isUnsaved = hasWorkToLose || isReadOnScreen || isReading
   useEffect(() => (isUnsaved ? retainUnloadWarning() : undefined), [isUnsaved])
 

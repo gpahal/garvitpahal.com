@@ -189,7 +189,6 @@ function Viewfinder({
             disabled={status !== 'live'}
             focusableWhenDisabled
             aria-busy={isStarting}
-            // Says why it cannot be pressed yet.
             aria-describedby={isStarting ? startingId : error !== undefined ? errorId : undefined}
             aria-label="Take picture"
             onClick={onShutter}

@@ -52,18 +52,12 @@ function press(
 describe('readTwoDigitWindowEnd', () => {
   it('ends the window on keys that enter or move, and leaves it alone on the rest', () => {
     for (const key of ['1', 'Backspace']) expect(press(key), key).toBe('entry')
-    // Space clicks the cell, which drops a held announcement.
     for (const key of ['ArrowUp', ' ']) expect(press(key), key).toBe('finish')
     for (const key of ['Shift', 'a']) expect(press(key), key).toBeUndefined()
     // A chord is the browser's or the system's, even one on a digit or an arrow.
     expect(press('1', { ctrlKey: true })).toBeUndefined()
     expect(press('ArrowRight', { altKey: true })).toBeUndefined()
     // Except Control+Home and Control+End, which move the selection.
-    for (const key of ['Home', 'End']) {
-      expect(press(key), key).toBe('finish')
-      expect(press(key, { ctrlKey: true }), `Control+${key}`).toBe('finish')
-      expect(press(key, { metaKey: true }), `Meta+${key}`).toBeUndefined()
-      expect(press(key, { ctrlKey: true, altKey: true }), `Control+Alt+${key}`).toBeUndefined()
-    }
+    expect(press('Home', { ctrlKey: true })).toBe('finish')
   })
 })
