@@ -1,4 +1,5 @@
 import { defineCollection } from 'astro:content'
+import type { SchemaContext } from 'astro:content'
 import { glob } from 'astro/loaders'
 
 import { z } from 'zod'
@@ -19,18 +20,27 @@ function isInOrder({ startedOn, endedOn }: { startedOn: DateOnly; endedOn?: Date
 }
 const OUT_OF_ORDER = { path: ['endedOn'], message: 'endedOn must not be before startedOn' }
 
+/**
+ * The picture a shared link shows, chosen per entry; without one, the site's card.
+ */
+function shareImageSchema(image: SchemaContext['image']) {
+  return z.strictObject({ src: image(), alt: z.string().trim().min(1) })
+}
+
 const blog = defineCollection({
   loader: glob({
     // A nested post's id would contain a slash, which `src/pages/blog/[id].astro` cannot serve.
     pattern: '*.md',
     base: './src/content/blog',
   }),
-  schema: z.strictObject({
-    title: z.string().trim().min(1),
-    description: z.string().trim().min(1),
-    publishedOn: contentDateSchema,
-    tags: z.array(z.string().trim().min(1)).optional(),
-  }),
+  schema: ({ image }) =>
+    z.strictObject({
+      title: z.string().trim().min(1),
+      description: z.string().trim().min(1),
+      publishedOn: contentDateSchema,
+      tags: z.array(z.string().trim().min(1)).optional(),
+      image: shareImageSchema(image).optional(),
+    }),
 })
 
 const periodSchema = z.strictObject({ startedOn: contentDateSchema, endedOn: contentDateSchema })
@@ -87,11 +97,13 @@ const projectPages = defineCollection({
     pattern: '*.md',
     base: './src/content/project-pages',
   }),
-  schema: z.strictObject({
-    title: z.string().trim().min(1),
-    description: z.string().trim().min(1),
-    href: z.url(),
-  }),
+  schema: ({ image }) =>
+    z.strictObject({
+      title: z.string().trim().min(1),
+      description: z.string().trim().min(1),
+      href: z.url(),
+      image: shareImageSchema(image).optional(),
+    }),
 })
 
 const pages = defineCollection({

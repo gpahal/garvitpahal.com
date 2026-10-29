@@ -21,6 +21,7 @@
     "lint-fix": "run-s lint-fix:*",
     "lint-fix:eslint": "eslint . --fix",
     "lint-fix:stylelint": "pnpm lint:stylelint --fix",
+    "og-card": "node scripts/og-card.ts",
     "preview": "astro preview",
     "resume": "astro build && node scripts/resume-pdf.ts",
     "sync": "astro sync",

@@ -79,6 +79,15 @@ describe('applyDraft', () => {
     expect(committed.contradictions).toEqual([0])
   })
 
+  it('flags a cage whose clue cell the draft took, keeping its clue on what is left', () => {
+    // Cell 4 takes cell 0, where the row's clue is printed.
+    const committed = applyDraft(row, grow(startDraft(row.grid, 4), [0]))
+    const rest = cageIdAt(committed.grid, 1)
+    expect(cageCells(committed.grid, rest)).toEqual([1, 2])
+    expect(committed.grid.cages[rest]).toEqual({ op: '+', target: 6 })
+    expect(committed.unreviewedCages).toEqual([rest])
+  })
+
   it('retires the flags on the origin, including on the piece it leaves behind', () => {
     const flagged: KenKenPuzzle = { ...row, unreviewedCages: [0], contradictions: [0] }
     // The row drops its last cell, which stays behind as a cage of its own.

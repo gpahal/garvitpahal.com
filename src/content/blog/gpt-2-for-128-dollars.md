@@ -3,6 +3,9 @@ title: Training GPT-2 for $128
 description: I pretrained a 124M-parameter GPT from scratch on 8 H200s in about four hours, and it beat OpenAI's GPT-2 of the same size on HellaSwag
 publishedOn: 15/10/2024
 tags: [ai, llms, pytorch]
+image:
+  src: ./images/gpt-2-for-128-dollars/loss-and-eval.png
+  alt: Training loss falling below GPT-2's and HellaSwag accuracy rising past GPT-2 and GPT-3
 ---
 
 I trained a 124M-parameter GPT from scratch, and it peaked at 34.6% on HellaSwag. OpenAI's GPT-2 checkpoint of the same size scores 29.4% and its GPT-3 checkpoint 33.7%. The run took about four hours on 8 H200 GPUs, which cost about \$128.

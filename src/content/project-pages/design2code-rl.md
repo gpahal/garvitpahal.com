@@ -2,6 +2,9 @@
 title: design2code-rl
 description: An RL environment that grades coding agents on rebuilding multi-page websites from screenshots
 href: https://github.com/gpahal/design2code-rl
+image:
+  src: ./images/design2code-rl/per-task-reward.png
+  alt: Total reward for each of the 10 eval sites over 10 trials, from about 0.91 down to 0.67
 ---
 
 ## The result

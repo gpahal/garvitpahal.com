@@ -2,6 +2,9 @@
 title: microgpt
 description: A small GPT implementation and training pipeline in PyTorch, with a 124M model pretrained from scratch
 href: https://github.com/gpahal/microgpt
+image:
+  src: ./images/microgpt/loss-and-hellaswag.png
+  alt: Training loss falling below GPT-2's and HellaSwag accuracy rising past GPT-2 and GPT-3
 ---
 
 ## The result

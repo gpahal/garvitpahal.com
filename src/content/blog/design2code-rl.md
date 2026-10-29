@@ -3,6 +3,9 @@ title: How well Claude Code rebuilds websites from screenshots
 description: I built an RL environment that grades coding agents on rebuilding multi-page websites from screenshots, and Claude Code with Opus 4.7 scored a mean reward of 0.80
 publishedOn: 15/05/2026
 tags: [ai, agents, evals]
+image:
+  src: ./images/design2code-rl/design-language-hardness.png
+  alt: Mean total reward by design language, from 0.887 for minimal-flat down to 0.707 for retro
 ---
 
 Claude Code with Opus 4.7 rebuilds a multi-page website from screenshots well, but not perfectly. Over 100 trials it scored a mean reward of 0.80. The oracle, which hands the grader the original site, scored 0.98. That leaves the agent about 0.18 below the ceiling.

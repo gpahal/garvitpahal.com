@@ -12,6 +12,10 @@ Pages and posts are Markdown under `src/content/`. [`src/content.config.ts`](../
 
 `/projects` is hard-coded in [`src/pages/projects.astro`](../src/pages/projects.astro). When a project changes, check it there, in [`pages/about.md`](../src/content/pages/about.md), in its notable personal project and in its project page.
 
+## Share images
+
+A blog post or project page can set `image` (`src`, relative like a post image, and `alt`) for the picture its shared link shows, resized to a JPEG at most 1200 pixels wide. Every other page shows [`public/images/og-card.png`](../public/images/og-card.png); after changing the site's name, tagline or photo, run `pnpm og-card` on a Mac and commit the PNG ([`og-card.ts`](../scripts/og-card.ts)).
+
 ## Resume
 
 [`src/pages/resume-print.astro`](../src/pages/resume-print.astro) builds the resume from the collections above as a standalone, unlisted A4 document, and `pnpm resume` prints it to [`public/docs/resume.pdf`](../public/docs/resume.pdf) with headless Chrome ([`resume-pdf.ts`](../scripts/resume-pdf.ts)). Run it on a Mac after changing any of them and commit the PDF: the page prints in Avenir Next, which only macOS ships, and the deploy only copies the committed file. The script fails unless the PDF is one page with no Type 3 fonts, whose text extracts broken for applicant tracking systems; `RESUME_PHONE` writes a copy with a phone number to `tmp/` instead.

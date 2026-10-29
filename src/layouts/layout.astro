@@ -1,4 +1,5 @@
 ---
+import { getImage } from 'astro:assets'
 import { PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN } from 'astro:env/client'
 import { ClientRouter } from 'astro:transitions'
 
@@ -25,11 +26,45 @@ type Props = {
     publishedTime: DateOnly
     tags?: Array<string>
   }
+  /**
+   * What a shared link shows instead of the site's card.
+   */
+  image?: { src: ImageMetadata; alt: string }
 }
 
-const { title: titleProp, description: descriptionProp, isFullPage, jsonLd, article } = Astro.props
+const {
+  title: titleProp,
+  description: descriptionProp,
+  isFullPage,
+  jsonLd,
+  article,
+  image: imageProp,
+} = Astro.props
 const url = new URL(Astro.url.pathname, Astro.site)
-const imageUrl = new URL('/images/self/self-320x320.jpg', Astro.site)
+/**
+ * JPEG, not Astro's default WebP, which some link previews cannot show. Never enlarged.
+ */
+const shareImage =
+  imageProp === undefined
+    ? {
+        src: '/images/og-card.png',
+        type: 'image/png',
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME}: ${SITE_TAGLINE}`,
+      }
+    : await getImage({
+        src: imageProp.src,
+        width: Math.min(imageProp.src.width, 1200),
+        format: 'jpg',
+      }).then((image) => ({
+        src: image.src,
+        type: 'image/jpeg',
+        width: Number(image.attributes.width),
+        height: Number(image.attributes.height),
+        alt: imageProp.alt,
+      }))
+const imageUrl = new URL(shareImage.src, Astro.site)
 
 const title = titleProp === undefined ? SITE_NAME : `${titleProp} | ${SITE_NAME}`
 const description = descriptionProp ?? SITE_TAGLINE
@@ -82,10 +117,10 @@ const robots = isPrivatePath(Astro.url.pathname)
     <meta property="og:description" content={description} />
     {!isUnlisted && <meta property="og:url" content={url} />}
     <meta property="og:image" content={imageUrl} />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="320" />
-    <meta property="og:image:height" content="320" />
-    <meta property="og:image:alt" content={`Photo of ${SITE_NAME}`} />
+    <meta property="og:image:type" content={shareImage.type} />
+    <meta property="og:image:width" content={String(shareImage.width)} />
+    <meta property="og:image:height" content={String(shareImage.height)} />
+    <meta property="og:image:alt" content={shareImage.alt} />
     {article && (
       <>
         <meta property="article:author" content={Astro.site} />
@@ -98,7 +133,7 @@ const robots = isPrivatePath(Astro.url.pathname)
         ))}
       </>
     )}
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@g10pahal" />
 
     <meta name="robots" content={robots} />

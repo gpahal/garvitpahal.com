@@ -21,7 +21,11 @@ const { projectPage } = Astro.props
 const { Content } = await render(projectPage)
 ---
 
-<Layout title={`${projectPage.data.title} | Projects`} description={projectPage.data.description}>
+<Layout
+  title={`${projectPage.data.title} | Projects`}
+  description={projectPage.data.description}
+  image={projectPage.data.image}
+>
   <PageHeader title={projectPage.data.title} subtitle={projectPage.data.description}>
     <Fragment slot="action">
       <ButtonLink variant="outline" size="sm" href={projectPage.data.href}>

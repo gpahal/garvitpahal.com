@@ -3,6 +3,9 @@ title: Solana Fellowship
 description: Week-by-week notes from Superteam's eight-week Solana Fellowship (Rust, dApps, NFTs and DeFi) and how it led to Superstream
 publishedOn: 01/05/2022
 tags: [programming, web3, solana, rust]
+image:
+  src: ./images/solana-fellowship/evolved-dynamic-pokemon-nft.jpg
+  alt: A dynamic Pokemon NFT on Metaplex after evolving, at evolution index 1
 ---
 
 I love exploring new programming languages and I have been trying to learn Rust for a good two or three months now. I learned about Solana during this time. I started diving deeper into the web3 ecosystem, bought some SOL, created a wallet, started using some Solana apps and read a lot.

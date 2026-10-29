@@ -116,14 +116,13 @@ function OpenFailureView({
   onCancel: () => void
   onChooseAnother: () => void
 }): ReactNode {
-  // Another picture cannot help a `noRetry` failure, so Cancel is then the only way on.
   const wayOnRef = useRef<HTMLButtonElement | null>(null)
   useEffect(() => {
     wayOnRef.current?.focus()
   }, [])
   const wayOn = failure.reload ? (
     <ReloadButton ref={wayOnRef} />
-  ) : failure.noRetry ? undefined : (
+  ) : (
     <Button ref={wayOnRef} onClick={onChooseAnother}>
       Choose another picture
     </Button>
@@ -135,7 +134,7 @@ function OpenFailureView({
       </ScrollDialogBody>
       <CaptureDialogFooter>
         <div className="flex items-center justify-end gap-2">
-          <Button ref={wayOn ? undefined : wayOnRef} variant="outline" onClick={onCancel}>
+          <Button variant="outline" onClick={onCancel}>
             Cancel
           </Button>
           {wayOn}

@@ -124,6 +124,11 @@ async function jpegDimensions({ take, size }: Header): Promise<Size> {
       continue
     }
     const code = marker[1] ?? 0
+    // TEM and RST0 to RST7 stand alone, with no length.
+    if (code === 0x01 || (code >= 0xd0 && code <= 0xd7)) {
+      offset += 2
+      continue
+    }
     const length = view(marker).getUint16(2)
     if (code === 0xda || code === 0xd9 || length < 2 || offset + 2 + length > size)
       throw new UserFacingError(DAMAGED)
