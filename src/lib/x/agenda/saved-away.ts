@@ -1,4 +1,6 @@
-import { dayOfInstant, formatDay } from './time/dates'
+import { dayOfInstant } from '@convex/shared/localTime'
+
+import { formatDay } from './time/dates'
 
 export type SavedAway = {
   from: number

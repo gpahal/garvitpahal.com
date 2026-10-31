@@ -15,6 +15,7 @@ import { ErrorBoundary } from '@/components/shared/error-boundary'
 import { NoticeAlert } from '@/components/shared/notice-alert'
 
 import { AgendaConnectivity } from './connectivity'
+import { RecordTimeZone } from './record-time-zone'
 import { setTokenFetchProblem } from './token-fetch-problem'
 
 /**
@@ -102,7 +103,10 @@ export function AgendaProvider({ children }: { children: ReactNode }): ReactNode
     <ConvexProvider client={connection.client}>
       <ErrorBoundary failureOf={pageFailure}>
         <DialogErrorsContext value={dialogFailure}>
-          <AgendaConnectivity onTryAgain={connection.tryAgain}>{children}</AgendaConnectivity>
+          <AgendaConnectivity onTryAgain={connection.tryAgain}>
+            <RecordTimeZone />
+            {children}
+          </AgendaConnectivity>
         </DialogErrorsContext>
       </ErrorBoundary>
     </ConvexProvider>

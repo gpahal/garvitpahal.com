@@ -1,14 +1,29 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Doc } from '@convex/_generated/dataModel'
-import { spanMs } from '@convex/shared/goalRules'
-import { isInRange } from '@convex/shared/intervals'
-import { MINUTE_MS } from '@convex/shared/limits'
+import type { Doc } from '../_generated/dataModel'
+import type { Goal } from '../schema'
+import { spanMs } from './goalRules'
+import type { IntervalKind } from './goalRules'
+import { dayOfLocal, intervalOfDay, isInRange } from './intervals'
+import type { TimeRange } from './intervals'
+import { MINUTE_MS } from './limits'
+import { fromLocal, toLocal } from './localTime'
+import { nextReminderAt, remindersElapsed, routineStatusOf } from './reminders'
+import type { ScheduledRoutine } from './reminders'
 
-import { fromLocal } from '../time/dates'
-import { intervalOf, KOLKATA, local } from '../time/test-readings'
-import { remindersElapsed, routineStatusOf } from './schedule'
-import type { Goal, ScheduledRoutine } from './schedule'
+const KOLKATA = 'Asia/Kolkata'
+const NEW_YORK = 'America/New_York'
+
+/**
+ * A wall-clock reading, written as if UTC.
+ */
+function local(iso: string): number {
+  return Date.parse(`${iso}Z`)
+}
+
+function intervalOf(kind: IntervalKind, at: number, timeZone: string): TimeRange {
+  return intervalOfDay(kind, dayOfLocal(toLocal(at, timeZone)))
+}
 
 type LoggedSpan = Pick<Doc<'routineLogs'>, 'started' | 'ended'>
 
@@ -126,5 +141,42 @@ describe('routineStatusOf', () => {
     expect(owed([logged('2026-09-14T10:00:00', 0)], '2026-09-16T10:00:00')).toBe(1)
     const four = [14, 15, 16, 17].map((day) => logged(`2026-09-${day}T10:00:00`, 0))
     expect(owed(four, '2026-09-18T10:00:00')).toBe(0)
+  })
+})
+
+describe('nextReminderAt', () => {
+  function next(goal: Goal, iso: string, zone = KOLKATA): string | undefined {
+    const at = nextReminderAt(goal, kolkata(iso), zone)
+    return at === undefined ? undefined : new Date(at).toISOString()
+  }
+
+  it('takes the first reminder strictly after the instant, later today or on a later day', () => {
+    const daily: Goal = {
+      kind: 'daily',
+      count: 2,
+      reminders: [{ minuteOfDay: 1080 }, { minuteOfDay: 540 }],
+    }
+    expect(next(daily, '2026-09-18T08:00:00')).toBe('2026-09-18T03:30:00.000Z')
+    // A reminder that fires at this very instant is the one just sent, not the next.
+    expect(next(daily, '2026-09-18T09:00:00')).toBe('2026-09-18T12:30:00.000Z')
+    expect(next(daily, '2026-09-18T18:00:00')).toBe('2026-09-19T03:30:00.000Z')
+  })
+
+  it('agrees with remindersElapsed on which days a reminder falls', () => {
+    // 18 September 2026 is a Friday.
+    const weekly: Goal = { kind: 'weekly', count: 1, reminders: [{ weekday: 1, minuteOfDay: 540 }] }
+    expect(next(weekly, '2026-09-18T10:00:00')).toBe('2026-09-21T03:30:00.000Z')
+    // The last day of the month, skipping none.
+    expect(next(monthly(-1), '2026-09-30T10:00:00')).toBe('2026-10-31T03:30:00.000Z')
+    // A month without a 31st has no reminder rather than one on the 30th.
+    expect(next(monthly(31), '2026-08-31T10:00:00')).toBe('2026-10-31T03:30:00.000Z')
+    expect(next(yearly(2, 29), '2026-09-18T10:00:00')).toBe('2028-02-29T03:30:00.000Z')
+  })
+
+  it('fires a reminder in a clocks-forward gap at the change', () => {
+    // 8 Mar 2026: 02:00 EST jumps to 03:00 EDT at 07:00Z, so 02:30 never happens.
+    const daily: Goal = { kind: 'daily', count: 1, reminders: [{ minuteOfDay: 150 }] }
+    const at = nextReminderAt(daily, Date.parse('2026-03-08T05:00:00Z'), NEW_YORK)
+    expect(at).toBe(Date.parse('2026-03-08T07:00:00Z'))
   })
 })

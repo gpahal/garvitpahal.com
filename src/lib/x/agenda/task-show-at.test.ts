@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
 import { CLOCK_TOO_EARLY_ISSUE, MINUTE_MS } from '@convex/shared/limits'
+import { fromLocal } from '@convex/shared/localTime'
 import { latestShowAt } from '@convex/shared/showAt'
 
 import { lastShowAtInput, showAtError } from './task-show-at'
-import { fromLocal } from './time/dates'
 import { local } from './time/test-readings'
 
 describe('lastShowAtInput', () => {

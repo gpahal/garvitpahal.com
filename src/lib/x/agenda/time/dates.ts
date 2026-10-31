@@ -1,7 +1,6 @@
-import { dayOfLocal, isoWeekdayOfDay, localRangeOfDay } from '@convex/shared/intervals'
-import type { TimeRange } from '@convex/shared/intervals'
+import { dayOfLocal, isoWeekdayOfDay } from '@convex/shared/intervals'
 import { DAY_MS } from '@convex/shared/limits'
-import { offsetAt, toLocal } from '@convex/shared/localTime'
+import { fromLocal, toLocal } from '@convex/shared/localTime'
 
 import { MONTHS } from '@/lib/months'
 
@@ -10,46 +9,6 @@ import { MONTHS } from '@/lib/months'
  * (`atLocal`) is a wall-clock reading encoded as if it were UTC, read through a `Date`'s UTC getters.
  * Local day D is `[D * DAY_MS, (D + 1) * DAY_MS)` of local instants, so no local date is stored.
  */
-
-/**
- * A reading in a clocks-forward gap resolves to the change itself; one in a clocks-back repeat
- * resolves to the first.
- */
-export function fromLocal(atLocal: number, timeZone: string): number {
-  // A day either side lands on both sides of any clock change near the reading.
-  const offsets = [
-    ...new Set([atLocal - DAY_MS, atLocal + DAY_MS].map((at) => offsetAt(at, timeZone))),
-  ]
-  const candidates = offsets.map((offset) => atLocal - offset)
-  const matches = candidates.filter((candidate) => toLocal(candidate, timeZone) === atLocal)
-  if (matches.length > 0) {
-    return Math.min(...matches)
-  }
-  // In a gap the clock reads below `atLocal` right up to the change and above it from then on.
-  let before = Math.min(...candidates)
-  let after = Math.max(...candidates)
-  while (after - before > 1) {
-    const middle = before + Math.floor((after - before) / 2)
-    if (toLocal(middle, timeZone) > atLocal) {
-      after = middle
-    } else {
-      before = middle
-    }
-  }
-  return after
-}
-
-export function dayOfInstant(at: number, timeZone: string): number {
-  return dayOfLocal(toLocal(at, timeZone))
-}
-
-/**
- * 23 or 25 hours long across a clock change.
- */
-export function instantRangeOfDay(day: number, timeZone: string): TimeRange {
-  const { start, end } = localRangeOfDay(day)
-  return { start: fromLocal(start, timeZone), end: fromLocal(end, timeZone) }
-}
 
 export function localToDateTimeInput(atLocal: number): string {
   return new Date(atLocal).toISOString().slice(0, 16)

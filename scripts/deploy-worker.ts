@@ -1,8 +1,9 @@
 /**
- * The secrets half of [Deploy](../.github/workflows/deploy.yml): it fetches the Worker's secrets
- * from Infisical's `prod` environment, sets Convex's settings from them and uploads them with the
- * Worker. It runs beside the deploy credentials from an install without scripts, so it imports
- * only Node's built-ins and modules that do the same, and checks responses by shape without zod.
+ * The secrets half of [Deploy](../.github/workflows/deploy.yml): it fetches the Worker's and
+ * Convex's secrets from Infisical's `prod` environment, sets Convex's settings from them and uploads
+ * the Worker's with the Worker. It runs beside the deploy credentials from an install without
+ * scripts, so it imports only Node's built-ins and modules that do the same, and checks responses
+ * by shape without zod.
  */
 
 import { execFileSync } from 'node:child_process'
@@ -12,8 +13,7 @@ import path from 'node:path'
 import { setConvexEnv } from './convex-env.ts'
 
 /**
- * The server secrets `astro.config.ts` declares, and exactly the names Infisical's `prod`
- * environment holds at `/`.
+ * The server secrets `astro.config.ts` declares.
  */
 export const WORKER_SECRETS = [
   'OPENAI_API_KEY',
@@ -23,7 +23,17 @@ export const WORKER_SECRETS = [
   'OWNER_EMAIL',
 ] as const
 
-type WorkerSecrets = Record<(typeof WORKER_SECRETS)[number], string>
+/**
+ * Read by Convex alone, so never uploaded to the Worker.
+ */
+const CONVEX_SECRETS = ['NTFY_URL', 'NTFY_TOKEN'] as const
+
+/**
+ * Exactly the names Infisical's `prod` environment holds at `/`.
+ */
+const SECRETS = [...WORKER_SECRETS, ...CONVEX_SECRETS] as const
+
+type Secrets = Record<(typeof SECRETS)[number], string>
 
 const INFISICAL_URL = 'https://app.infisical.com'
 const INFISICAL_ENVIRONMENT = 'prod'
@@ -114,10 +124,10 @@ async function fetchInfisicalSecrets(settings: InfisicalSettings): Promise<unkno
 }
 
 /**
- * Refuses anything but exactly `WORKER_SECRETS`, each non-empty: an extra name is most likely a
- * misspelt one, and the upload never deletes a Worker secret. Issues name secrets, never values.
+ * Refuses anything but exactly `SECRETS`, each non-empty: an extra name is most likely a misspelt
+ * one, and the upload never deletes a Worker secret. Issues name secrets, never values.
  */
-function workerSecretsOf(body: unknown): { secrets: WorkerSecrets } | { issues: Array<string> } {
+function secretsOf(body: unknown): { secrets: Secrets } | { issues: Array<string> } {
   const listed: unknown =
     typeof body === 'object' && body !== null && 'secrets' in body ? body.secrets : undefined
   if (!Array.isArray(listed)) {
@@ -142,8 +152,8 @@ function workerSecretsOf(body: unknown): { secrets: WorkerSecrets } | { issues: 
     }
     values.set(key, value.trim())
   }
-  const expected = new Set<string>(WORKER_SECRETS)
-  for (const name of WORKER_SECRETS) {
+  const expected = new Set<string>(SECRETS)
+  for (const name of SECRETS) {
     const value = values.get(name)
     if (value === undefined) {
       issues.push(`${name} is missing`)
@@ -153,7 +163,7 @@ function workerSecretsOf(body: unknown): { secrets: WorkerSecrets } | { issues: 
   }
   for (const name of values.keys()) {
     if (!expected.has(name)) {
-      issues.push(`${name} is not a Worker secret`)
+      issues.push(`${name} is not a secret Deploy reads`)
     }
   }
   if (issues.length > 0) {
@@ -161,21 +171,23 @@ function workerSecretsOf(body: unknown): { secrets: WorkerSecrets } | { issues: 
   }
   return {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- every name was checked above
-    secrets: Object.fromEntries(
-      WORKER_SECRETS.map((name) => [name, values.get(name) ?? '']),
-    ) as WorkerSecrets,
+    secrets: Object.fromEntries(SECRETS.map((name) => [name, values.get(name) ?? ''])) as Secrets,
   }
 }
 
 /**
- * `RUNNER_TEMP` is emptied after every job, and the deploy step deletes the file sooner.
+ * `RUNNER_TEMP` is emptied after every job, and the deploy step deletes the files sooner.
  */
-function secretsFilePath(): string {
+function runnerTempPath(name: string): string {
   const { RUNNER_TEMP: runnerTemp } = process.env
   if (runnerTemp === undefined || runnerTemp === '') {
     throw new Error('RUNNER_TEMP is unset: run this in GitHub Actions')
   }
-  return path.join(runnerTemp, 'worker-secrets.json')
+  return path.join(runnerTemp, name)
+}
+
+function secretsFilePath(): string {
+  return runnerTempPath('secrets.json')
 }
 
 function requiredEnv(name: string, where: string): string {
@@ -205,11 +217,11 @@ async function fetchSecrets(): Promise<void> {
       'Set it as a repository variable to the project ID in .infisical.yaml (docs/deployment.md, GitHub)',
     ),
   }
-  const result = workerSecretsOf(await fetchInfisicalSecrets(settings))
+  const result = secretsOf(await fetchInfisicalSecrets(settings))
   if ('issues' in result) {
     for (const issue of result.issues) {
       console.log(
-        `::error::Infisical's prod environment: ${issue}. It must hold exactly ${WORKER_SECRETS.join(', ')} at /, each set; see docs/deployment.md, Infisical.`,
+        `::error::Infisical's prod environment: ${issue}. It must hold exactly ${SECRETS.join(', ')} at /, each set; see docs/deployment.md, Infisical.`,
       )
     }
     process.exitCode = 1
@@ -225,11 +237,11 @@ async function fetchSecrets(): Promise<void> {
   writeFileSync(secretsFilePath(), JSON.stringify(result.secrets), { mode: 0o600, flag: 'wx' })
 }
 
-function readSecretsFile(): WorkerSecrets {
+function readSecretsFile(): Secrets {
   const parsed: unknown = JSON.parse(readFileSync(secretsFilePath(), 'utf8'))
   const entries: Array<[string, unknown]> =
     typeof parsed === 'object' && parsed !== null ? Object.entries(parsed) : []
-  const result = workerSecretsOf({
+  const result = secretsOf({
     secrets: entries.map(([secretKey, secretValue]) => ({ secretKey, secretValue })),
   })
   if ('issues' in result) {
@@ -240,7 +252,12 @@ function readSecretsFile(): WorkerSecrets {
 
 function convexEnv(): void {
   const secrets = readSecretsFile()
-  setConvexEnv({ ownerEmail: secrets.OWNER_EMAIL, privateKey: secrets.CONVEX_JWT_PRIVATE_KEY })
+  setConvexEnv({
+    ownerEmail: secrets.OWNER_EMAIL,
+    privateKey: secrets.CONVEX_JWT_PRIVATE_KEY,
+    ntfyUrl: secrets.NTFY_URL,
+    ntfyToken: secrets.NTFY_TOKEN,
+  })
 }
 
 function deploy(): void {
@@ -249,8 +266,14 @@ function deploy(): void {
     throw new Error('Set DEPLOY_TAG and WORKER_MESSAGE to label the Worker version')
   }
   const secretsFile = secretsFilePath()
-  readSecretsFile()
+  const workerSecretsFile = runnerTempPath('worker-secrets.json')
+  const secrets = readSecretsFile()
   try {
+    writeFileSync(
+      workerSecretsFile,
+      JSON.stringify(Object.fromEntries(WORKER_SECRETS.map((name) => [name, secrets[name]]))),
+      { mode: 0o600, flag: 'wx' },
+    )
     // `env.deploy` names neither the entry nor the assets, and its module rules assume no bundling.
     // `--secrets-file` adds and updates secrets but never deletes one.
     execFileSync(
@@ -268,7 +291,7 @@ function deploy(): void {
         '--assets',
         'dist/client',
         '--secrets-file',
-        secretsFile,
+        workerSecretsFile,
         '--tag',
         tag,
         '--message',
@@ -278,6 +301,7 @@ function deploy(): void {
     )
   } finally {
     rmSync(secretsFile, { force: true })
+    rmSync(workerSecretsFile, { force: true })
   }
 }
 

@@ -5,11 +5,11 @@ import {
   EARLIEST_YEAR,
   MINUTE_MS,
 } from '@convex/shared/limits'
-import { toLocal } from '@convex/shared/localTime'
+import { dayOfInstant, toLocal } from '@convex/shared/localTime'
 import { lastShowDay, SHOW_AT_TOO_LATE_ISSUE } from '@convex/shared/showAt'
 
 import { DATE_TIME_REQUIRED } from './field-errors'
-import { dayOfInstant, localToDateTimeInput } from './time/dates'
+import { localToDateTimeInput } from './time/dates'
 
 const SHOW_AT_TOO_EARLY_ISSUE = `Choose a date in ${EARLIEST_YEAR} or later`
 

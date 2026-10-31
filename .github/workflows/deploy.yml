@@ -70,7 +70,7 @@ jobs:
 
       # Before the Convex push, so a missing secret stops the deploy before either half ships. It
       # masks each value and writes them to a file in RUNNER_TEMP, out of later steps' environment.
-      - name: Fetch the Worker's secrets from Infisical
+      - name: Fetch the secrets from Infisical
         env:
           INFISICAL_PROJECT_ID: ${{ vars.INFISICAL_PROJECT_ID }}
           INFISICAL_IDENTITY_ID: ${{ vars.INFISICAL_IDENTITY_ID }}
@@ -105,8 +105,8 @@ jobs:
 
       # The backend goes first so new pages never call missing functions. `--cmd` runs before the
       # push: it stops a key for another deployment than the build's CSP allows, then sets Convex's
-      # `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from the Worker's secrets, which `convex/auth.config.ts`
-      # refuses the push without. `check` already ran `tsc -p convex`.
+      # settings from Infisical's secrets: `convex/auth.config.ts` refuses the push without
+      # `CONVEX_JWT_JWKS`. `check` already ran `tsc -p convex`.
       - name: Deploy Convex
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}

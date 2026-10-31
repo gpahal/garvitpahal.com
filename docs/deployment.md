@@ -6,13 +6,13 @@ Production runs on a Cloudflare Worker with static assets, Cloudflare Access in 
 
 [Deploy](../.github/workflows/deploy.yml) is the only path to production. It ships `main` on every push and on a manual run from the Actions tab; a manual run on any other branch or tag fails before anything else runs, and re-running an older run ships that older commit. [Check](../.github/workflows/check.yml) builds `dist/` without secrets, then Deploy ([`deploy-worker.ts`](../scripts/deploy-worker.ts)):
 
-1. Signs in to Infisical as a machine identity with a token GitHub mints for the run, and fetches the Worker's secrets from `prod`. It stops unless `/` holds exactly the [five secrets](#infisical), each set, so a mistake stops the deploy before either half ships.
-2. Sets Convex's `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from the Worker's `OWNER_EMAIL` and `CONVEX_JWT_PRIVATE_KEY` ([`convex-env.ts`](../scripts/convex-env.ts)), then pushes the Convex backend.
-3. Uploads the build to the Worker, with the secrets in the same version.
+1. Signs in to Infisical as a machine identity with a token GitHub mints for the run, and fetches the Worker's and Convex's secrets from `prod`. It stops unless `/` holds exactly the [seven secrets](#infisical), each set, so a mistake stops the deploy before either half ships.
+2. Sets Convex's `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from the Worker's `OWNER_EMAIL` and `CONVEX_JWT_PRIVATE_KEY`, and its `NTFY_URL` and `NTFY_TOKEN` as they are ([`convex-env.ts`](../scripts/convex-env.ts)), then pushes the Convex backend.
+3. Uploads the build to the Worker, with the Worker's five secrets in the same version.
 
 The backend must stay compatible with the pages served until the upload finishes. To undo a deploy, revert the commit on `main` and push; `wrangler rollback` restores only the Worker, against the newer backend.
 
-A secret changed in Infisical reaches the Worker and Convex only with the next deploy, so re-run Deploy after changing one (`gh workflow run deploy.yml --ref main`). Every deploy overwrites Convex's two settings and the Worker's five secrets, so change them only in Infisical. The upload never deletes a Worker secret: remove one with `pnpm exec wrangler secret delete <name> --env deploy`.
+A secret changed in Infisical reaches the Worker and Convex only with the next deploy, so re-run Deploy after changing one (`gh workflow run deploy.yml --ref main`). Every deploy overwrites Convex's four settings and the Worker's five secrets, so change them only in Infisical. The upload never deletes a Worker secret: remove one with `pnpm exec wrangler secret delete <name> --env deploy`.
 
 `pnpm build` runs without secrets. A build under `infisical run` writes the dev secrets into `dist/server/.dev.vars`, so never share that `dist/`.
 
@@ -25,12 +25,14 @@ Do these once, and recheck them after account changes, since [Verify production]
 The project [`.infisical.yaml`](../.infisical.yaml) names, on Infisical's US Cloud (`https://app.infisical.com`), holds the Worker's secrets: `dev` for `pnpm dev` ([Running the private tools](../README.md#running-the-private-tools)) and `prod` for Deploy.
 
 1. Keep the project's environments with the slugs `dev` and `prod`. Nothing reads any other.
-2. In `prod`, at the root path `/`, add exactly these five secrets, without secret imports: Deploy refuses a missing, empty or extra name.
+2. In `prod`, at the root path `/`, add exactly these seven secrets, without secret imports: Deploy refuses a missing, empty or extra name.
    - `OPENAI_API_KEY`.
    - `CONVEX_JWT_PRIVATE_KEY`: the JSON line `pnpm convex-jwt-key` prints, run once for production and never used in `dev`. It signs every Convex token, so it goes nowhere but Infisical, not even a file.
    - `ACCESS_TEAM_DOMAIN`: `<team>.cloudflareaccess.com`, a bare host name.
    - `ACCESS_AUD`: the Access application's AUD tag ([Cloudflare step 2](#cloudflare)).
    - `OWNER_EMAIL`: the only email allowed to use `/x`, the same as the Access policy's.
+   - `NTFY_URL`: the ntfy server's https base URL, reachable from Convex. Convex alone reads it and the next one, for Agenda's notifications ([Agenda](agenda.md#notifications)).
+   - `NTFY_TOKEN`: an ntfy access token. A token acts as its whole user, so make it for a user that may only write to the `agenda` topic.
 3. Under Access Control → Machine Identities, create an identity for Deploy. In its Authentication section, add OIDC Auth with these settings and remove any other method:
    - OIDC Discovery URL and Issuer: `https://token.actions.githubusercontent.com`.
    - Subject: the one GitHub gives the `production` environment's jobs. A repository created after 15 July 2026 has numeric IDs in it, which this prints once the repository exists:
@@ -162,7 +164,7 @@ The repository is public: on a free personal account, rulesets, environment bran
    gh api -X PUT "repos/$repo/rulesets/$id" -f enforcement=active
    ```
 
-   From then on, `main` changes only through pull requests, and Deploy runs on each merge. If Infisical is not set up yet, Deploy stops at "Fetch the Worker's secrets from Infisical" before either half ships; without a Convex deploy key it stops at "Deploy Convex", but a Cloudflare problem stops it only at "Deploy the Worker", after the backend has shipped.
+   From then on, `main` changes only through pull requests, and Deploy runs on each merge. If Infisical is not set up yet, Deploy stops at "Fetch the secrets from Infisical" before either half ships; without a Convex deploy key it stops at "Deploy Convex", but a Cloudflare problem stops it only at "Deploy the Worker", after the backend has shipped.
 
 ### OpenAI
 
@@ -180,7 +182,7 @@ A secret the Worker reads needs all of these. [`wrangler-config.test.ts`](../che
 2. Its name in `WORKER_SECRETS` ([`deploy-worker.ts`](../scripts/deploy-worker.ts)) and in `env.deploy.secrets.required` in [`wrangler.jsonc`](../wrangler.jsonc). If `pnpm dev` reads it, also in `env.dev.secrets.required` and in `DEV_SECRETS` in the check.
 3. A value in Infisical's `prod` environment, and in `dev` if `pnpm dev` reads it. Then re-run Deploy.
 
-A setting Convex reads comes from a Worker secret through `convexEnvFile` in [`convex-env.ts`](../scripts/convex-env.ts). A `PUBLIC_*` value takes an `envField` with `context: 'client'` and `access: 'public'`, a [`.env.development`](../.env.development) line if dev needs it and a GitHub variable passed to the build step in [`check.yml`](../.github/workflows/check.yml). A Worker setting that is not secret goes in `vars` in `wrangler.jsonc`, under `env.dev` for `pnpm dev` and `env.deploy` for production.
+A setting Convex reads comes from a Worker secret through `convexEnvFile` in [`convex-env.ts`](../scripts/convex-env.ts). A secret only Convex reads goes in `CONVEX_SECRETS` in [`deploy-worker.ts`](../scripts/deploy-worker.ts) and `convexEnvFile` instead, with a value in both Infisical environments. A `PUBLIC_*` value takes an `envField` with `context: 'client'` and `access: 'public'`, a [`.env.development`](../.env.development) line if dev needs it and a GitHub variable passed to the build step in [`check.yml`](../.github/workflows/check.yml). A Worker setting that is not secret goes in `vars` in `wrangler.jsonc`, under `env.dev` for `pnpm dev` and `env.deploy` for production.
 
 ## Rotating the Convex token key
 
@@ -204,6 +206,9 @@ Each event is a JSON log line's `event` field. Read Convex's with `pnpm exec con
 | `auth.not_owner` (Convex) | Re-run Deploy, which sets Convex's `OWNER_EMAIL` from the Worker's, or locally run `pnpm convex-dev-set-env` |
 | `auth.owner_email_unset` (Convex) | Re-run Deploy, or locally run `pnpm convex-dev-set-env`; until then every call is refused |
 | `routines.delete_resumed` (Convex) | Repeats mean `routines:drainBatch` keeps failing: look for its errors |
+| `ntfy.not_configured` (Convex) | Set `NTFY_URL` and `NTFY_TOKEN` in Infisical's `prod` and re-run Deploy, or locally run `pnpm convex-dev-set-env` |
+| `ntfy.refused` (Convex) | By `status`: for 401 or 403, give `NTFY_TOKEN` a token whose user may write to `agenda`, then re-run Deploy; for 404, point `NTFY_URL` at the server's base URL. Nothing retries a refusal |
+| `ntfy.unavailable` (Convex) | The server was unreachable or answered 429 or 5xx, and the publish is retried for about 14 minutes. If it lasts, check that the server is up and reachable from the internet |
 | `<route>.access_refused` at error level | By `reason`: for `no_access_jwt`, cover the path in Access without a Bypass policy ([Cloudflare step 2](#cloudflare)); for `claim_aud`, fix `ACCESS_AUD` in Infisical's `prod` and re-run Deploy; for `claim_iss` or `ERR_JWKS_NO_MATCHING_KEY`, do the same for `ACCESS_TEAM_DOMAIN`; for `malformed_claims`, allow only the owner's email login. Any other reason is a forged or corrupted token, and an expired session logs at info level |
 | `<route>.not_owner` | Make the Access policy's email and `OWNER_EMAIL` in Infisical's `prod` match, then re-run Deploy |
 | `<route>.auth_unavailable` | With `cause: misconfigured`, fix the Worker secret `message` names in Infisical's `prod` and re-run Deploy. With `cause: outage`, the Access certificates were unreachable; if it lasts, check that `ACCESS_TEAM_DOMAIN` names a team |

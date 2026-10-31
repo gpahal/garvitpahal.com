@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { dayOfInstant } from '../time/dates'
+import { dayOfInstant } from '@convex/shared/localTime'
+
 import { intervalOf, KOLKATA, NEW_YORK } from '../time/test-readings'
 import { defaultLogMinutes, defaultLogStart } from './log-start'
 

@@ -1,3 +1,4 @@
+import actionRetrierTest from '@convex-dev/action-retrier/test'
 import aggregateTest from '@convex-dev/aggregate/test'
 import rateLimiterTest from '@convex-dev/rate-limiter/test'
 import { convexTest } from 'convex-test'
@@ -30,6 +31,7 @@ export function handlerTest() {
   const t = convexTest({ schema, modules, transactionLimits: true })
   aggregateTest.register(t, 'routineLogAggregate')
   rateLimiterTest.register(t)
+  actionRetrierTest.register(t)
   return t
 }
 

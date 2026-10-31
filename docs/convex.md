@@ -14,7 +14,7 @@ Under `pnpm dev`, a loopback request without Access, Cloudflare or proxy headers
 
 ## Functions
 
-- Build functions with [`lib/functionBuilders.ts`](../convex/lib/functionBuilders.ts), so every public function runs the owner check and every write keeps the aggregate trigger. Check inputs with [`lib/validate.ts`](../convex/lib/validate.ts).
+- Build functions with [`lib/functionBuilders.ts`](../convex/lib/functionBuilders.ts), so every public function runs the owner check and every write runs the triggers: the aggregate's and [notifications'](agenda.md#notifications). Check inputs with [`lib/validate.ts`](../convex/lib/validate.ts).
 - Name indexes after their fields, with underscores for dots: `by_done_at_and_showAt`.
 - A mutation repeated from a second tab, such as complete, archive or remove, succeeds as a no-op and never moves a recorded instant.
 - A mutation on a document deleted elsewhere throws its `requireDoc` message ([`lib/documents.ts`](../convex/lib/documents.ts)); `remove` treats an already-deleted document as done.
@@ -32,7 +32,7 @@ Under `pnpm dev`, a loopback request without Access, Cloudflare or proxy headers
 
 ## Tests
 
-The `handlers` Vitest project (`pnpm test --project handlers`) runs the top-level `convex/*.test.ts` files, most with `convex-test`, for what pure tests cannot show: aggregates, owner authorisation, scheduled deletion, completion guards and metering. [`ownerAccess.test.ts`](../convex/ownerAccess.test.ts) checks that every public function refuses a stranger and an anonymous caller.
+The `handlers` Vitest project (`pnpm test --project handlers`) runs the top-level `convex/*.test.ts` files, most with `convex-test`, for what pure tests cannot show: aggregates, owner authorisation, scheduled deletion, notifications, completion guards and metering. [`ownerAccess.test.ts`](../convex/ownerAccess.test.ts) checks that every public function refuses a stranger and an anonymous caller.
 
 - Start each test from `handlerTest` or `setup` (signed in as the owner) in [`handlerTest.setup.ts`](../convex/handlerTest.setup.ts).
 - Write through public handlers. Seed rows directly only through `withTriggers`, so the aggregate stays in step, unless a test needs a row the aggregate lacks.

@@ -8,6 +8,7 @@ import { api } from '@convex/_generated/api'
 import { dayOfLocal } from '@convex/shared/intervals'
 import { EARLIEST_LOCAL, INTERVAL_LOGS_READ, MAX_NOTE_LENGTH } from '@convex/shared/limits'
 import { toLocal } from '@convex/shared/localTime'
+import type { RoutineStatus } from '@convex/shared/reminders'
 
 import { ifChanged } from '@/lib/form-fields'
 import type { RoutineLog } from '@/lib/x/agenda/doc-types'
@@ -21,7 +22,6 @@ import type { DurationBoxes } from '@/lib/x/agenda/routines/duration-boxes'
 import { parseLogDraft } from '@/lib/x/agenda/routines/log-draft'
 import { defaultLogMinutes, defaultLogStart } from '@/lib/x/agenda/routines/log-start'
 import { intervalWords, minutesLabel, wholeMinutes } from '@/lib/x/agenda/routines/routine-format'
-import type { RoutineStatus } from '@/lib/x/agenda/routines/schedule'
 import {
   formatLocalDateTime,
   localToDateTimeInput,
