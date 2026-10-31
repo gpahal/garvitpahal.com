@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 
 import { dayOfLocal } from '@convex/shared/intervals'
+import { dayOfInstant } from '@convex/shared/localTime'
 
 import type { Routine, RoutineLog } from '@/lib/x/agenda/doc-types'
-import { dayOfInstant } from '@/lib/x/agenda/time/dates'
 import { readDeviceTimeZone } from '@/hooks/use-device-time-zone'
 import { useDialogTarget } from '@/hooks/use-dialog-target'
 

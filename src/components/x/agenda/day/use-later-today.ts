@@ -1,9 +1,9 @@
 import { useQuery } from 'convex/react'
 
 import { api } from '@convex/_generated/api'
+import { instantRangeOfDay } from '@convex/shared/localTime'
 
 import { LATER_TODAY_COUNTED, laterTodayLabel } from '@/lib/x/agenda/due-tasks'
-import { instantRangeOfDay } from '@/lib/x/agenda/time/dates'
 import { useDeviceTimeZone } from '@/hooks/use-device-time-zone'
 import { useStandIn } from '@/hooks/use-stand-in'
 

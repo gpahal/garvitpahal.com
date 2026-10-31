@@ -1,9 +1,7 @@
 import { dayOfLocal, localRangeOfDay } from '@convex/shared/intervals'
 import type { TimeRange } from '@convex/shared/intervals'
 import { DAY_MS, MINUTE_MS } from '@convex/shared/limits'
-import { toLocal } from '@convex/shared/localTime'
-
-import { fromLocal } from '../time/dates'
+import { fromLocal, toLocal } from '@convex/shared/localTime'
 
 /**
  * Today's default ends now and may start back to the interval's beginning. An earlier day's ends at

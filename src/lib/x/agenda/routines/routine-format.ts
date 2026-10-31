@@ -3,12 +3,12 @@ import { INTERVAL_UNITS, spanMs } from '@convex/shared/goalRules'
 import type { IntervalKind } from '@convex/shared/goalRules'
 import { MINUTE_MS } from '@convex/shared/limits'
 import { toLocal } from '@convex/shared/localTime'
+import type { Goal, Reminder, RoutineStatus } from '@convex/shared/reminders'
 
 import { MONTHS } from '@/lib/months'
 
 import type { RoutineLog } from '../doc-types'
 import { formatLocalDateTime, formatLocalTime, WEEKDAYS } from '../time/dates'
-import type { Goal, Reminder, RoutineStatus } from './schedule'
 
 /**
  * `current` names the interval around now, `other` any other.

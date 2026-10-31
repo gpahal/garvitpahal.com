@@ -55,10 +55,11 @@ They need the Infisical CLI signed in ([Getting started](#getting-started)). Onc
    - `OWNER_EMAIL`: your email.
    - `CONVEX_JWT_PRIVATE_KEY`: the JSON line `pnpm convex-jwt-key` prints, a development key separate from production's.
    - For the puzzle solvers, `OPENAI_API_KEY`: a key from a separate OpenAI project with a low hard limit.
+   - For Agenda's notifications, `NTFY_URL`: the ntfy server's https base URL, and `NTFY_TOKEN`: an access token for a user that may write to the `agenda` topic. The dev deployment notifies the same topic as production.
 2. Run `pnpm convex-dev`, signing in to Convex if asked. It uses the cloud dev deployment that the committed [`.env.development`](.env.development) names, as do `pnpm dev` and `pnpm dev:public`.
-3. In a second terminal, run `pnpm convex-dev-set-env`, which sets the dev deployment's `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from those secrets. Until then `pnpm convex-dev` fails to push; restart it if it doesn't retry.
+3. In a second terminal, run `pnpm convex-dev-set-env`, which sets the dev deployment's `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from those secrets and passes `NTFY_URL` and `NTFY_TOKEN` through. Until then `pnpm convex-dev` fails to push; restart it if it doesn't retry.
 
-After that, keep `pnpm convex-dev` and `pnpm dev` running side by side. After changing a secret in Infisical, restart `pnpm dev`; after changing `OWNER_EMAIL` or the key, or if Agenda says its sign-in keys don't match, also run `pnpm convex-dev-set-env` again.
+After that, keep `pnpm convex-dev` and `pnpm dev` running side by side. After changing a secret in Infisical, restart `pnpm dev`; after changing `OWNER_EMAIL`, the key or an `NTFY_*` secret, or if Agenda says its sign-in keys don't match, also run `pnpm convex-dev-set-env` again.
 
 ## Deploying
 

@@ -123,6 +123,21 @@ export function assertQueryDay(day: number): void {
   }
 }
 
+export function assertTimeZone(timeZone: string): void {
+  // `v.string()` caps no length, so a long zone is refused before `Intl` sees it, and only that much
+  // of it is echoed.
+  if (timeZone.length <= MAX_ZONE_NAME_LENGTH && isNamedTimeZone(timeZone)) {
+    return
+  }
+  const shown =
+    timeZone.length > MAX_ZONE_NAME_LENGTH
+      ? `${timeZone.slice(0, MAX_ZONE_NAME_LENGTH)}…`
+      : timeZone
+  throw new ConvexError(
+    `"${shown}" is not a time zone this server knows. In this device's date and time settings, choose a named time zone, or a nearby city's if this one is new, then try again`,
+  )
+}
+
 /**
  * A new local reading, which files a record under its day for good, so a later zone change leaves
  * it where it was. The caller bounds the instant against the future.
@@ -133,17 +148,7 @@ export function assertReading(
   label: string,
   tooEarlyIssue: string,
 ): void {
-  // `v.string()` caps no length, so a long zone is refused before `Intl` sees it, and only that much
-  // of it is echoed.
-  if (!(timeZone.length <= MAX_ZONE_NAME_LENGTH && isNamedTimeZone(timeZone))) {
-    const shown =
-      timeZone.length > MAX_ZONE_NAME_LENGTH
-        ? `${timeZone.slice(0, MAX_ZONE_NAME_LENGTH)}…`
-        : timeZone
-    throw new ConvexError(
-      `"${shown}" is not a time zone this server knows. In this device's date and time settings, choose a named time zone, or a nearby city's if this one is new, then try again`,
-    )
-  }
+  assertTimeZone(timeZone)
   assertInstant(at, label)
   // `toLocal` can misread an instant this early.
   if (at < EARLIEST_INSTANT) {

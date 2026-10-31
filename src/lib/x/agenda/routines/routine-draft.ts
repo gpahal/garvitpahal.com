@@ -12,6 +12,7 @@ import {
 } from '@convex/shared/goalRules'
 import type { IntervalKind } from '@convex/shared/goalRules'
 import { MAX_GOAL_COUNT } from '@convex/shared/limits'
+import type { Goal } from '@convex/shared/reminders'
 
 import { parseWhole } from '@/lib/form-fields'
 import { MONTHS } from '@/lib/months'
@@ -28,7 +29,6 @@ import {
 } from './duration-boxes'
 import type { DurationBoxes, DurationUnit } from './duration-boxes'
 import { formatMinuteOfDay } from './routine-format'
-import type { Goal } from './schedule'
 
 /**
  * Every field any kind could ask for, as typed, so switching the interval keeps what the kinds

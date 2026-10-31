@@ -53,6 +53,8 @@ const ARGS: Record<string, (ids: Ids) => Record<string, unknown>> = {
   'routineLogs:update': ({ log }) => ({ id: log, note: 'Changed' }),
   'routineLogs:remove': ({ log }) => ({ id: log }),
   'rateLimits:consumePuzzleRead': () => ({ cost: 1 }),
+  'settings:get': () => ({}),
+  'settings:recordTimeZone': () => ({ timeZone: 'UTC' }),
 }
 
 function publicFunctions(): Array<{ name: string; isQuery: boolean }> {
@@ -94,6 +96,7 @@ test('refuses a stranger and a caller with no identity on every public function'
       routines: await ctx.db.query('routines').collect(),
       logs: await ctx.db.query('routineLogs').collect(),
       notes: await ctx.db.query('routineLogNotes').collect(),
+      settings: await ctx.db.query('settings').collect(),
     }))
   const before = await snapshot()
   const stranger = t.withIdentity({ email: 'stranger@example.com' })

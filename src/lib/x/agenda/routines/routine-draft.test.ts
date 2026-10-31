@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest'
 
 import { goalIssue } from '@convex/shared/goalRules'
 import { MAX_GOAL_COUNT, MAX_REMINDERS } from '@convex/shared/limits'
+import type { Goal } from '@convex/shared/reminders'
 
 import { durationBoxesOf } from './duration-boxes'
 import { areRoutineDraftsDifferent, draftOf, parseDraft, withKind } from './routine-draft'
 import type { RoutineDraft } from './routine-draft'
-import type { Goal } from './schedule'
 
 describe('withKind', () => {
   it.each([['monthly', 'yearly', { month: '' }]] as const)(

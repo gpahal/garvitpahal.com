@@ -187,6 +187,9 @@ importers:
       '@base-ui/react':
         specifier: ^1.9.0
         version: 1.9.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@convex-dev/action-retrier':
+        specifier: ^0.3.1
+        version: 0.3.1(convex@1.48.0(react@19.3.1))
       '@convex-dev/aggregate':
         specifier: ^0.3.4
         version: 0.3.4(convex@1.48.0(react@19.3.1))(hono@4.13.13)(react@19.3.1)(typescript@6.0.3)(zod@4.6.7)
@@ -752,6 +755,11 @@ packages:
     engines: {node: '>=16'}
     cpu: [x64]
     os: [win32]
+
+  '@convex-dev/action-retrier@0.3.1':
+    resolution: {integrity: sha512-uji7ZV4GYN24fgnV9FrXABbq2mWCpcMohkEa2ie1zmD5S7ioSxNNBE0lNPB1jlMzICqWCTrbSTr68bgJPag6Ww==}
+    peerDependencies:
+      convex: ^1.24.8
 
   '@convex-dev/aggregate@0.3.4':
     resolution: {integrity: sha512-w60E4fLuysza8sBIQsLlYFxnzMB7ed8yqYpu/JfDhkUYvnnvW3CzLEf74zCwb/RfLrR6u5a/0pfvVtIp4XNIoA==}
@@ -6815,6 +6823,10 @@ snapshots:
 
   '@cloudflare/workerd-windows-64@1.20261019.1':
     optional: true
+
+  '@convex-dev/action-retrier@0.3.1(convex@1.48.0(react@19.3.1))':
+    dependencies:
+      convex: 1.48.0(react@19.3.1)
 
   '@convex-dev/aggregate@0.3.4(convex@1.48.0(react@19.3.1))(hono@4.13.13)(react@19.3.1)(typescript@6.0.3)(zod@4.6.7)':
     dependencies:

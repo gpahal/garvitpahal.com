@@ -77,4 +77,30 @@ const routineDeletions = defineTable({
   routineId: v.id('routines'),
 })
 
-export default defineSchema({ tasks, routines, routineLogs, routineLogNotes, routineDeletions })
+/**
+ * One row: the zone an Agenda page last reported, which routine reminders and the morning summary
+ * follow. Absent until a page first opens, and until then neither is scheduled.
+ */
+const settings = defineTable({
+  timeZone: v.string(),
+})
+
+/**
+ * The pending notification for each task, routine and the morning summary, keyed `task:<id>`,
+ * `routine:<id>` or `summary`, so a later write can replace or cancel it.
+ */
+const notificationJobs = defineTable({
+  key: v.string(),
+  at: v.number(),
+  jobId: v.id('_scheduled_functions'),
+}).index('by_key', ['key'])
+
+export default defineSchema({
+  tasks,
+  routines,
+  routineLogs,
+  routineLogNotes,
+  routineDeletions,
+  settings,
+  notificationJobs,
+})

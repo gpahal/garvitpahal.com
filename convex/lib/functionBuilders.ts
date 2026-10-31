@@ -5,6 +5,7 @@ import type { DataModel } from '../_generated/dataModel'
 import { mutation, query, internalMutation as rawInternalMutation } from '../_generated/server'
 import type { MutationCtx, QueryCtx } from '../_generated/server'
 import { requireOwner } from './auth'
+import { storedTimeZone, syncRoutine, syncTask } from './notifications'
 import { routineLogAggregate } from './routineLogAggregate'
 
 /**
@@ -15,6 +16,16 @@ import { routineLogAggregate } from './routineLogAggregate'
 const triggers = new Triggers<DataModel>()
 
 triggers.register('routineLogs', routineLogAggregate.trigger())
+
+// Every write to a task or routine replaces, keeps or cancels its pending notification
+// (`lib/notifications.ts`), so no mutation has to remember to.
+triggers.register('tasks', async (ctx, { id, newDoc }) => {
+  await syncTask(ctx, id, newDoc, Date.now())
+})
+
+triggers.register('routines', async (ctx, { id, newDoc }) => {
+  await syncRoutine(ctx, id, newDoc, await storedTimeZone(ctx), Date.now())
+})
 
 /**
  * Handler tests seed rows through this so the aggregate stays in step.
