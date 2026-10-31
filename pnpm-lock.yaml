@@ -203,17 +203,17 @@ importers:
         specifier: ^5.28.8
         version: 5.28.8(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       '@gpahal/eslint-config':
-        specifier: ^0.0.146
-        version: 0.0.146(6595d56be31faba6d34be0461f938220)
+        specifier: ^0.0.147
+        version: 0.0.147(6595d56be31faba6d34be0461f938220)
       '@gpahal/prettier-config':
-        specifier: ^0.0.49
-        version: 0.0.49(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier-plugin-tailwindcss@0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.10)(supports-color@10.2.2))(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier@3.9.10))(prettier@3.9.10)(supports-color@10.2.2)
+        specifier: ^0.0.50
+        version: 0.0.50(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier-plugin-tailwindcss@0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.10)(supports-color@10.2.2))(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier@3.9.10))(prettier@3.9.10)(supports-color@10.2.2)
       '@gpahal/stylelint-config':
-        specifier: ^0.0.30
-        version: 0.0.30(stylelint@17.16.0(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)(tailwindcss@4.3.3)
+        specifier: ^0.0.31
+        version: 0.0.31(stylelint@17.16.0(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)(tailwindcss@4.3.3)
       '@gpahal/tsconfig':
-        specifier: ^0.0.24
-        version: 0.0.24(@types/node@24.19.2)(typescript@6.0.3)
+        specifier: ^0.0.25
+        version: 0.0.25(@types/node@24.19.2)(typescript@6.0.3)
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
@@ -1491,8 +1491,8 @@ packages:
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
 
-  '@gpahal/eslint-config@0.0.146':
-    resolution: {integrity: sha512-TF/GeT1/PwPjPm6WMs+0SgaJnBfbKgRGPzNmhEQNJxWVBrwvoxRTgZqB5ccBpV71H08M1zSQzsK9Rh4WJeHAEQ==}
+  '@gpahal/eslint-config@0.0.147':
+    resolution: {integrity: sha512-vCcI9beTKWxEffRQvx/eDbKnBkbhC3QoD/YrQq9UiE3Lf9a/ldqCqYAZRhsru1iI2dhTpeu1Ca3D2ckJhFRb0Q==}
     engines: {node: '>=24.22.0'}
     peerDependencies:
       '@eslint-react/eslint-plugin': ^5.21
@@ -1546,8 +1546,8 @@ packages:
       typescript:
         optional: true
 
-  '@gpahal/prettier-config@0.0.49':
-    resolution: {integrity: sha512-ft1P9Lzc1/11vV0zd6kI+5ifH+W+p2C4cloDhY9bI91i4P1+DmwPT2hkaikeI8uGBoMHuO6BG5qnZJfX9Ec3tQ==}
+  '@gpahal/prettier-config@0.0.50':
+    resolution: {integrity: sha512-1EiAt57vpyQdXDUk+RjKnwFIRywxYdD51CuCRC8ez9A41o9RVegGwCg5QhjHT6a3xmRUnY0hJeZdno+jx9AA5Q==}
     engines: {node: '>=24.22.0'}
     peerDependencies:
       prettier: ^3.9
@@ -1559,12 +1559,12 @@ packages:
       prettier-plugin-tailwindcss:
         optional: true
 
-  '@gpahal/std@0.0.52':
-    resolution: {integrity: sha512-7qcYAb2PO6RnYLDu5gUwUQC/VIwj8WG7ulypOwy22nd2+iblK+WEyY5TPHNs1Lxl3H3wOIr3bDDbOV6bI9MfPg==}
+  '@gpahal/std@0.0.53':
+    resolution: {integrity: sha512-dGIg/dsLFZb9YPwk+BXALoSEEBVuWTpwnzqeaNUYcDgexdREAOcrfTgugAX6f/TMPYJazKTBLi16opoK5bcJgg==}
     engines: {node: '>=24.22.0'}
 
-  '@gpahal/stylelint-config@0.0.30':
-    resolution: {integrity: sha512-S+MmaKOC92gkqJZl9Y5p8sjdOenicGcAxR4lCTBvFwxscsOe3h2vGE4k7QGJIq5mwL47BUF6joYYFT4uEymrGA==}
+  '@gpahal/stylelint-config@0.0.31':
+    resolution: {integrity: sha512-z8xjtid7oe50bJnLtZPXcTJXeq1+qMPU2fQXVpx9Q98j5AFXYGYeA7xZUNmliSfU/T2V3gdTueoT+fcTifWGIg==}
     engines: {node: '>=24.22.0'}
     peerDependencies:
       stylelint: ^17.15
@@ -1573,8 +1573,8 @@ packages:
       tailwindcss:
         optional: true
 
-  '@gpahal/tsconfig@0.0.24':
-    resolution: {integrity: sha512-+AL4JzvfeNqII1hb9shxMk4fy5NMPBVZZ+J/DK4h8SScbCYxSELSDxYOtydU6RwQGUxRrkxCw6hINbG8e7TqSA==}
+  '@gpahal/tsconfig@0.0.25':
+    resolution: {integrity: sha512-c2kB2rmO+S/BXfZA2ixRMRxz9U9BTy70Ne1aD5mfYeNgBauk6uVZwHcjVDMclcekxlqbP+P67Eb+tTFbCHOpsA==}
     peerDependencies:
       '@types/node': '*'
       typescript: ~6.0.3
@@ -7256,14 +7256,14 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
-  '@gpahal/eslint-config@0.0.146(6595d56be31faba6d34be0461f938220)':
+  '@gpahal/eslint-config@0.0.147(6595d56be31faba6d34be0461f938220)':
     dependencies:
       '@e18e/eslint-plugin': 0.8.1(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))
       '@eslint-community/eslint-plugin-eslint-comments': 4.8.1(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))
       '@eslint/js': 10.0.1(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))
       '@eslint/json': 2.1.1
       '@eslint/markdown': 8.0.3(supports-color@10.2.2)
-      '@gpahal/std': 0.0.52
+      '@gpahal/std': 0.0.53
       '@typescript-eslint/parser': 8.72.1(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       '@typescript-eslint/utils': 8.72.1(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
       brace-expansion: 5.0.12
@@ -7317,9 +7317,9 @@ snapshots:
       - supports-color
       - ts-declaration-location
 
-  '@gpahal/prettier-config@0.0.49(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier-plugin-tailwindcss@0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.10)(supports-color@10.2.2))(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier@3.9.10))(prettier@3.9.10)(supports-color@10.2.2)':
+  '@gpahal/prettier-config@0.0.50(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier-plugin-tailwindcss@0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.10)(supports-color@10.2.2))(prettier-plugin-astro@1.1.2(prettier@3.9.10))(prettier@3.9.10))(prettier@3.9.10)(supports-color@10.2.2)':
     dependencies:
-      '@gpahal/std': 0.0.52
+      '@gpahal/std': 0.0.53
       '@ianvs/prettier-plugin-sort-imports': 4.7.1(prettier@3.9.10)(supports-color@10.2.2)
       prettier: 3.9.10
       prettier-plugin-packagejson: 3.0.3(prettier@3.9.10)
@@ -7335,12 +7335,12 @@ snapshots:
       - prettier-plugin-ember-template-tag
       - supports-color
 
-  '@gpahal/std@0.0.52': {}
+  '@gpahal/std@0.0.53': {}
 
-  '@gpahal/stylelint-config@0.0.30(stylelint@17.16.0(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)(tailwindcss@4.3.3)':
+  '@gpahal/stylelint-config@0.0.31(stylelint@17.16.0(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)(tailwindcss@4.3.3)':
     dependencies:
       '@csstools/css-tokenizer': 4.0.2
-      '@gpahal/std': 0.0.52
+      '@gpahal/std': 0.0.53
       brace-expansion: 5.0.12
       cosmiconfig: 10.0.1
       import-meta-resolve: 4.2.0
@@ -7358,7 +7358,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@gpahal/tsconfig@0.0.24(@types/node@24.19.2)(typescript@6.0.3)':
+  '@gpahal/tsconfig@0.0.25(@types/node@24.19.2)(typescript@6.0.3)':
     dependencies:
       typescript: 6.0.3
     optionalDependencies:
