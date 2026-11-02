@@ -334,7 +334,7 @@ export default defineConfig({
     // Server secrets are optional because prerendering runs without them; each is checked per
     // request.
     schema: {
-      OPENAI_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      OPENROUTER_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       ACCESS_TEAM_DOMAIN: envField.string({ context: 'server', access: 'secret', optional: true }),
       ACCESS_AUD: envField.string({ context: 'server', access: 'secret', optional: true }),
       OWNER_EMAIL: envField.string({ context: 'server', access: 'secret', optional: true }),

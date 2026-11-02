@@ -45,7 +45,7 @@ GitHub runs `pnpm check` on every pull request and deploy.
 Everything under `/x` sits behind Cloudflare Access, so only I can sign in.
 
 - **Agenda** keeps my tasks and recurring goals ([docs/agenda.md](docs/agenda.md)).
-- **Puzzle solvers** read a photo of a Sudoku or Ken Ken with an OpenAI vision model, then check and solve it in the browser ([docs/puzzle-solvers.md](docs/puzzle-solvers.md)).
+- **Puzzle solvers** read a photo of a Sudoku or Ken Ken with a vision model through OpenRouter, then check and solve it in the browser ([docs/puzzle-solvers.md](docs/puzzle-solvers.md)).
 
 ### Running the private tools
 
@@ -54,7 +54,7 @@ They need the Infisical CLI signed in ([Getting started](#getting-started)). Onc
 1. In Infisical's `dev` environment, at the root path `/`, add these secrets:
    - `OWNER_EMAIL`: your email.
    - `CONVEX_JWT_PRIVATE_KEY`: the JSON line `pnpm convex-jwt-key` prints, a development key separate from production's.
-   - For the puzzle solvers, `OPENAI_API_KEY`: a key from a separate OpenAI project with a low hard limit.
+   - For the puzzle solvers, `OPENROUTER_API_KEY`: an OpenRouter key of its own with a low credit limit.
    - For Agenda's notifications, `NTFY_URL`: the ntfy server's https base URL, and `NTFY_TOKEN`: an access token for a user that may write to the `agenda` topic. The dev deployment notifies the same topic as production.
 2. Run `pnpm convex-dev`, signing in to Convex if asked. It uses the cloud dev deployment that the committed [`.env.development`](.env.development) names, as do `pnpm dev` and `pnpm dev:public`.
 3. In a second terminal, run `pnpm convex-dev-set-env`, which sets the dev deployment's `OWNER_EMAIL` and `CONVEX_JWT_JWKS` from those secrets and passes `NTFY_URL` and `NTFY_TOKEN` through. Until then `pnpm convex-dev` fails to push; restart it if it doesn't retry.

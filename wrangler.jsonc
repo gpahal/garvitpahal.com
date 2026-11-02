@@ -31,7 +31,7 @@
     "dev": {
       "name": "garvitpahal-com",
       "secrets": {
-        "required": ["OPENAI_API_KEY", "CONVEX_JWT_PRIVATE_KEY", "OWNER_EMAIL"]
+        "required": ["OPENROUTER_API_KEY", "CONVEX_JWT_PRIVATE_KEY", "OWNER_EMAIL"]
       }
     },
     // Deploy uses this rather than the build's `dist/server/wrangler.json`, which comes from a job
@@ -45,7 +45,7 @@
       // (`scripts/deploy-worker.ts`). Wrangler refuses a deploy that leaves one unset.
       "secrets": {
         "required": [
-          "OPENAI_API_KEY",
+          "OPENROUTER_API_KEY",
           "CONVEX_JWT_PRIVATE_KEY",
           "ACCESS_TEAM_DOMAIN",
           "ACCESS_AUD",

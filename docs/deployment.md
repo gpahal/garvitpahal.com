@@ -26,7 +26,7 @@ The project [`.infisical.yaml`](../.infisical.yaml) names, on Infisical's US Clo
 
 1. Keep the project's environments with the slugs `dev` and `prod`. Nothing reads any other.
 2. In `prod`, at the root path `/`, add exactly these seven secrets, without secret imports: Deploy refuses a missing, empty or extra name.
-   - `OPENAI_API_KEY`.
+   - `OPENROUTER_API_KEY`: a key used nowhere else, with a credit limit ([OpenRouter](#openrouter)).
    - `CONVEX_JWT_PRIVATE_KEY`: the JSON line `pnpm convex-jwt-key` prints, run once for production and never used in `dev`. It signs every Convex token, so it goes nowhere but Infisical, not even a file.
    - `ACCESS_TEAM_DOMAIN`: `<team>.cloudflareaccess.com`, a bare host name.
    - `ACCESS_AUD`: the Access application's AUD tag ([Cloudflare step 2](#cloudflare)).
@@ -166,9 +166,9 @@ The repository is public: on a free personal account, rulesets, environment bran
 
    From then on, `main` changes only through pull requests, and Deploy runs on each merge. If Infisical is not set up yet, Deploy stops at "Fetch the secrets from Infisical" before either half ships; without a Convex deploy key it stops at "Deploy Convex", but a Cloudflare problem stops it only at "Deploy the Worker", after the backend has shipped.
 
-### OpenAI
+### OpenRouter
 
-Under Organization settings → Limits → Spend, set a monthly limit with **Enforce a hard limit** and an alert below it. Only the hard limit bounds the bill, with some lag ([spend limits](https://developers.openai.com/api/docs/guides/spend-limits)); the [puzzle-read budget](convex.md#rate-limits) caps calls, not dollars.
+OpenRouter bills from prepaid credits, so the balance bounds the bill unless auto top-up refills it: leave auto top-up off or cap it. Give `OPENROUTER_API_KEY` a key used nowhere else, with a credit limit, and keep `dev` on a separate key; past its limit a key gets 402 ([limits](https://openrouter.ai/docs/api/reference/limits)). The [puzzle-read budget](convex.md#rate-limits) caps calls, not dollars.
 
 ### First deploy
 
@@ -213,10 +213,10 @@ Each event is a JSON log line's `event` field. Read Convex's with `pnpm exec con
 | `<route>.not_owner` | Make the Access policy's email and `OWNER_EMAIL` in Infisical's `prod` match, then re-run Deploy |
 | `<route>.auth_unavailable` | With `cause: misconfigured`, fix the Worker secret `message` names in Infisical's `prod` and re-run Deploy. With `cause: outage`, the Access certificates were unreachable; if it lasts, check that `ACCESS_TEAM_DOMAIN` names a team |
 | `rate_limit.unavailable` | With `cause: misconfigured`, fix the setting `message` names: the `PUBLIC_CONVEX_URL` variable, or re-run Deploy for a `CONVEX_JWT_JWKS` that does not trust the Worker's key or a mismatched `OWNER_EMAIL`. With `cause: outage`, Convex was unreachable |
-| `vision.not_configured` | Set `OPENAI_API_KEY` in Infisical's `dev` and restart `pnpm dev` (`pnpm dev:public` never reads it); Deploy refuses a `prod` without it |
-| `vision.upstream_failed` | For `failure: account_rejected`, fix `OPENAI_API_KEY` in Infisical's `prod` and re-run Deploy, or fix the [spend limit](#openai); an invalid key shows only here, after admissions are spent. A lasting `model_failed`, or a run of `model_rejected` on ordinary photos, means OpenAI or picture preparation broke |
-| `vision.truncated` | With `reason: max_output_tokens`, the output budget ran out: raise `MAX_TOKENS` in [`openai-exchange.ts`](../src/lib/x/puzzle-solvers/vision/server/openai-exchange.ts) or lower the model's `effort` in the puzzle's `server/extraction.ts`. More tokens do not help any other reason |
-| `vision.malformed_reply`, `<puzzle>.uninterpretable` | A run of them means the Responses API changed or the model or prompt regressed |
+| `vision.not_configured` | Set `OPENROUTER_API_KEY` in Infisical's `dev` and restart `pnpm dev` (`pnpm dev:public` never reads it); Deploy refuses a `prod` without it |
+| `vision.upstream_failed` | For `failure: account_rejected`, by `status`: 401, fix `OPENROUTER_API_KEY` in Infisical's `prod` and re-run Deploy; 402, add credits or raise the key's [credit limit](#openrouter); 403, loosen the key's guardrails. An invalid key shows only here, after admissions are spent. A 503 means no provider of the model takes every parameter sent: pick another model. A lasting `model_failed`, or a run of `model_rejected` on ordinary photos, means OpenRouter, the model or picture preparation broke |
+| `vision.truncated` | The output budget ran out: raise `MAX_TOKENS` in [`openrouter-exchange.ts`](../src/lib/x/puzzle-solvers/vision/server/openrouter-exchange.ts) or lower the model's `effort` in the puzzle's `server/extraction.ts` |
+| `vision.malformed_reply`, `<puzzle>.uninterpretable` | A run of them means OpenRouter's Chat Completions reply changed or the model or prompt regressed |
 | `<route>.unexpected_error`, `<puzzle>.unexpected_error` | A bug: `message` says what |
 | `auth.dev_only_unverified_owner_token` | The unverified dev sign-in reached a build ([Authentication](convex.md#authentication)) |
 

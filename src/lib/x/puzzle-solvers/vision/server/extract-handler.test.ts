@@ -14,14 +14,17 @@ import {
   serveExtraction,
 } from './extract-handler'
 import type { ExtractHandlerConfig, ExtractHandlerDeps } from './extract-handler'
-import { NOT_CONFIGURED } from './openai-exchange'
+import { NOT_CONFIGURED } from './openrouter-exchange'
 
 type Raw = { cells: Array<number> }
 
 const config: ExtractHandlerConfig<Raw, Raw, Raw, object> = {
   models: {
-    initial: [{ id: 'gpt-6-luna' }, { id: 'gpt-6-sol', effort: 'low', tier: 'fast' }],
-    fallback: [{ id: 'gpt-6-sol', effort: 'high', tier: 'fast' }],
+    initial: [
+      { id: 'openai/gpt-6-luna' },
+      { id: 'openai/gpt-6.1-sol', effort: 'low', tier: 'fast' },
+    ],
+    fallback: [{ id: 'openai/gpt-6.1-sol', effort: 'high', tier: 'fast' }],
   },
   hintsSchema: z.strictObject({}),
   prompt: () => 'read it',
@@ -157,7 +160,7 @@ describe('extract route', () => {
 
   it.each([
     ['base64 that is not a JPEG', { ...VALID_BODY, data: 'iVBORw0KGgo=' }, 'invalid_request'],
-    ['a model choice', { ...VALID_BODY, model: 'gpt-6-sol' }, 'invalid_request'],
+    ['a model choice', { ...VALID_BODY, model: 'openai/gpt-6.1-sol' }, 'invalid_request'],
   ])('refuses %s before any model call', async (_label, body, outcome) => {
     const { steps, post } = setup()
     expect(await post(body)).toEqual({
