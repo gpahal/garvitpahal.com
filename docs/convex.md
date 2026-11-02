@@ -28,7 +28,7 @@ Under `pnpm dev`, a loopback request without Access, Cloudflare or proxy headers
 
 ## Rate limits
 
-[`rateLimits.ts`](../convex/rateLimits.ts) meters puzzle reads in one Convex transaction, so the budget holds across Cloudflare locations, and caps calls weighted by price, not the bill ([OpenAI](deployment.md#openai)). A paid route consumes its admissions before reading the body (`consumeRateLimit` in [`convex-server.ts`](../src/lib/x/puzzle-solvers/vision/server/convex-server.ts)), never refunds them and answers 503 without paid work when metering is unavailable.
+[`rateLimits.ts`](../convex/rateLimits.ts) meters puzzle reads in one Convex transaction, so the budget holds across Cloudflare locations, and caps calls weighted by price, not the bill ([OpenRouter](deployment.md#openrouter)). A paid route consumes its admissions before reading the body (`consumeRateLimit` in [`convex-server.ts`](../src/lib/x/puzzle-solvers/vision/server/convex-server.ts)), never refunds them and answers 503 without paid work when metering is unavailable.
 
 ## Tests
 

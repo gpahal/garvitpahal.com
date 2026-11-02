@@ -62,10 +62,10 @@ ${PROMPT_CLOSING}`
 
 const KEN_KEN_VISION_MODELS: VisionModels = {
   initial: [
-    { id: 'gpt-6-sol', effort: 'none' },
-    { id: 'gpt-6-sol', effort: 'medium', tier: 'fast' },
+    { id: 'openai/gpt-6.1-terra', effort: 'none' },
+    { id: 'openai/gpt-6.1-sol', effort: 'medium', tier: 'fast' },
   ],
-  fallback: [{ id: 'gpt-6-sol', effort: 'xhigh', tier: 'fast' }],
+  fallback: [{ id: 'openai/gpt-6.1-sol', effort: 'xhigh', tier: 'fast' }],
 }
 
 export const kenKenExtraction = createExtractHandler<

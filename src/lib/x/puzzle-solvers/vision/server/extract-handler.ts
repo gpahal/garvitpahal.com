@@ -21,8 +21,8 @@ import type { BoundedText } from './bounded-read'
 import type { consumeRateLimit } from './convex-server'
 import { admissionsOf, modelKey } from './models'
 import type { ChainModel, VisionModels } from './models'
-import { MAX_TOKENS, NOT_CONFIGURED, UNREADABLE } from './openai-exchange'
-import type { ExtractStructuredOptions, StructuredReply } from './openai-exchange'
+import { MAX_TOKENS, NOT_CONFIGURED, UNREADABLE } from './openrouter-exchange'
+import type { ExtractStructuredOptions, StructuredReply } from './openrouter-exchange'
 import { runReadSession } from './read-session'
 import type { CallOutcome } from './read-session'
 import { toStrictJsonSchema } from './strict-json-schema'
@@ -157,7 +157,7 @@ export function createExtractHandler<TRaw, TPuzzle, TResult, THints extends obje
 
     // In this order so no admission is spent on a request that could never be served.
     if (!deps.isConfigured()) {
-      logErrorEvent('vision.not_configured', { requestId, unset: 'OPENAI_API_KEY' })
+      logErrorEvent('vision.not_configured', { requestId, unset: 'OPENROUTER_API_KEY' })
       return refuse('not_configured', 503, NOT_CONFIGURED)
     }
 

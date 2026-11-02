@@ -16,7 +16,7 @@ import { setConvexEnv } from './convex-env.ts'
  * The server secrets `astro.config.ts` declares.
  */
 export const WORKER_SECRETS = [
-  'OPENAI_API_KEY',
+  'OPENROUTER_API_KEY',
   'CONVEX_JWT_PRIVATE_KEY',
   'ACCESS_TEAM_DOMAIN',
   'ACCESS_AUD',

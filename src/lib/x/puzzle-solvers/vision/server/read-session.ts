@@ -4,7 +4,7 @@ import type { SetTimer } from '@/lib/timers'
 
 import { READ_TIME_LIMIT_MESSAGE, wireFailure } from '../extract-wire'
 import type { ExtractError, ExtractRead, ReadRefusal } from '../extract-wire'
-import { UNREADABLE } from './openai-exchange'
+import { UNREADABLE } from './openrouter-exchange'
 
 /**
  * A proxy or browser may drop a connection silent for most of the deadline, and a failed write is

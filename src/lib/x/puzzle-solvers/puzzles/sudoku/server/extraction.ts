@@ -38,10 +38,10 @@ ${PROMPT_CLOSING}`
 
 const SUDOKU_VISION_MODELS: VisionModels = {
   initial: [
-    { id: 'gpt-6-luna', effort: 'none' },
-    { id: 'gpt-6-sol', effort: 'low' },
+    { id: 'openai/gpt-6-luna', effort: 'none' },
+    { id: 'openai/gpt-6.1-terra', effort: 'medium' },
   ],
-  fallback: [{ id: 'gpt-6-sol', effort: 'high', tier: 'fast' }],
+  fallback: [{ id: 'openai/gpt-6.1-sol', effort: 'high', tier: 'fast' }],
 }
 
 export const sudokuExtraction = createExtractHandler<

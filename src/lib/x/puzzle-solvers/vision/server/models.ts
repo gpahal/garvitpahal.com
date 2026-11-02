@@ -4,17 +4,32 @@ import type { ReadPhase } from '../extract-wire'
 type VisionEffort = 'none' | 'low' | 'medium' | 'high' | 'xhigh' | 'max'
 
 /**
- * The provider's priority lane, at twice the price.
+ * The priority lane, at twice the price. OpenRouter treats it as a request: the logged
+ * `serviceTier` is the lane used and billed.
  */
 type VisionTier = 'fast'
 
-type VisionModelId = 'gpt-6-sol' | 'gpt-6-luna'
+/**
+ * OpenRouter model IDs and the efforts each accepts (its `reasoning.supported_efforts`). A model
+ * added here must accept an image, `reasoning` and `response_format`: `require_parameters` makes
+ * OpenRouter refuse the call rather than drop one.
+ */
+type VisionModelEfforts = {
+  'openai/gpt-6-luna': VisionEffort
+  'openai/gpt-6.1-terra': VisionEffort
+  /**
+   * Reasoning is mandatory, so OpenRouter refuses `none`.
+   */
+  'openai/gpt-6.1-sol': Exclude<VisionEffort, 'none'>
+}
 
 export type ChainModel = {
-  id: VisionModelId
-  effort?: VisionEffort
-  tier?: VisionTier
-}
+  [Id in keyof VisionModelEfforts]: {
+    id: Id
+    effort?: VisionModelEfforts[Id]
+    tier?: VisionTier
+  }
+}[keyof VisionModelEfforts]
 
 export type VisionModels = {
   initial: [ChainModel, ChainModel]

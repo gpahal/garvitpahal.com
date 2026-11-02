@@ -19,7 +19,7 @@ const CONFIG = path.join(ROOT, 'wrangler.jsonc')
  * What `pnpm dev` reads: the unverified owner token's two settings and the puzzle solvers' key.
  * The Access settings only matter behind Access.
  */
-const DEV_SECRETS = ['OPENAI_API_KEY', 'CONVEX_JWT_PRIVATE_KEY', 'OWNER_EMAIL']
+const DEV_SECRETS = ['OPENROUTER_API_KEY', 'CONVEX_JWT_PRIVATE_KEY', 'OWNER_EMAIL']
 
 const runWorkerFirstSchema = z.union([z.boolean(), z.array(z.string())])
 
