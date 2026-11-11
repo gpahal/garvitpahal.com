@@ -9,15 +9,11 @@ I have built a workflow engine twice. The first ran under every product at [Harn
 
 ## Harness
 
-I joined Harness as a founding software engineer. I worked on the Continuous Delivery and Pipeline teams, building the foundations the other teams used to build workflow products.
-
-My main work was the design and development of the workflow execution engine under CD, CI, Feature Flags and Cloud Cost Management. It runs durable workflows that last weeks. I also led the move from a monolithic Java app to polyglot microservices as the product offering grew.
-
-While I was there, revenue grew 50x and Harness went from one product to six. It is now valued at \$5.5 billion.
+I joined Harness as a founding software engineer and designed and built the workflow execution engine under its CD, CI, Feature Flags and Cloud Cost Management products. It runs durable workflows that last weeks. While I was there, revenue grew 50x and Harness went from one product to six.
 
 ## durable-execution
 
-durable-execution runs tasks durably, from a single function to a multi-step workflow. Tasks survive logic failures, process crashes and network errors, which makes it a good fit for AI workflows.
+durable-execution runs tasks durably, from a single function to a multi-step workflow, so they survive logic failures, process crashes and network errors.
 
 Temporal needs its own cluster and Inngest is a hosted service. I wanted a library that runs inside a TypeScript app and keeps its state in the database I already use, Convex or SQL through Drizzle.
 
@@ -58,7 +54,7 @@ State lives in a storage implementation. Two packages provide one:
 - [durable-execution-storage-drizzle](https://github.com/gpahal/durable-execution/tree/main/durable-execution-storage-drizzle) uses [Drizzle ORM](https://orm.drizzle.team/) with PostgreSQL, MySQL or SQLite
 - [durable-execution-storage-convex](https://github.com/gpahal/durable-execution/tree/main/durable-execution-storage-convex) runs as a [Convex](https://www.convex.dev/) component
 
-An in-memory storage comes with the main package for tests and simple cases.
+The main package also includes an in-memory storage for tests and simple cases. I use durable-execution mostly as the orchestration layer for my personal agents.
 
 ## Lessons that carried over
 
@@ -67,10 +63,6 @@ An in-memory storage comes with the main package for tests and simple cases.
 **State belongs in storage, not in the process.** A running task gets an expiry of its timeout plus some leeway. If the process dies, a background job finds the expired task and marks it ready again. Several executors can share one storage, and a cancellation reaches whichever one is running the task.
 
 **A tree of tasks covers most workflows.** Parents with parallel children, plus an optional finalize step that combines their results, are the core. Sequential, looping and recursive tasks can all be built from them.
-
-## Outcome
-
-I use durable-execution mostly as the orchestration layer for my personal agents. All five packages are published on npm.
 
 ## Resources
 

@@ -29,31 +29,25 @@ The tokeniser is my own byte-pair encoding tokeniser with GPT-2's vocabulary siz
 Training has two stages:
 
 1. Stage 1 trains on 10 billion tokens of FineWeb-Edu, mostly web text, for five epochs.
-2. Stage 2 continues from stage 1 on up to 310 million tokens of higher-quality text from [Cosmopedia](https://huggingface.co/datasets/HuggingFaceTB/cosmopedia) and [Alpaca](https://huggingface.co/datasets/yahma/alpaca-cleaned).
+2. Stage 2 continues from stage 1 on up to 310 million tokens of higher-quality text: synthetic textbooks, stories and WikiHow-style articles from [Cosmopedia](https://huggingface.co/datasets/HuggingFaceTB/cosmopedia), written by Mixtral, and [Alpaca](https://huggingface.co/datasets/yahma/alpaca-cleaned).
 
-Stage 2 runs three times with different seeds. A script then averages the three models' weights into one, a technique known as a model soup.
+Stage 2 runs three times with different seeds, and a script averages the three models' weights into one, a technique known as a model soup.
 
-Both stages use PyTorch's DistributedDataParallel, launched with `torchrun` as one process per GPU. A HellaSwag eval runs during training, so I could watch accuracy climb against the OpenAI baselines.
+Both stages use PyTorch's DistributedDataParallel, launched with `torchrun` as one process per GPU. A HellaSwag eval runs during training, so I could watch accuracy climb against the OpenAI baselines, as in these stage 1 charts:
 
 ![Two charts from stage 1 training. Left: training and validation loss falling over about 90,000 iterations, with validation loss ending below OpenAI GPT-2's. Right: HellaSwag accuracy rising from about 0.24, passing GPT-2's 0.294 early and GPT-3's 0.337 later in the run](./images/gpt-2-for-128-dollars/loss-and-eval.png)
 
-The chart shows stage 1.
-
 ## What it cost
 
-The GPUs were 8 H200s on [Runpod](https://www.runpod.io/) at \$32 an hour. About four hours came to about \$128. A separate AWS c8g.4xlarge instance ran for about 16 hours to train the tokeniser and then tokenise the training data, about \$6.75 more.
+The GPUs were 8 H200s on [Runpod](https://www.runpod.io/) at \$32 an hour, so four hours came to about \$128. Training the tokeniser and tokenising the data took another 16 hours on an AWS c8g.4xlarge instance, about \$6.75.
 
 ## Outcome
 
-A GPT-2-class model is cheap to train from scratch, and the biggest lesson was how much data quality matters. A plain architecture beat the original GPT-2 checkpoint on HellaSwag after about 48 billion tokens, five passes over 10 billion tokens of FineWeb-Edu. OpenAI never said how many tokens GPT-2 saw; Andrej Karpathy [estimates about 100 billion](https://x.com/karpathy/status/1795513568655487221), from WebText, a 2019 scrape of pages linked from Reddit. GPT-3's model of the same size saw 300 billion.
+A GPT-2-class model is cheap to train from scratch, and the biggest lesson was how much data quality matters. A plain architecture beat the original GPT-2 checkpoint on HellaSwag after about 48 billion tokens, five passes over 10 billion tokens of FineWeb-Edu. OpenAI never said how many tokens GPT-2 saw; Andrej Karpathy [estimates about 100 billion](https://x.com/karpathy/status/1795513568655487221), from WebText, a scrape of pages linked from Reddit. GPT-3's model of the same size saw 300 billion.
 
-FineWeb-Edu is one of the newest open datasets. It is Common Crawl filtered and deduplicated, then cut to the pages that a classifier, trained on Llama 3 70B's ratings, judged educational. In the [FineWeb paper](https://arxiv.org/abs/2406.17557), it matched another open dataset's MMLU score with almost 10 times fewer tokens. Cosmopedia, in stage 2, is synthetic textbooks, stories and WikiHow-style articles written by Mixtral.
+FineWeb-Edu is Common Crawl filtered and deduplicated, then cut to the pages that a classifier, trained on Llama 3 70B's ratings, judged educational. In the [FineWeb paper](https://arxiv.org/abs/2406.17557), it matched another open dataset's MMLU score with almost 10 times fewer tokens.
 
 Data quality isn't the whole story, though. FineWeb-Edu's gains are biggest on knowledge benchmarks such as MMLU and ARC, and its authors set its filter threshold as a trade-off against HellaSwag scores. HellaSwag's questions also come from WikiHow articles and video captions, plain English much like FineWeb-Edu's, while the model likely gave up skills HellaSwag doesn't test, such as code.
-
-Next I'd like to try post-training it, with supervised fine-tuning and then reinforcement learning.
-
-The pretrained model and tokeniser download with one script, and the notebooks walk through the tokeniser, the model and the training plots.
 
 ## Resources
 
