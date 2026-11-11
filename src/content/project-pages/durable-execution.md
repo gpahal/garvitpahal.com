@@ -10,7 +10,7 @@ href: https://github.com/gpahal/durable-execution
 
 A task is a single function or a parent that returns child tasks, which run in parallel. An optional `finalize` task receives every child's result, failed ones included, and decides the parent's output. The executor stores each execution and moves it through explicit states: `ready`, `running`, then `completed`, `failed`, `timed_out` or `cancelled`.
 
-Recovery rests on one rule. A running task gets an expiry from its timeout plus some leeway, and a background process resets any task still running past its expiry to `ready`, so a crash loses no state. Tasks must be idempotent, because a task can run more than once.
+For recovery, a running task gets an expiry from its timeout plus some leeway, and a background process resets any task still running past its expiry to `ready`, so a crash loses no state. Tasks must be idempotent, because a task can run more than once.
 
 Sleeping tasks wait for an outside signal, such as a payment webhook or an approval. Cancellation is stored too, so whichever executor is running a task stops it.
 

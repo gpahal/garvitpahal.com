@@ -16,7 +16,7 @@ I built [design2code-rl](https://github.com/gpahal/design2code-rl) to measure th
 
 Most screenshot-to-code benchmarks, such as Design2Code and Web2Code, test a single page. Real sites have several pages that share a nav, a footer and a brand. A multi-page task is harder, and it shows failures a single page hides, like colours drifting from one page to the next.
 
-I also wanted a reward that could train a model, not only rank one. Pass or fail gives no gradient. A score between 0 and 1 does.
+I also wanted a reward that could train a model as well as rank one. Pass or fail gives no gradient, so the grader returns a score between 0 and 1.
 
 ## How it works
 

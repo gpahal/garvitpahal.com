@@ -11,7 +11,7 @@ Claude Code with Opus 4.7 rebuilt multi-page websites from screenshots with a me
 
 ## Why build it
 
-Screenshot-to-code benchmarks such as Design2Code and Web2Code test one page. Real sites share a nav, a footer and a brand across pages, and drift between pages is a failure a single page cannot show. I also wanted a reward that could train a model: pass or fail gives no gradient, and a score between 0 and 1 does.
+Screenshot-to-code benchmarks such as Design2Code and Web2Code test one page. Real sites share a nav, a footer and a brand across pages, and drift between pages is a failure a single page cannot show. I also wanted a reward that could train a model as well as rank one. Pass or fail gives no gradient, so the grader returns a score between 0 and 1.
 
 ## How it works
 
@@ -30,7 +30,7 @@ The judge sees only screenshots, so any markup that looks right scores well. The
 
 ## Findings
 
-The site decided the score, not the attempt. Within a site the standard deviation stayed under 0.05, while site means ran from 0.91 for a minimal space nonprofit to 0.67 for a retro storybook education site.
+The site decided the score far more than the attempt did. Within a site the standard deviation stayed under 0.05, while site means ran from 0.91 for a minimal space nonprofit to 0.67 for a retro storybook education site.
 
 Retro was the hardest design language, about 0.18 below minimal, because the agent dropped decorative type, background patterns and ornaments. About 60% of the judge's lost points came from photos and illustrations the agent cannot draw. Accessibility scored 0.44, mostly for missing alt text and heading order.
 
