@@ -8,213 +8,165 @@ image:
   alt: A dynamic Pokemon NFT on Metaplex after evolving, at evolution index 1
 ---
 
-I love exploring new programming languages and I have been trying to learn Rust for a good two or three months now. I learned about Solana during this time. I started diving deeper into the web3 ecosystem, bought some SOL, created a wallet, started using some Solana apps and read a lot.
+I had been learning Rust for two or three months when I came across Solana. I went deeper into web3: I bought some SOL, created a wallet, used Solana apps and read a lot.
 
-Looking back, I feel Solana spoiled me. I expected all blockchains to be fast and have great wallets like [Phantom](https://phantom.com/). I tried Ethereum next, and the experience was significantly worse. I was paying \$80 gas fees and waiting for transactions to complete, and MetaMask wasn't very intuitive. Solana and products in its ecosystem were the only ones I looked forward to using.
+Solana spoiled me. I expected every blockchain to be fast and to have wallets as good as [Phantom](https://phantom.com/). Ethereum, which I tried next, was much worse: \$80 gas fees, slow transactions and an unintuitive MetaMask.
 
 ## Getting into the fellowship
 
-After all this experimentation, I wanted to work full-time in web3 and see what was possible with this new technology stack. Around this time, I came to know about the fellowship on [SuperteamDAO's](https://x.com/SuperteamDAO) Twitter.
+I wanted to work full-time in web3, and around then I saw the fellowship on [SuperteamDAO's](https://x.com/SuperteamDAO) Twitter. Superteam helps promising Solana projects in India, South-East Asia, Eastern Europe and Africa launch and grow, and I had been following its [podcasts](https://www.youtube.com/channel/UCi-pkXLbm7sqXFhV1NBLUfQ).
 
-Superteam is a collective which helps the most promising projects in the Solana ecosystem in the ascending world (India, South-East Asia, Eastern Europe and Africa) launch and grow. I had been following Superteam for a while, particularly their [podcasts](https://www.youtube.com/channel/UCi-pkXLbm7sqXFhV1NBLUfQ).
-
-The [fellowship](https://web.archive.org/web/20220106144208/https://solana-india-fellowship.devfolio.co/) looked exciting. It was an eight-week programme to learn about Solana and build apps for it. There was a new theme each week, from NFTs to DeFi to gaming, followed by quests, exercises and Q\&A sessions by experts. And you got a \$2,500 stipend!
-
-The fellowship aligned with my goals, so I applied. I had to fill out a few application forms and give an in-person interview. After a week, I got an email from them welcoming me to the fellowship. Yay! I was excited to dive deeper and learn from a fantastic team of mentors and supporters.
+The [fellowship](https://web.archive.org/web/20220106144208/https://solana-india-fellowship.devfolio.co/) was an eight-week programme to learn Solana and build apps for it. Each week had a new theme, from NFTs to DeFi to gaming, with quests, exercises and Q\&A sessions with experts, and fellows got a \$2,500 stipend. I filled out a few application forms, gave an in-person interview and got in a week later.
 
 ## Week 1: Getting started
 
 **In short:** Rust and Solana fundamentals: the ecosystem, the language and the programming model.
 
-The first week's goal was to brush up on Rust concepts, Solana's programming model and tooling.
-
 ### Solana ecosystem and the fellowship
 
-The week started with a talk by [Chase](https://x.com/therealchaseeb), who works at Solana in developer relations. He talked about the Solana ecosystem, where he sees it going and its growth over the last year, especially in India. There is a lot to be optimistic and excited about! Do follow him to keep up with the ecosystem and learn how to get started with Solana. Also, check out [SOL dev\_](https://web.archive.org/web/20220405055138/https://soldev.app/) for everything you might need for developing on Solana.
-
-Then, we got to know more about the fellowship, its structure and goals from [Neil](https://x.com/neilshroff) and [Gnana Lakshmi](https://x.com/gyanlakshmi).
+[Chase](https://x.com/therealchaseeb), from developer relations at Solana, opened with the ecosystem's growth over the last year, especially in India, and where he sees it going. [SOL dev\_](https://web.archive.org/web/20220405055138/https://soldev.app/) collects everything you need to develop on Solana. [Neil](https://x.com/neilshroff) and [Gnana Lakshmi](https://x.com/gyanlakshmi) then covered the fellowship's structure and goals.
 
 ### Rust
 
-I knew some Rust before starting the fellowship. I like learning new languages, and Rust was the one I chose to learn last year. Like most resolutions, it wasn't very successful. But I ended up using it in a small side project and also got to know about Solana.
-
-I spent that week refreshing my Rust knowledge. I enjoyed going over exercises on [Rustlings](https://github.com/rust-lang/rustlings) and [Exercism](https://exercism.org/tracks/rust). They both have short, progressively tricky exercises you can easily do on your local machine. Simple and engaging. If anyone prefers video, have a look at these: [Rust Programming Tutorials](https://www.youtube.com/playlist?list=PLVvjrrRCBy2JSHf9tGxGKJ-bYAN_uDCUL) and [Introduction to Rust for Solana](https://web.archive.org/web/20211128024016/https://questb.uk/quest/introduction-to-rust-for-solana-3b5a).
+I had picked Rust as the language to learn last year and used it in a small side project, which is how I found Solana. I spent the week refreshing it with [Rustlings](https://github.com/rust-lang/rustlings) and [Exercism](https://exercism.org/tracks/rust), which both have short, progressively harder exercises you run locally. For video, try [Rust Programming Tutorials](https://www.youtube.com/playlist?list=PLVvjrrRCBy2JSHf9tGxGKJ-bYAN_uDCUL) and [Introduction to Rust for Solana](https://web.archive.org/web/20211128024016/https://questb.uk/quest/introduction-to-rust-for-solana-3b5a).
 
 ### Solana
 
-The previous week, I read [Explaining Solana with The Simpsons](https://web.archive.org/web/20211201085846/https://learn.figment.io/tutorials/explaining-solana-with-the-simpsons). It's one of the best introductions to Solana I have come across to date. It talks about Solana and its unique innovations. I had previously gone through the official blog posts written by Solana developers to understand why it's so fast and secure. But they were dense and a bit difficult for me to understand. After reading the Simpsons post, it started to make sense. Kudos to [Jonathan Ferreira](https://x.com/JSoufer) for putting it together.
+The week before, I had read [Explaining Solana with The Simpsons](https://web.archive.org/web/20211201085846/https://learn.figment.io/tutorials/explaining-solana-with-the-simpsons) by [Jonathan Ferreira](https://x.com/JSoufer), the best introduction to Solana I have come across. Solana's own posts on why it's fast and secure had been too dense for me, and this one made them make sense.
 
-This week was about learning the [programming model](https://web.archive.org/web/20220408124107/https://docs.solana.com/developing/programming-model/overview), [how to deploy to Solana](https://web.archive.org/web/20231231234819/https://openquest.xyz/quest/deploying-the-program-on-to-solana) and [how to work with interfaces to Solana like the SPL Token CLI](https://web.archive.org/web/20220514154128/https://openquest.xyz/quest/create_crypto_with_solana_cli). It was a fun experience to actually use the technologies that I had read about, to experience them and to see how they worked.
+This week covered the [programming model](https://web.archive.org/web/20220408124107/https://docs.solana.com/developing/programming-model/overview), [how to deploy to Solana](https://web.archive.org/web/20231231234819/https://openquest.xyz/quest/deploying-the-program-on-to-solana) and [how to work with interfaces to Solana like the SPL Token CLI](https://web.archive.org/web/20220514154128/https://openquest.xyz/quest/create_crypto_with_solana_cli). It was fun to finally use what I had read about.
 
 ## Week 2: Creating mini dApps
 
-**In short:** My first dApps, with the Solana web3.js library and an on-chain voting program.
+**In short:** My first dApps, with the [`@solana/web3.js`](https://web.archive.org/web/20220401091308/https://solana-labs.github.io/solana-web3.js/) library and an on-chain voting program.
 
-This week's goal was to start creating mini dApps on Solana. There are two parts to this: interacting with Solana using the [`@solana/web3.js`](https://web.archive.org/web/20220401091308/https://solana-labs.github.io/solana-web3.js/) library and creating on-chain programs.
+### Web2 vs web3 development
 
-### Thoughts on web2 vs web3 development
+[Preethi Kasireddy](https://x.com/iam_preethi) talked about how web3 differs from client-server programming. Web3 makes a global computer with persistent storage simple but iterative development much harder, so auditing and security reviews have to happen before deployment.
 
-[Preethi Kasireddy](https://x.com/iam_preethi) discussed how web3 development differs from the classical client-server programming model. On the one hand, web3 makes it extremely simple to have a global computer with persistent storage, but on the other hand, doing iterative development is significantly more difficult. Another significant difference is the security model and how much auditing needs to be done before deployment. Because iterative upgrades are complex, auditing and security reviews must be done before deployment.
-
-My experience so far with Solana and Ethereum aligns with that: a lot of the basic concepts are the same (you are still writing Rust/Solidity/JS, storing/retrieving data, using a database as a source of truth), but things change a lot when you start building, deploying and combining these components. Be sure to have an open mind if you want to go deep.
+That matches my experience on Solana and Ethereum. The basics are the same (you still write Rust, Solidity or JS and keep a source of truth), but a lot changes once you build, deploy and combine components.
 
 ### Solana web3.js library
 
-This week, we did two quests: [creating an airdrop program](https://web.archive.org/web/20220514154128/https://openquest.xyz/quest/create-an-airdrop-program-with-solana-web3.js) and [creating a roulette game](https://web.archive.org/web/20220401092219/https://openquest.xyz/quest/roulette_game_in_solana). Both of them were about how to use [`@solana/web3.js`](https://web.archive.org/web/20220401091308/https://solana-labs.github.io/solana-web3.js/) to interact with Solana and on-chain programs. The quests are relatively easy if you know JavaScript.
-
-My quick review of the library: very easy to use, powerful (you can move real money in a couple of lines of code) and even better with TypeScript with all the autocompletion goodness.
+Two quests, [creating an airdrop program](https://web.archive.org/web/20220514154128/https://openquest.xyz/quest/create-an-airdrop-program-with-solana-web3.js) and [creating a roulette game](https://web.archive.org/web/20220401092219/https://openquest.xyz/quest/roulette_game_in_solana), used `@solana/web3.js` to interact with Solana and on-chain programs. They're easy if you know JavaScript. The library is simple and powerful, since you can move real money in a couple of lines, and better still with TypeScript's autocompletion.
 
 ### On-chain voting program
 
-We had to build a voting program with support for delegation ([same thing implemented in Solidity](https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html)). I wanted to do this exercise without using the [Anchor framework](https://github.com/otter-sec/anchor). Even though it makes program development much simpler and more secure, it abstracts away quite a few things. I wanted to learn how the Solana program SDK handles those things without the Anchor abstractions.
+The exercise was a voting program with delegation ([the Solidity version](https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html)). I skipped the [Anchor framework](https://github.com/otter-sec/anchor): it makes programs simpler and safer, but I wanted to see what it abstracts away from the Solana program SDK.
 
-It turned out to be more challenging than I expected. I couldn't find a good starting point, so I went down a rabbit hole and explored the Solana program library. I found the [`name-service`](https://github.com/solana-labs/solana-program-library/tree/master/name-service) program most helpful. Its features were relatively straightforward, and the implementation was simple to understand. I created a template for myself at [templates/program](https://github.com/gpahal/solana-fellowship/tree/main/programs/templates/program).
+It was harder than I expected. With no good starting point, I went through the Solana program library and found the [`name-service`](https://github.com/solana-labs/solana-program-library/tree/master/name-service) program the most helpful, since it was simple to follow. I made a template from it at [templates/program](https://github.com/gpahal/solana-fellowship/tree/main/programs/templates/program). With no UI to test the program, I learned to write integration tests for Solana, and seeing them pass was satisfying.
 
-I completed the program after browsing and going through open-source Solana and Rust programs. I could not test it through a UI, so I learned how to write integration tests for Solana. It was satisfying to see the green ticks after some challenging work.
-
-That said, I'll be using the Anchor framework from now on. Not using it showed me how useful it is.
+Not using Anchor showed me how useful it is, so I used it from then on.
 
 ## Week 3: More dApps
 
 **In short:** Bigger programs, written with the Anchor framework.
 
-This week's goal was to continue creating dApps on Solana, not as simple as last week's.
-
 ### Anchor framework
 
-This week, I had a personal goal: to learn and use the [Anchor framework](https://github.com/otter-sec/anchor). Anchor provides an eDSL for writing Solana programs and an IDL that anyone can use to generate a client. It also comes with a CLI and workspace management for developing applications.
-
-I faced a lot of issues last week getting started with Solana programs. There is too little documentation and quite a bit of boilerplate. Looking at open-source programs helped me immensely, especially [`solana-program-library`](https://github.com/solana-labs/solana-program-library).
-
-I had heard great things about Anchor, so I used it for this week's work. And it was great. It was easy to follow the tutorials, go through [The Anchor Book](https://www.anchor-lang.com/docs), start a new project and get the program to a working state. It makes Solana development feel as simple as Solidity development. The only problem I faced was the limited documentation, which was expected given that it's a young project and is under active development.
+[Anchor](https://github.com/otter-sec/anchor) provides an eDSL for writing Solana programs, an IDL anyone can use to generate a client, and a CLI with workspace management. After last week's sparse documentation and boilerplate, it was a relief. The tutorials and [The Anchor Book](https://www.anchor-lang.com/docs) took me from a new project to a working program quickly, and Solana development felt as simple as Solidity. Its documentation was limited too, as you'd expect from a young project under active development.
 
 ### On-chain programs
 
-This week, we did three quests: [building a crowdfunding platform](https://web.archive.org/web/20250614232129/https://openquest.xyz/quest/building-a-crowdfunding-platform-using-solana), [setting up campaign accounts and sending money](https://web.archive.org/web/20250614234757/https://openquest.xyz/quest/setting-up-campaign-accounts-and-sending-money-on-solana) and [creating an on-chain calculator](https://web.archive.org/web/20220514154129/https://openquest.xyz/quest/solana-calculator). These were easy to follow after last week's exercise. The calculator program was also a good introduction to using the Anchor framework.
+Three quests, [building a crowdfunding platform](https://web.archive.org/web/20250614232129/https://openquest.xyz/quest/building-a-crowdfunding-platform-using-solana), [setting up campaign accounts and sending money](https://web.archive.org/web/20250614234757/https://openquest.xyz/quest/setting-up-campaign-accounts-and-sending-money-on-solana) and [creating an on-chain calculator](https://web.archive.org/web/20220514154129/https://openquest.xyz/quest/solana-calculator), were easy after last week. The calculator was a good introduction to Anchor.
 
-This week's exercise was to build a bi-directional payment channel ([same thing implemented in Solidity](https://solidity-by-example.org/app/bi-directional-payment-channel/)). It was a challenging exercise, just like the last one, but for different reasons.
+The exercise was a bi-directional payment channel ([the Solidity version](https://solidity-by-example.org/app/bi-directional-payment-channel/)), hard for a different reason. Ethereum's logic can't be copied over, because Solana handles where you store data, where you hold the treasury and how you manage it differently. Each time I thought the logic was done, another error taught me something new about the programming model. It took a day, and writing basic tests first kept the build and test cycle tight.
 
-The programming models of Ethereum and Solana are very different. So, directly copying over the logic is not possible. All of these things have to be handled differently on Solana: where you can store data, where you hold the treasury, how you manage the treasury.
-
-There were many instances when I thought I was done with the program logic, only to be hit with another error and learn something new about the Solana programming model. I completed it after a day of work. What was helpful was that I wrote some basic tests beforehand. So, the build and test cycle was tight.
-
-Some final thoughts: Anchor is awesome. The documentation and example programs are limited and error messages are sometimes unclear, so be ready to go down rabbit holes and test continuously. Join the Anchor and Solana Discords to get help.
+Anchor is excellent, but its documentation and examples are limited and its error messages sometimes unclear, so expect rabbit holes, test continuously and ask in the Anchor and Solana Discords.
 
 ## Week 4: NFTs
 
 **In short:** NFTs on Solana, ending with dynamic NFTs that change over time.
 
-This week was about NFTs: what they are, when they can be used and how to create some on Solana.
-
 ### Creator ecosystem
 
-We had a session by [Jenil](https://web.archive.org/web/20211208150233/https://twitter.com/0xjenil) from [Coinvise](https://coinvise.co/) at the start of the week. He talked about communities, NFTs, tokens, DAOs and web3. It was an insightful session, with some interesting anecdotes from his journey. Jenil also discussed how to evaluate and build ideas, specifically in web3. The way early projects and communities originate and operate is very different from web2 companies. I needed to think about it in the coming weeks as the project deadline came closer.
+[Jenil](https://web.archive.org/web/20211208150233/https://twitter.com/0xjenil) from [Coinvise](https://coinvise.co/) talked about communities, NFTs, tokens, DAOs and how to evaluate ideas in web3, where early projects and communities start and run very differently from web2 companies. That stayed with me as the project deadline came closer.
 
 ### NFTs
 
-This week, we did two quests: [creating and burning NFTs using `@solana/web3.js`](https://web.archive.org/web/20220121150757/https://openquest.xyz/quest/create-burn-nft-solana) and [creating your own NFT minting machine](https://web.archive.org/web/20220514154128/https://openquest.xyz/quest/create_a_candy_machine_minting_nft_and_minting_website_v2). I particularly enjoyed the second one. It allowed me to deploy an NFT minting machine quickly, and then I could peek inside the code and see what was happening.
+Two quests covered [creating and burning NFTs using `@solana/web3.js`](https://web.archive.org/web/20220121150757/https://openquest.xyz/quest/create-burn-nft-solana) and [creating your own NFT minting machine](https://web.archive.org/web/20220514154128/https://openquest.xyz/quest/create_a_candy_machine_minting_nft_and_minting_website_v2). I liked the second: I deployed a minting machine quickly, then read its code to see what was happening.
 
-I had previous experience creating NFTs on Ethereum. The mental model of Solidity was much more straightforward. There were a couple of interfaces (ERC-721 and ERC-1155): implement those, go as crazy as you want with the implementation and you are done.
-
-Metaplex is the de facto NFT standard on Solana. It is significantly more complex than the Ethereum standards. Some of it is because of Solana's programming model, and some of it is to be fast. The good thing is that Metaplex has excellent tooling, documentation and UI code to get you started. I leaned on that to understand Solana's NFTs and do the exercise.
+On Ethereum, where I had made NFTs before, you implement an interface (ERC-721 or ERC-1155) however you like. Metaplex, Solana's de facto NFT standard, is much more complex, partly because of Solana's programming model and partly for speed. Its tooling, documentation and UI code are excellent, though, and I leaned on them for the exercise.
 
 ### Dynamic NFTs
 
-This week's exercise was to create an NFT marketplace supporting dynamic NFTs. I decided to build dynamic Pokémon NFTs. You start with Charmander Pokémon and can evolve it into Charmeleon, Charizard, etc.
-
-I bootstrapped with [Metaplex Storefront](https://web.archive.org/web/20220121074927/https://docs.metaplex.com/storefront/introduction) and added UI components to create and evolve Pokémon NFTs. The creator could go to the Pokémon NFT page and click a button to evolve it. Learning about the Metaplex APIs and the Metaplex Storefront UI cache management was the most challenging part.
+The exercise was an NFT marketplace with dynamic NFTs. I built Pokémon NFTs that start as Charmander and evolve into Charmeleon and then Charizard. I started from [Metaplex Storefront](https://web.archive.org/web/20220121074927/https://docs.metaplex.com/storefront/introduction) and added UI to create and evolve them, so the creator could click a button on the NFT's page to evolve it. The Metaplex APIs and Storefront's UI cache were the hardest part.
 
 ![Metaplex NFT page showing a Charmander with evolution index 0 while the evolve button reads "Evolving Pokemon..."](./images/solana-fellowship/evolving-dynamic-pokemon-nft.jpg)
 
 ![The same NFT page after evolving, now showing a Charmeleon with evolution index 1](./images/solana-fellowship/evolved-dynamic-pokemon-nft.jpg)
 
-It was not the best solution, though. Right now, the dynamic nature requires the creator to manually update the metadata by clicking a button. Ideally, there should be an on-chain program as the NFT's update authority. That program would be responsible for checking the conditions for evolution and automatically evolving the NFT based on conditions like time passed, etc. But I didn't have enough time to implement that, unfortunately! It's a nice add-on that I may implement at some point.
+The creator still has to update the metadata by hand. Ideally an on-chain program would be the NFT's update authority and evolve it automatically, for example after enough time passes, but I ran out of time to build it.
 
 ## Week 5: DeFi
 
 **In short:** Tokens, staking and tokenomics, including my own wallet and cryptocurrency.
 
-We focused on DeFi this week: basics of tokens, staking and tokenomics.
-
 ### DAO treasuries and getting into web3
 
-This week we had a session by [Shreyas](https://x.com/HelloShreyas), who's the co-founder of [Llama](https://web.archive.org/web/20220331225334/https://llama.xyz/). He talked about economic infrastructure for DAO treasuries, how to create a community, his journey in web3 and how important it is to have a good name for your product!
-
-I connected a lot with his journey into web3: he left his job wanting to get into a new industry and took part in hackathons to force himself to do something, something I am trying to do. Another interesting thing he talked about was how to decide what problems to work on: he helped people with their DAOs, and that's where he came across the problem people face managing treasuries. Since then, he has built a product, created a community around it and built up conviction in the problem statement.
+[Shreyas](https://x.com/HelloShreyas), co-founder of [Llama](https://web.archive.org/web/20220331225334/https://llama.xyz/), talked about economic infrastructure for DAO treasuries, building a community and why a product's name matters. His path into web3 matched mine: he left his job for a new industry and used hackathons to force himself to build. He found his problem by helping people with their DAOs, saw how hard managing treasuries was, and built a product and a community around it.
 
 ### Creating my own wallet and cryptocurrency
 
-To see how DeFi is implemented on Solana, we did three quests: [creating a wallet](https://web.archive.org/web/20220514154129/https://openquest.xyz/quest/create_personal_wallet), [creating your own crypto using Solana programs](https://web.archive.org/web/20220117164925/https://openquest.xyz/quest/solana-my-money) and [creating your own crypto using JavaScript](https://web.archive.org/web/20211229162046/https://openquest.xyz/quest/create_crypto_with_js). All of these were focused on how to move money, SOL or any other SPL token.
-
-The first two interacted with Solana through its JSON RPC API, but the last one was interesting: we had to create a Solana contract that proxies calls to the main SPL token program. This ability to call other programs quickly makes the ecosystem more composable and rich.
+Three quests, [creating a wallet](https://web.archive.org/web/20220514154129/https://openquest.xyz/quest/create_personal_wallet), [creating your own crypto using Solana programs](https://web.archive.org/web/20220117164925/https://openquest.xyz/quest/solana-my-money) and [creating your own crypto using JavaScript](https://web.archive.org/web/20211229162046/https://openquest.xyz/quest/create_crypto_with_js), covered moving SOL and other SPL tokens. The first two used Solana's JSON RPC API. The last had us write a program that proxies calls to the SPL token program, and that ability to call other programs makes the ecosystem composable.
 
 ### Staking and tokenomics
 
-The exercise for this week was to add support for staking to the cryptocurrency created in one of the quests. This is what I ended up making.
+The exercise was to add staking to the cryptocurrency from one of the quests. I had to decide where to escrow the funds, how to create escrow accounts for each token and how to tie it together in the UI.
 
 ![Staking app with buttons to airdrop SOL, mint a token and stake 10 tokens, and the resulting token, staked and escrow balances](./images/solana-fellowship/staking-app.jpg)
 
-I had to consider where to escrow the funds, how to create different escrow accounts for tokens and how to connect it all in the UI to provide a good user experience. It was a fun exercise, and I ended up learning a lot.
-
-This exercise also made me think about token economics (tokenomics for short). Different projects have different ways of token distribution, inflation, rewards, etc. I wanted to know why different projects choose different mechanics and how they implement those.
-
-I read the documentation of [Solana economics](https://web.archive.org/web/20211227121250/https://docs.solana.com/economics_overview). It is a well-written set of articles. I would suggest everyone go through them to know why people stake and why it's beneficial for the blockchain that people distribute their stake to different validators, a problem some projects are trying to solve.
+It also got me thinking about tokenomics: why projects choose different distribution, inflation and reward mechanics, and how they implement them. Solana's [economics documentation](https://web.archive.org/web/20211227121250/https://docs.solana.com/economics_overview) is well written and explains why people stake and why spreading stake across validators matters for the network.
 
 ## Week 6: More complex dApps
 
 **In short:** Harder dApps, and the problem my fellowship project would solve.
 
-This week, there was no particular theme; we just practised, built more complicated programs and started on the fellowship project.
+### dApps, dApps everywhere
 
-### dApps, dApps everywhere...
+There were four guided quests:
 
-There were four guided quests, all very different.
+- [**Staking on Solana:**](https://web.archive.org/web/20220528001324/https://openquest.xyz/quest/staking-solana) how staking works under the hood, a good deep dive after a year of staking myself
 
-- [**Staking on Solana:**](https://web.archive.org/web/20220528001324/https://openquest.xyz/quest/staking-solana) This talked about staking and how you can stake on Solana. I have been staking on Solana for the past year, and this was an excellent deep dive into how it works under the hood.
+- [**Building a messaging app on Solana:**](https://web.archive.org/web/20220126103944/https://openquest.xyz/quest/solana-messaging-app) a simple messaging program and its tests
 
-- [**Building a messaging app on Solana:**](https://web.archive.org/web/20220126103944/https://openquest.xyz/quest/solana-messaging-app) This was a quest to create a simple messaging contract and write tests for it.
+- [**Building a decentralised identity verification system on Solana:**](https://web.archive.org/web/20220124062710/https://alexgrinman.com/posts/building-decentralized-identity-verification-system-on-solana/) worth trying if you've used ENS (.eth domains) or Bonfida (.sol domains), to see how services like them work
 
-- [**Building a decentralised identity verification system on Solana:**](https://web.archive.org/web/20220124062710/https://alexgrinman.com/posts/building-decentralized-identity-verification-system-on-solana/) Decentralised identity verification is an interesting problem, and blockchains are an excellent implementation tool. You should try this quest if you've used ENS (.eth domains) or Bonfida (.sol domains). It will give you an idea of how to implement services like that.
+- [**Building a blog on Solana:**](https://web.archive.org/web/20211201081715/https://learn.figment.io/tutorials/build-a-blog-dapp-using-anchor) like the messaging app, but with a UI to play with
 
-- [**Building a blog on Solana:**](https://web.archive.org/web/20211201081715/https://learn.figment.io/tutorials/build-a-blog-dapp-using-anchor) This one was similar to the messaging app. But the good thing was that the author provided a UI that I could use to play with the app.
-
-The exercise for this week was to create a shared wallet between friends to spend from. The program I built allowed a group of people to create a shared wallet that they could use to manage any SPL token. I used the proxying technique from the previous week to create a proxy SPL token. For now, the shared wallet only allows the transfer of SPL tokens. It can be extended to any transaction type in the future, similar to multi-sig wallets like Goki.
+The exercise was a shared wallet that a group of friends could spend any SPL token from. I used the proxying technique from week 5 to create a proxy SPL token. It only transfers SPL tokens for now, but it could support any transaction, like multi-sig wallets such as Goki.
 
 ### Fellowship project
 
-For my fellowship project, I decided to work on streaming payments for Solana.
+For my fellowship project, I chose streaming payments on Solana.
 
 #### The problem
 
-The original idea that I came into the fellowship with:
+I came into the fellowship with this idea:
 
 > Having worked at private remote companies, I have seen people having issues with ESOPs (transparency and illiquidity), global payroll and expense management.
 >
 > This is something I feel blockchain technology can solve, especially for newer-generation companies which are global, distributed and they want new structures for incentivisation and a seamless employee experience.
 
-At the same time, startups are coming up in India and overseas that are trying to solve for earned wage access. Earned wage access means employees can access their earned wage anytime. For example, a person with a salary of 30k per month can withdraw \~15k on the 15th of that month rather than waiting for the start of the following month.
-
-Low-income employees want this because they sometimes face cash crunches at the end of the month if there is any sudden financial expense. They have to resort to predatory loans in these circumstances.
+Meanwhile, startups in India and overseas were working on earned wage access: letting employees draw their wages as they earn them. Someone on 30k a month could withdraw \~15k on the 15th instead of waiting for the next month. Low-income employees need this when a sudden expense leaves them short at the end of the month, which otherwise drives them to predatory loans.
 
 #### The solution
 
-I used Superfluid when I was trying to build something on Ethereum. Thinking about these problems made me think of it and how easy it would be to build solutions on top of it that can solve the issues mentioned above.
+These problems reminded me of Superfluid, which I had used on Ethereum, and how easy solutions would be to build on something like it. The idea was a contract that lets a sender stream payments to a recipient, with:
 
-The idea was to have a contract that allows a sender to send streaming payments to a recipient. Some features that I need for this contract:
+- **Cliffs:** ESOPs usually have them, so the contract needs a way to codify them
 
-- **Support for cliffs:** ESOPs generally involve cliffs, so we need some way to codify cliffs to support that use case.
+- **Prepaid and unbounded streams:** ESOP streams need to be prepaid, so employees know their tokens are in escrow for the vesting schedule. Payroll and subscription streams are unbounded, and senders top up the escrow to keep them running
 
-- **Prepaid and unbounded streams:** Some stream types, like ESOPs, would need to be prepaid because employees would need assurance that part of their tokens are locked up in an escrow that will be given to them on the vesting schedule. Other streams like payroll and subscriptions will be unbounded, so senders can top up the escrow to keep them running.
+- **Solvency detection:** an unbounded stream that isn't topped up in time goes insolvent, so it has to be caught quickly and its sender penalised. Superfluid uses deposits and sentinels for this, and something similar would work here
 
-- **Solvency detection:** Unbounded streams may become insolvent if not topped up in time. There needs to be a way to identify them as quickly as possible and penalise the sender of that stream somehow. Superfluid uses deposits and sentinels to incentivise this behaviour. Something similar would be needed here.
-
-There are solutions in the Solana ecosystem that are trying to bring streaming payments to Solana. However, these lack some features needed to solve the use cases. Some of these are closed-source, so it isn't easy to gauge if they can add these features in an update.
+Existing streaming payment projects on Solana lacked some of these features, and some were closed-source, so I couldn't tell whether they would add them.
 
 ## Week 7: Starting on my project
 
 **In short:** Designing and building the first version of the project, and naming it Superstream.
 
-This week, I designed and started implementing the project idea. I made significant progress, finalised the scope and implemented major parts of the smart contract.
+I designed the project, finalised its scope and implemented most of the smart contract.
 
 ### Components
 
@@ -222,39 +174,29 @@ There would be four main components:
 
 - Streaming contract
 - Service that checks for insolvent streams
-- JavaScript client for usage in browser/Node.js applications
+- JavaScript client for browser and Node.js apps
 - Web UI for users to manage their streams
 
-One of the main aims I have for the project is that any other project should be able to hook into these components to incorporate payment streaming.
-
-Another exciting aspect of the project is insolvency: how to detect, decentralise and incentivise people to prevent it. I have some ideas on this subject but am still finalising the approach.
+Any other project should be able to hook into them to add payment streaming. Insolvency is the most interesting part: how to detect it, decentralise detection and incentivise people to prevent it. I have some ideas but haven't settled on an approach.
 
 ### Naming the project
 
-Probably the most difficult decision of this week. I spent a decent amount of time thinking about it. I settled on **Superstream**, inspired by Superteam.
+Probably the hardest decision of the week. I settled on **Superstream**, after Superteam.
 
 ### Future considerations
 
-Many more exciting things can be done. One example is transitive streams. If Alice is streaming to Bob and Bob is streaming to Charles, Charles can be assured that his stream will not go insolvent as long as Alice keeps topping up the stream. The contract can ensure that Bob only takes out the net balance from both streams.
-
-However, implementing these ideas is pretty complex and out of scope for the project. I might come back to these ideas later.
+Transitive streams are one possibility. If Alice streams to Bob and Bob streams to Charles, the contract can let Bob take out only the net balance of both streams, so Charles's stream stays solvent as long as Alice keeps topping hers up. Ideas like this are complex and out of scope for now.
 
 ### Tech stack
 
-- Smart contract implemented in the excellent [Anchor framework](https://www.anchor-lang.com/docs)
-- Insolvency checker and JavaScript client using TypeScript
-- Web UI using [Next.js](https://nextjs.org/) and TypeScript
+- Smart contract in the [Anchor framework](https://www.anchor-lang.com/docs)
+- Insolvency checker and JavaScript client in TypeScript
+- Web UI in [Next.js](https://nextjs.org/) and TypeScript
 
 ## Superstream
 
-It took me a month, but the project is finally ready. It's live at [superstream.finance](https://superstream.finance/). Try it out, and let me know what you think!
+The project took another month and is live at [superstream.finance](https://superstream.finance/). Superstream became a company, which I founded and ran from September 2021 to March 2022. More on my [work](/work) page.
 
 ## Closing thoughts
 
-It was a fun and productive eight weeks. I learned a lot, built a lot of things and got to know a lot of people. I'm excited to continue building on Solana. I would recommend it to anyone who wants to learn how to develop Solana apps.
-
-I'm especially pleased about this project. I plan to dedicate some time to market it and build a community around it.
-
-Superstream became a company, which I founded and ran from September 2021 to March 2022. More on my [work](/work) page.
-
-If you have any questions about the fellowship, feel free to reach out to me on [email](mailto:g10pahal@gmail.com) or [X](https://x.com/g10pahal).
+The eight weeks were fun and productive: I learned a lot, built a lot and met a lot of people. I'd recommend the fellowship to anyone who wants to learn to build Solana apps. If you have questions about it, reach me by [email](mailto:g10pahal@gmail.com) or on [X](https://x.com/g10pahal).

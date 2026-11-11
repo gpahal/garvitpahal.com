@@ -9,6 +9,6 @@ resume:
   - Solved RAG latency, interruptions and accents, added AI provider fallbacks and made the voice experience configurable
 ---
 
-Giga is an enterprise-focused AI platform that builds voice and chat AI agents to automate and scale customer support and operations for large companies. Customers include DoorDash and Cloudbeds.
+Giga builds voice and chat AI agents for enterprise customer support. Customers include DoorDash and Cloudbeds.
 
-I built the voice AI infrastructure at Giga, which was until then a text- and email-based customer support platform. The work involved solving problems such as RAG latency on the knowledge base, user interruptions and accents, adding fallbacks for our AI providers and making every part of the voice experience configurable.
+I built its voice agent infrastructure on what had been a text and email support platform. I solved RAG latency on the knowledge base, interruptions and accents, added AI provider fallbacks and made every part of the voice experience configurable.

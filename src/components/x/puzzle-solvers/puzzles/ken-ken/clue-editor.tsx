@@ -88,8 +88,7 @@ export function ClueEditor({
             aria-invalid={isNotClueTyped || issue === 'out_of_range'}
             aria-describedby={issue === 'out_of_range' ? `${statusId} ${issueId}` : statusId}
             value={input}
-            // eslint-disable-next-line slop/no-em-dash -- a mark for no clue, not prose
-            placeholder="—"
+            placeholder="None"
             onChange={(event) => {
               const { value } = event.target
               setText(value)

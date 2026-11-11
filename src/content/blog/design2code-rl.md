@@ -8,7 +8,7 @@ image:
   alt: Mean total reward by design language, from 0.887 for minimal-flat down to 0.707 for retro
 ---
 
-Claude Code with Opus 4.7 rebuilds a multi-page website from screenshots well, but not perfectly. Over 100 trials it scored a mean reward of 0.80. The oracle, which hands the grader the original site, scored 0.98. That leaves the agent about 0.18 below the ceiling.
+Claude Code with Opus 4.7 scored a mean reward of 0.80 over 100 trials at rebuilding multi-page websites from screenshots. The oracle, which hands the grader the original site, scored 0.98.
 
 I built [design2code-rl](https://github.com/gpahal/design2code-rl) to measure this. It generates websites, asks an agent to rebuild them from screenshots and grades the result on a continuous scale.
 
@@ -16,13 +16,13 @@ I built [design2code-rl](https://github.com/gpahal/design2code-rl) to measure th
 
 Most screenshot-to-code benchmarks, such as Design2Code and Web2Code, test a single page. Real sites have several pages that share a nav, a footer and a brand. A multi-page task is harder, and it shows failures a single page hides, like colours drifting from one page to the next.
 
-I also wanted a reward that could train a model, not only rank one. Pass or fail gives no gradient. A score between 0 and 1 does.
+I also wanted a reward that could train a model as well as rank one. Pass or fail gives no gradient, so the grader returns a score between 0 and 1.
 
 ## How it works
 
 The pipeline generates 50 sites from scratch, each with five or more pages. Claude Sonnet writes a concept for each one: a category such as a dashboard or a docs site, a brand and a design language. Claude Opus then writes the HTML and CSS, shared regions first so the pages stay consistent. Playwright renders every page at desktop and mobile sizes, and a screener rejects broken or incoherent sites.
 
-Each site becomes a [Harbor](https://github.com/harbor-framework/harbor) task. The agent gets the screenshots and has to produce the site. Trials run on [Modal](https://modal.com/).
+Each site becomes a [Harbor](https://github.com/harbor-framework/harbor) task: the agent gets the screenshots and has to produce the site. Trials run on [Modal](https://modal.com/).
 
 The grader re-renders the agent's pages and scores four things:
 
@@ -41,17 +41,15 @@ The site decided the score far more than the attempt did. Within a site, the sta
 
 Minimal layouts were easy. The three minimal sites scored 0.87 to 0.91, and form pages such as donation, contact and reservation flows scored highest of all.
 
-Retro was the hardest design language, about 0.18 below minimal. The agent dropped decorative type, background patterns and ornaments. It also pushed muted palettes towards vivid web colours. Dense grids of articles, products or schedules scored poorly too, worst when combined with decorative styling.
+Retro was the hardest design language, about 0.18 below minimal. The agent dropped decorative type, background patterns and ornaments, and pushed muted palettes towards vivid web colours. Dense grids of articles, products or schedules scored poorly too, worst when combined with decorative styling.
 
 ![Mean total reward by design language: minimal-flat 0.887, brutalist 0.809, playful-illustrated 0.771, corporate-clean 0.759 and retro 0.707](./images/design2code-rl/design-language-hardness.png)
 
-Much of the lost score is imagery the agent cannot draw: about 60% of the judge's lost points came from photos and illustrations. Some failures don't show at all. Every trial wrote responsive CSS, but accessibility scored 0.44, because alt text and heading order were often missing. The prompt didn't ask for them.
+About 60% of the judge's lost points came from photos and illustrations the agent cannot draw. Other failures are invisible to the judge: every trial wrote responsive CSS, but accessibility scored 0.44, because alt text and heading order were often missing. The prompt didn't ask for them.
 
 ## Outcome
 
 The environment gives a reward that separates easy sites from hard ones and stays stable across attempts at the same site, which is what training needs. Claude Code is already good at plain, minimal sites. The remaining gap is in decorative styles, dense layouts and imagery.
-
-Next I plan to build more evals like this, and RL environments for much more complex and involved tasks, where a reward can do more than rank models: it can help train better ones.
 
 ## Resources
 

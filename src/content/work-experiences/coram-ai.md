@@ -9,6 +9,6 @@ resume:
   - Built platform features including real-time alerts and the background tasks framework
 ---
 
-Coram AI builds AI-powered physical security and operations software, turning ordinary video cameras and sensors into intelligent systems that help organisations improve safety, security and operational efficiency.
+Coram AI makes physical security software that runs on ordinary cameras and sensors.
 
-I built Coram Assistant, where customers ask anything about their security infrastructure and run long-horizon investigations into what is happening in their buildings. I also worked on platform features like real-time alerts and our background tasks framework.
+I built Coram Assistant, which answers questions about a customer's cameras and access control and runs long investigations into what happened in their buildings. I also built platform features including real-time alerts and the background tasks framework.

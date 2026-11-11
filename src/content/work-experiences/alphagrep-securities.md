@@ -8,6 +8,6 @@ resume:
   - Built high-frequency trading strategies for Chinese commodity markets, which became the team's most profitable market
 ---
 
-AlphaGrep is a quantitative trading and investment firm.
+AlphaGrep is a quantitative trading firm.
 
-I researched and developed high-frequency quantitative trading strategies for commodity markets in China, which became my team's most profitable market.
+I researched and built high-frequency trading strategies for commodity markets in China, which became my team's most profitable market.

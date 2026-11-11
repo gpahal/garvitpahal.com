@@ -5,6 +5,4 @@ endedOn: 31/10/2014
 resume: Automated programming feedback with Sumit Gulwani (Microsoft Research) and Amey Karkare (IIT Kanpur), used by 400+ students
 ---
 
-This was a research project under Dr Sumit Gulwani (Principal Researcher, Microsoft Research, Redmond) and Prof. Amey Karkare (Assistant Professor, IIT Kanpur).
-
-We built an application to assist in teaching introductory programming courses in the 1st year of college by automating assignment and feedback generation and solution-checking. The project was deployed in the 2014–15 academic year (with 400+ enrolled students) and was used by the students to practise programming assignments and get immediate feedback.
+A research project with Dr Sumit Gulwani (Microsoft Research) and Prof. Amey Karkare (IIT Kanpur). We built a tool for a first-year programming course that generated assignments, checked solutions and gave students immediate feedback. Over 400 students used it in 2014-15.
