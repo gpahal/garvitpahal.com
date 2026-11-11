@@ -4,21 +4,17 @@ description: A benchmark of text, multimodal and multi-vector embedders, sparse 
 href: https://github.com/gpahal/pdf-rag-embed-bench
 ---
 
-## The result
-
-The best setup I tested found the right PDF page with 94.0% NDCG@5. It combined Cohere's multimodal embedder on page images, Nomic's Colnomic multi-vector embedder, BGE-M3 sparse retrieval and Voyage's reranker. The best dense text embedder on parsed pages reached 84.0% on its own.
-
-A simpler setup came close: Colnomic alone, with sparse retrieval and the reranker, reached 93.8%.
+The best setup I tested found the right PDF page with 94.0% NDCG@5. It combined Cohere's multimodal embedder on page images, Nomic's Colnomic multi-vector embedder, BGE-M3 sparse retrieval and Voyage's reranker. Colnomic alone, with sparse retrieval and the reranker, came close at 93.8%.
 
 ## Why build it
 
-A RAG system over PDFs has to find the right page before a model can answer from it. There are many ways to do that: parse the PDF and embed the text, embed page images, use multi-vector models, add sparse retrieval or rerank. Each choice adds cost and latency, so I wanted numbers on which ones pay off.
+A RAG system over PDFs has to find the right page before a model can answer. Each retrieval option adds cost and latency, so I measured which ones pay off.
 
 ## How it works
 
-I used a subset of the PDFs in [OHR-Bench](https://huggingface.co/datasets/opendatalab/OHR-Bench), across seven domains: academic, administration, finance, law, manuals, news and textbooks. Each setup returns its top five pages for a query, scored with NDCG@5 and recall@5.
+I used a subset of the PDFs in [OHR-Bench](https://huggingface.co/datasets/opendatalab/OHR-Bench) across seven domains: academic, administration, finance, law, manuals, news and textbooks. Each setup returns its top five pages per query, scored with NDCG@5 and recall@5.
 
-I compared text embedders from Voyage, Cohere and Gemini on pages parsed by [Marker](https://github.com/datalab-to/marker), multimodal embedders from Voyage, Cohere and Jina on page images, and multi-vector embedders from Jina and Nomic. I added BGE-M3 sparse retrieval and Voyage's reranker to each, then combined two embedders. I also tested Marker against two other parsers and the dataset's ground-truth text.
+I compared text embedders from Voyage, Cohere and Gemini on pages parsed by [Marker](https://github.com/datalab-to/marker), multimodal embedders from Voyage, Cohere and Jina on page images and multi-vector embedders from Jina and Nomic, each alone, reranked by Voyage and with BGE-M3 sparse retrieval added. I also tested two other parsers and the dataset's ground-truth text against Marker.
 
 | Setup                         | Alone | Reranked | Sparse and reranked |
 | ----------------------------- | ----- | -------- | ------------------- |
@@ -28,12 +24,12 @@ I compared text embedders from Voyage, Cohere and Gemini on pages parsed by [Mar
 | Image multi-vector (Colnomic) | 91.4% | 93.5%    | 93.8%               |
 | Best combination              | -     | -        | 94.0%               |
 
-## Outcome
+## Findings
 
-Reranking lifted every embedder, by 2.1 to 9.2 points, and it took Gemini on text from 76.6% to 85.8%. Embedding the page beat embedding its text. Among dense embedders, Cohere on page images scored 85.8% against 84.0% for Voyage on text. Among multi-vector ones, Colnomic on images scored 91.4% against 87.9% for Jina on text. Even perfect text, the dataset's ground truth, lifted Voyage only to 86.4%.
+Embedding page images beat embedding parsed text, for dense and multi-vector embedders alike. Even the dataset's ground-truth text lifted Voyage only to 86.4%.
 
-Sparse retrieval raised every setup, but a second embedder added little: the best combination beat Colnomic alone by 0.2 points and costs more to query.
+Reranking added 2.1 to 9.2 points to every embedder, taking Gemini on text from 76.6% to 85.8%. Sparse retrieval helped every setup, but a second embedder added only 0.2 points and costs more to query.
 
-A cheap parser was enough. With Voyage, [Contextual AI](https://contextual.ai/blog/document-parser-for-rag/) scored 84.2% and [Landing AI](https://landing.ai/agentic-document-extraction) 82.9%, against 84.0% for Marker, at roughly 10 to 13 times the cost. Finance was the hardest domain throughout: the best combination reached 88.1% there.
+A cheap parser was enough. With Voyage, [Contextual AI](https://contextual.ai/blog/document-parser-for-rag/) scored 84.2% and [Landing AI](https://landing.ai/agentic-document-extraction) 82.9%, against Marker's 84.0%, at roughly 10 to 13 times the cost. Finance was the hardest domain, where the best combination reached 88.1%.
 
-The [results](https://github.com/gpahal/pdf-rag-embed-bench/tree/main/results) have NDCG@5 and recall@5 per domain for every setup. The [precomputed embeddings](https://huggingface.co/datasets/gpahal/pdf-rag-embed-bench) are about 14.5GB zipped.
+Per-domain [results](https://github.com/gpahal/pdf-rag-embed-bench/tree/main/results) cover every setup, and the [precomputed embeddings](https://huggingface.co/datasets/gpahal/pdf-rag-embed-bench) are about 14.5GB zipped.

@@ -1,7 +1,7 @@
 summary:
   Software engineer with ten years at early-stage startups, taking products from zero to one and on
-  to enterprise customers. I build the systems products run on, from durable workflow engines to
-  voice agents and AI assistants
+  to enterprise customers. I build the systems they run on, from durable workflow engines to voice
+  agents and AI assistants
 skills:
   - label: Technologies
     text: TypeScript, Python, Go, Java, Rust, Haskell, SQL, PyTorch, React, Kubernetes

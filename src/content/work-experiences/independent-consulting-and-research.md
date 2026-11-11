@@ -9,6 +9,4 @@ resume:
   - Recently started on robotics, with an SO-101 leader-follower arm kit
 ---
 
-I work independently, building AI agents for clients and doing my own research. My projects cover evals, multimodal embeddings, pretraining, voice agents and durable execution, mostly in AI, and I've recently started on robotics with an SO-101 leader-follower arm kit.
-
-The projects are under notable personal projects below.
+I build AI agents for clients and do my own research on evals, multimodal embeddings, pretraining, voice agents and durable execution. I've also started on robotics with an SO-101 leader-follower arm kit.

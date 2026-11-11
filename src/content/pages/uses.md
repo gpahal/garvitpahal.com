@@ -3,17 +3,15 @@ title: Uses
 description: The hardware, development tools and apps Garvit Pahal uses daily as a software engineer
 ---
 
-This is a rough list of the products I use daily as a software engineer. Check out [uses.tech](https://uses.tech/) for a list of other people's `/uses` pages!
-
-There was a time in my early 20s when I used to enjoy building my own desktop and OS from scratch. I still enjoy tinkering with new tech, but I depend on a simple setup so that I can focus more on my work.
+The hardware and software I use daily. More `/uses` pages are on [uses.tech](https://uses.tech/).
 
 ## Hardware
 
 - Laptop: MacBook Pro M3 Max 14"
 
-- Desktop: an always-on Ubuntu machine that I use from the Mac over SSH
+- Desktop: an always-on Ubuntu machine I use from the Mac over SSH
 
-- Monitor: [Dell S2722QC 27-inch 4K UHD](https://www.dell.com/en-us/shop/dell-27-4k-uhd-usb-c-monitor-s2722qc/apd/210-bbqt/monitors-monitor-accessories)
+- Monitor: [Dell S2722QC 27-inch 4K](https://www.dell.com/en-us/shop/dell-27-4k-uhd-usb-c-monitor-s2722qc/apd/210-bbqt/monitors-monitor-accessories)
 
 - Keyboard: [NuPhy Air75 V3](https://nuphy.com/products/nuphy-air75-v3)
 
@@ -21,98 +19,68 @@ There was a time in my early 20s when I used to enjoy building my own desktop an
 
 - Shortcut keys: [Elgato Stream Deck MK.2](https://www.elgato.com/us/en/p/stream-deck)
 
-- Headphones: [Philips SHP9500 wired headphones](https://www.usa.philips.com/c-p/SHP9500S_27/hifi-stereo-headphones) and [Technics EAH-AZ100 wireless earphones](https://www.technics.com/sg/products/headphones-learn/headphones/the-future-of-sound-innovation-true-wireless-earbuds-eah-az100.html)
+- Headphones: [Philips SHP9500](https://www.usa.philips.com/c-p/SHP9500S_27/hifi-stereo-headphones) wired and [Technics EAH-AZ100](https://www.technics.com/sg/products/headphones-learn/headphones/the-future-of-sound-innovation-true-wireless-earbuds-eah-az100.html) wireless
 
 ## Two machines
 
-I work from the Mac, and an Ubuntu desktop runs around the clock beside it. My [dotfiles](https://github.com/gpahal/dotfiles) set up both, so the shell, editors, launcher and hotkeys match.
+My [dotfiles](https://github.com/gpahal/dotfiles) set up both, so the shell, editors, launcher and hotkeys match.
 
-- Connection: OpenSSH over [Tailscale](https://tailscale.com/), not Tailscale SSH, which drops sessions when tailscaled restarts. The desktop accepts only keys, and only from private ranges and the tailnet.
+- Connection: OpenSSH over [Tailscale](https://tailscale.com/) with keys only, since Tailscale SSH drops sessions when tailscaled restarts
 
-- Sessions: tmux starts at boot on Ubuntu and brings back its sessions after a reboot. tmux and Vim copy to the Mac's clipboard through OSC 52, and agents' notifications reach Ghostty on the Mac over SSH.
+- Sessions: tmux starts at boot and restores its sessions after a reboot. Copies (OSC 52) and agent notifications reach the Mac over SSH
 
-- What runs there: the T3 Code server, as a service that T3 Code on the Mac and my phone share, with Claude Code, Codex and Docker for its agents
+- Services: the T3 Code server, shared by the Mac and my phone, with Claude Code, Codex and Docker for its agents
 
-- Desk: a USB switch moves the keyboard, mouse and Stream Deck between the two machines, and the monitor's input follows over DDC/CI. Elgato's app doesn't run on Linux, so on Ubuntu a daemon draws the same Stream Deck keys, and GNOME gets the hotkeys Hammerspoon sets on the Mac.
+- Desk: a USB switch moves the keyboard, mouse and Stream Deck between the machines, and the monitor input follows over DDC/CI. On Ubuntu a daemon draws the Stream Deck keys and GNOME gets the Mac's Hammerspoon hotkeys
 
-- Uptime: suspend is off, a UPS shuts the desktop down on low battery and starts it when power returns, and security updates install daily. Disk health, a daily check and each boot push alerts to my phone through [ntfy](https://ntfy.sh/).
+- Uptime: no suspend, a UPS that shuts down and restarts with the power, daily security updates and health alerts to my phone through [ntfy](https://ntfy.sh/)
 
 ## Development tools
 
-- IDE: [Zed](https://zed.dev/)
+- Editors: [Zed](https://zed.dev/), and [Vim](https://www.vim.org/) in the terminal
 
-- Coding agents: [Claude Code](https://claude.com/product/claude-code) in [T3 Code](https://t3.codes/)
+- Terminal: [Ghostty](https://ghostty.org/) with [Monaspace](https://monaspace.githubnext.com/) Neon
 
-- Terminal: [Ghostty](https://ghostty.org/) with the [Monaspace](https://monaspace.githubnext.com/) Neon font
+- Shell: zsh with [starship](https://starship.rs/) and [atuin](https://atuin.sh/)
 
-- Shell: zsh with [starship](https://starship.rs/) for the prompt and [atuin](https://atuin.sh/) for history
+- Multiplexer: [tmux](https://github.com/tmux/tmux) with [tmux-sessionizer](https://github.com/gpahal/dotfiles/blob/main/tmux/bin/tmux-sessionizer)
 
-- Terminal multiplexer: [tmux](https://github.com/tmux/tmux), with [tmux-sessionizer](https://github.com/gpahal/dotfiles/blob/main/tmux/bin/tmux-sessionizer) to open a session for a project
+- Git: [lazygit](https://github.com/jesseduffield/lazygit), [difftastic](https://github.com/Wilfred/difftastic) and [git wt](https://github.com/gpahal/dotfiles/blob/main/git/bin/git-wt) for worktrees
 
-- Terminal editor: [Vim](https://www.vim.org/)
+- Containers: [OrbStack](https://orbstack.dev/) on the Mac, [Docker](https://www.docker.com/) on Ubuntu
 
-- Git: [lazygit](https://github.com/jesseduffield/lazygit), [difftastic](https://github.com/Wilfred/difftastic) for diffs and [git wt](https://github.com/gpahal/dotfiles/blob/main/git/bin/git-wt) for worktrees
+- Packages and runtimes: [Homebrew](https://brew.sh/), [mise](https://mise.jdx.dev/) for Node and Go, [rustup](https://rustup.rs/), [uv](https://docs.astral.sh/uv/) and [pnpm](https://pnpm.io/)
 
-- Code management: [GitHub](https://github.com/)
+## AI coding
 
-- Containers: [OrbStack](https://orbstack.dev/) on the Mac and [Docker](https://www.docker.com/) on Ubuntu
+I run [Claude Code](https://claude.com/product/claude-code), on Claude Opus 5.5 at medium effort in auto mode, and [Codex](https://github.com/openai/codex) inside [T3 Code](https://t3.codes/). The [`ai_tools`](https://github.com/gpahal/dotfiles/tree/main/ai_tools) folder in my dotfiles sets them up on both machines.
 
-- Packages and runtimes: [Homebrew](https://brew.sh/) for CLI tools and apps, [mise](https://mise.jdx.dev/) for Node and Go, [rustup](https://rustup.rs/) for Rust, [uv](https://docs.astral.sh/uv/) for Python and [pnpm](https://pnpm.io/) for JavaScript
+- Worktrees: every T3 Code thread, subagent and background session gets its own git worktree
 
-## AI coding setup
+- Instructions: one user-level file for both agents. Work through to done, ask before adding a dependency, never weaken a test and commit only when asked
 
-T3 Code runs the Claude Code and [Codex](https://github.com/openai/codex) CLIs, so their settings and skills apply there too. The [`ai_tools`](https://github.com/gpahal/dotfiles/tree/main/ai_tools) folder in my dotfiles sets them up on both machines.
+- Skills: shared by both, from spec to review and writing, mostly adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills) and [poteto's pstack](https://github.com/cursor/plugins/tree/main/pstack)
 
-- Worktrees: every T3 Code thread works in its own git worktree. Claude Code's subagents and background sessions make theirs with git wt under `~/.worktrees`.
+## Apps
 
-- Instructions: one user-level file, copied to `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`. It tells agents to work through to done without check-ins, ask before adding a dependency, never weaken a test to make it pass and commit only when asked. This site and my dotfiles keep their conventions in `AGENTS.md`, which their `CLAUDE.md` imports.
+- AI assistants: [Claude](https://claude.ai/) and [ChatGPT](https://chatgpt.com/)
 
-- Skills: shared by Claude Code and Codex. The engineering ones take a feature from spec to design, tickets, implementation and review, and the productivity ones cover writing and questioning a plan. Most are modified copies from [Matt Pocock's skills](https://github.com/mattpocock/skills) and [poteto's pstack](https://github.com/cursor/plugins/tree/main/pstack).
+- Launcher: [Vicinae](https://www.vicinae.com/) on both machines, for apps, clipboard history and Raycast extensions
 
-- Defaults: Claude Opus 5.5 at medium effort in auto mode
-
-## Productivity tools
-
-- Browser: [Google Chrome](https://www.google.com/intl/en_in/chrome/)
-
-- AI assistant: [Claude](https://claude.ai/) and [ChatGPT](https://chatgpt.com/)
-
-- Command centre: [Vicinae](https://www.vicinae.com/) on both machines, for apps, clipboard history and Raycast extensions
-
-- Hotkeys: [Hammerspoon](https://www.hammerspoon.org/)
-
-- Window management: [Rectangle](https://rectangleapp.com/)
+- Hotkeys and windows: [Hammerspoon](https://www.hammerspoon.org/) and [Rectangle](https://rectangleapp.com/)
 
 - Dictation: [Wispr Flow](https://wisprflow.ai/)
 
-- Knowledge base: [Notion](https://www.notion.com/)
+- Notes and tasks: [Notion](https://www.notion.com/) and [Linear](https://linear.app/)
 
-- Task management: [Linear](https://linear.app/)
+- Design: [Figma](https://www.figma.com/) and [Canva](https://www.canva.com/)
 
-- Email: [Gmail](https://mail.google.com/)
+- Everyday: Chrome, Gmail, Google Calendar, Google Drive and Dropbox
 
-- Calendar: [Google Calendar](https://calendar.google.com/)
+- Privacy: [Cloudflare 1.1.1.1](https://1.1.1.1/) and [Mullvad](https://mullvad.net/en)
 
-- File management and backup: [Google Drive](https://drive.google.com/) and [Dropbox](https://www.dropbox.com/)
-
-## Design tools
-
-- Interface design: [Figma](https://www.figma.com/)
-
-- Graphic design: [Canva](https://www.canva.com/)
-
-## Misc
-
-- DNS: [Cloudflare 1.1.1.1](https://1.1.1.1/)
-
-- VPN: [Mullvad](https://mullvad.net/en)
-
-- Break reminders: [Time Out](https://www.dejal.com/timeout/)
-
-- Blue light filter: [f.lux](https://justgetflux.com/)
-
-- CLI tools and configs: [dotfiles](https://github.com/gpahal/dotfiles)
+- Eyes and breaks: [f.lux](https://justgetflux.com/) and [Time Out](https://www.dejal.com/timeout/)
 
 ## This site
 
-This site is built with [Astro](https://astro.build/), Markdown, [React](https://react.dev/) islands and [Tailwind CSS](https://tailwindcss.com/). It runs on a [Cloudflare Worker](https://workers.cloudflare.com/), and [Convex](https://www.convex.dev/) backs its private tools. The source is on [GitHub](https://github.com/gpahal/garvitpahal.com).
+Built with [Astro](https://astro.build/), Markdown, [React](https://react.dev/) islands and [Tailwind CSS](https://tailwindcss.com/) on a [Cloudflare Worker](https://workers.cloudflare.com/), with [Convex](https://www.convex.dev/) behind the private tools. The source is on [GitHub](https://github.com/gpahal/garvitpahal.com).
