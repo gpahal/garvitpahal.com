@@ -14,7 +14,7 @@ import { KEN_KEN_SIZES } from './model'
 const HEAVY_EDGE_MIN_SEPARATION = 0.3
 
 function farCell(n: number, edge: GridEdge): number {
-  return edge.side === 'right' ? edge.cell + 1 : edge.cell + n
+  return edge.cell + (edge.side === 'right' ? 1 : n)
 }
 
 /**
